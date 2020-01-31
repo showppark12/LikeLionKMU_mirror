@@ -22,7 +22,7 @@
 
 
 
-## 개요
+## 1. 개요
 
 **프로젝트 명**
 
@@ -34,20 +34,22 @@ KMU - LIKELION WEB SERVICE
 
 
 
-## 조직도
+## 2. 조직도
 
 - **역할 및 책임**
 
   - 이정현 [Frontend]
     - React.js
     - JS / Jquery / Ajax
+  - 박종민 [Frontend]
+    - React.js
   - 강승원 [Backend]
-    - App : Accounts, JoinForm, Study
+  - App : Accounts, JoinForm, Study
   - 이정우 [Backend]
-
+  
   
 
-## 요구사항
+## 5. 요구사항
 
 ![요구사항](C:\Users\labiss96\Desktop\LikeLion\KMU-LikeLion\KMU-LIKELION\요구사항.PNG)
 
@@ -55,7 +57,7 @@ KMU - LIKELION WEB SERVICE
 
 ## UseCase (보류)
 
-## 모듈 구조
+## 6. 모듈 구조
 
 #### App
 
