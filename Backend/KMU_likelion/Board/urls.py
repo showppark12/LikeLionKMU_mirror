@@ -8,8 +8,7 @@ router.register('notice', views.NoticeViewSet)
 router.register('QnA', views.QnAViewSet)
 router.register('recuit', views.RecuitViewSet)
 
-
 urlpatterns = [
     path('', include(router.urls)),
- 
+
 ] 
