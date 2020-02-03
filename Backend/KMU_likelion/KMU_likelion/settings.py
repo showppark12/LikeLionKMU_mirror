@@ -44,8 +44,12 @@ INSTALLED_APPS = [
     'Board',
     'account',
     'knox',
+<<<<<<< HEAD
+    
+=======
     'JoinForm',
 
+>>>>>>> b5feaeaf6b536329a84969a8f89b87e97ef0864e
 
 ]
 
@@ -144,5 +148,7 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'account.Profile'
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": ("knox.auth.TokenAuthentication",),
+    "DEFAULT_AUTHENTICATION_CLASSES": ("knox.auth.TokenAuthentication",
+    ),
+
 }
