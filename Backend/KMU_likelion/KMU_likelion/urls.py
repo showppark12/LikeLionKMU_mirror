@@ -22,5 +22,5 @@ urlpatterns = [
     path('Board/', include('Board.urls')),
     path("account/", include("account.urls")),
     path("account/auth", include("knox.urls")),
-    
+   
 ]
