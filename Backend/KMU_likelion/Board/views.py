@@ -24,3 +24,25 @@ class QnAViewSet(viewsets.ModelViewSet):
 class RecuitViewSet(viewsets.ModelViewSet):
     queryset = RecuitBoard.objects.all()
     serializer_class = RecuitSerializer 
+
+
+
+#스터디 댓글 viewset
+class StudyCommentViewSet(viewsets.ModelViewSet):
+    queryset = StudyComments.objects.all()
+    serializer_class = StudyCommentSerializer
+
+#공지 댓글 viewset
+class NoticeCommentViewSet(viewsets.ModelViewSet):
+    queryset = NoticeComments.objects.all()
+    serializer_class = NoticeCommentSerializer
+
+# QnA 댓글 viewset
+class QnACommentViewSet(viewsets.ModelViewSet):
+    queryset = QnAComments.objects.all()
+    serializer_class = QnACommentSerializer
+
+# 팀원모집 댓글 viewset
+class RecuitCommentViewSet(viewsets.ModelViewSet):
+    queryset = RecuitComments.objects.all()
+    serializer_class = RecuitCommentSerializer 
