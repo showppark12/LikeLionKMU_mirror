@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'Board',
     'account',
     'knox',
+    
 
 ]
 
@@ -138,5 +139,7 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'account.Profile'
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": ("knox.auth.TokenAuthentication",),
+    "DEFAULT_AUTHENTICATION_CLASSES": ("knox.auth.TokenAuthentication",
+    ),
+
 }
