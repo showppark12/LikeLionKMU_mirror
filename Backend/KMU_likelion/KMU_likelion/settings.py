@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'account',
     'knox',
     'JoinForm',
-
 ]
 
 MIDDLEWARE = [
