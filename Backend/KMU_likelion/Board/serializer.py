@@ -24,3 +24,30 @@ class RecuitSerializer(serializers.ModelSerializer):
      class Meta:
          model = RecuitBoard
          fields = '__all__'
+
+
+#밑에는 댓글이염
+
+#스터디 댓글 Serializer
+class StudyCommentSerializer(serializers.ModelSerializer):
+     class Meta:
+         model = StudyComments
+         fields = '__all__'
+
+#공지 댓글 Serializer
+class NoticeCommentSerializer(serializers.ModelSerializer):
+     class Meta:
+         model = NoticeComments
+         fields = '__all__'
+
+#QnA 댓글 Serializer
+class QnACommentSerializer(serializers.ModelSerializer):
+     class Meta:
+         model = QnAComments
+         fields = '__all__'
+
+#질문 댓글 Serializer
+class RecuitCommentSerializer(serializers.ModelSerializer):
+     class Meta:
+         model = RecuitComments
+         fields = '__all__'

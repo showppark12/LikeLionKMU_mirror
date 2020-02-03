@@ -14,11 +14,12 @@
 4. **일정**
    1. **프로젝트 추진 일정**
    2. **단계별 세부일정**
-5. **요구사항**
-6. **Usecase**
-7. **모듈 구조**
-8. **DB 구조**
-9. **추가사항**
+5. **요구사항** / **Usecase**
+6. **구조도**
+   1. **모듈구조**
+   2. **사이트맵 구조**
+   3. **DB구조**
+7. **추가사항**
 
 
 
@@ -57,7 +58,11 @@ KMU - LIKELION WEB SERVICE
 
 ## UseCase (보류)
 
-## 6. 모듈 구조
+
+
+## 6. 구조도
+
+### 6-1. 모듈 구조
 
 #### App
 
@@ -96,7 +101,32 @@ KMU - LIKELION WEB SERVICE
 
 
 
-## DB 구조
+### 6-2. 사이트맵 구조
+
+- **Main page**
+  - Nav-bar
+    - KMU-LIKELION logo
+    - Menu
+      - 스터디 게시판
+      - 공지사항
+      - QnA
+      - 멤버(동아리 구성원 리스트)
+      - What We Made
+    - Mypage Icon
+      - 로그인 시 - 마이페이지
+      - 로그아웃 시 - 로그인 / 입부신청(입부기간 시만)
+  - Body
+    - Carousel(logo, 활동사진 등)
+    - 최근 게시물 or Best 게시물
+    - 일정 (달력 표시)
+    - What We Made(베스트 3~4개만 표시)
+  - Footer
+    - Contact
+    - 주소 및 어드레스 + copyright
+
+
+
+### 6.3 DB 구조
 
 -- ModelName [AppName] --
 
