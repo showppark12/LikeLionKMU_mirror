@@ -20,5 +20,5 @@ from rest_framework import urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('Board/', include('Board.urls')),
-    
+    path('api-auth/',include('rest_framework.urls'))
 ]
