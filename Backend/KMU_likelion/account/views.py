@@ -53,4 +53,3 @@ class LoginAPI(generics.GenericAPIView):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = UserSerializer
-   
