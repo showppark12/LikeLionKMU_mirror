@@ -55,3 +55,9 @@ class UserAPI(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+
+    # def get_object(self, userId):
+    #     userInfo = User.objects.get(id=userId)
+    #     return userInfo
+
+    
