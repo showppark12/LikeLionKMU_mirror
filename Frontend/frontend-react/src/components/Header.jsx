@@ -28,7 +28,15 @@ export default function Header(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const id = window.sessionStorage.getItem("id");
 
+
+ 
+  // if (_user) {
+  //   setUsername(_user);
+  // }
+  //캐러셀 관련 코드?
+
   // React.useEffect();
+
 
   //새로고침 안되게 하는코든데 작동이 안되누..
   // const preventDefault = event => event.preventDefault();
@@ -78,7 +86,9 @@ export default function Header(props) {
                 <DropItem to={"/notice"}>Notice</DropItem>
               </MenuItem>
               <MenuItem onClick={handleClose}>Study</MenuItem>
-              <MenuItem onClick={handleClose}>QnA</MenuItem>
+              <MenuItem onClick={handleClose}>
+                <DropItem to={"/QnA"}>QnA</DropItem>
+              </MenuItem>
               <MenuItem onClick={handleClose}>Recuit</MenuItem>
             </Menu>
           </Typography>
