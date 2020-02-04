@@ -18,9 +18,9 @@ class CreateUserSerializer(serializers.ModelSerializer):
 
 # 접속 유지중인지 확인
 class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = ("id", "username")
+     class Meta:
+         model = Profile
+         fields = '__all__'
 
 #로그인
 class LoginUserSerializer(serializers.Serializer):
