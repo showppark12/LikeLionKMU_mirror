@@ -29,16 +29,17 @@ class RecuitSerializer(serializers.ModelSerializer):
 #밑에는 댓글이염
 
 #스터디 댓글 Serializer
-class StudyCommentSerializer(serializers.ModelSerializer):
+class StudyCommentSerializer(serializers.ModelSerializer):     
      class Meta:
          model = StudyComments
          fields = '__all__'
 
 #공지 댓글 Serializer
 class NoticeCommentSerializer(serializers.ModelSerializer):
+     author_name = serializers.ReadOnlyField(source='writer.username')
      class Meta:
          model = NoticeComments
-         fields = '__all__'
+         fields = ['pk','author_name','body','writer','board']
 
 #QnA 댓글 Serializer
 class QnACommentSerializer(serializers.ModelSerializer):
