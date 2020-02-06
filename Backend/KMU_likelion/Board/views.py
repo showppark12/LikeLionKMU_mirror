@@ -9,16 +9,18 @@ from rest_framework.response import Response
 
 #스터디 게시판 viewset
 class StudyViewSet(viewsets.ModelViewSet):
-    queryset = StudyBoard.objects.all()
+    queryset = StudyBoard.objects.all().order_by('pub_date')
     serializer_class = StudySerializer
     pagination_class = Studypagination
 
 #공지 게시판 viewset
 class NoticeViewSet(viewsets.ModelViewSet):
+    queryset = NoticeBoard.objects.all().order_by('pub_date')
+
     permission_classes = [
         permissions.IsAuthenticated,
     ]
-    queryset = NoticeBoard.objects.all()
+
     serializer_class = NoticeSerializer
     pagination_class = Noticepagination
 
@@ -26,13 +28,13 @@ class NoticeViewSet(viewsets.ModelViewSet):
 
 # QnA 게시판 viewset
 class QnAViewSet(viewsets.ModelViewSet):
-    queryset = QnABoard.objects.all()
+    queryset = QnABoard.objects.all().order_by('pub_date')
     serializer_class = QnASerializer
     pagination_class = QnApagination
 
 # 팀원모집 게시판 viewset
 class RecuitViewSet(viewsets.ModelViewSet):
-    queryset = RecuitBoard.objects.all()
+    queryset = RecuitBoard.objects.all().order_by('pub_date')
     serializer_class = RecuitSerializer 
     pagination_class = Recuitpagination
 
@@ -40,7 +42,7 @@ class RecuitViewSet(viewsets.ModelViewSet):
 
 #스터디 댓글 viewset
 class StudyCommentViewSet(viewsets.ModelViewSet):
-    queryset = StudyComments.objects.all()
+    queryset = StudyComments.objects.all().order_by('pub_date')
     serializer_class = StudyCommentSerializer
     pagination_class = StudyCommentpagination
     def get_queryset(self):
@@ -52,10 +54,11 @@ class StudyCommentViewSet(viewsets.ModelViewSet):
 
 #공지 댓글 viewset
 class NoticeCommentViewSet(viewsets.ModelViewSet):
+    queryset = NoticeComments.objects.all().order_by('pub_date')
     permission_classes = [
         permissions.IsAuthenticated,
     ]
-    queryset = NoticeComments.objects.all()
+
     serializer_class = NoticeCommentSerializer
     pagination_class = NoticeCommentpagination
     
@@ -68,7 +71,7 @@ class NoticeCommentViewSet(viewsets.ModelViewSet):
         return qs
 # QnA 댓글 viewset
 class QnACommentViewSet(viewsets.ModelViewSet):
-    queryset = QnAComments.objects.all()
+    queryset = QnAComments.objects.all().order_by('pub_date')
     serializer_class = QnACommentSerializer
     pagination_class = QnACommentpagination
     def get_queryset(self):
@@ -80,7 +83,7 @@ class QnACommentViewSet(viewsets.ModelViewSet):
 
 # 팀원모집 댓글 viewset
 class RecuitCommentViewSet(viewsets.ModelViewSet):
-    queryset = RecuitComments.objects.all()
+    queryset = RecuitComments.objects.all().order_by('pub_date')
     serializer_class = RecuitCommentSerializer
     pagination_class = RecuitCommentpagination
     def get_queryset(self):
