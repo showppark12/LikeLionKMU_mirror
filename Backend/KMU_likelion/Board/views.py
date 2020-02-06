@@ -3,6 +3,7 @@ from .models import *
 from .serializer import *
 from rest_framework.decorators import action
 from .pagination import *
+from rest_framework.filters import SearchFilter
 # Create your views here.
 
 #스터디 게시판 viewset
@@ -36,21 +37,29 @@ class StudyCommentViewSet(viewsets.ModelViewSet):
     queryset = StudyComments.objects.all()
     serializer_class = StudyCommentSerializer
     pagination_class = StudyCommentpagination
+    filter_backends=[SearchFilter]
+    search_fields=('board',)
 
 #공지 댓글 viewset
 class NoticeCommentViewSet(viewsets.ModelViewSet):
     queryset = NoticeComments.objects.all()
     serializer_class = NoticeCommentSerializer
     pagination_class = NoticeCommentpagination
+    filter_backends=[SearchFilter]
+    search_fields=('board',)
 
 # QnA 댓글 viewset
 class QnACommentViewSet(viewsets.ModelViewSet):
     queryset = QnAComments.objects.all()
     serializer_class = QnACommentSerializer
     pagination_class = QnACommentpagination
+    filter_backends=[SearchFilter]
+    search_fields=('board',)
 
 # 팀원모집 댓글 viewset
 class RecuitCommentViewSet(viewsets.ModelViewSet):
     queryset = RecuitComments.objects.all()
     serializer_class = RecuitCommentSerializer
     pagination_class = RecuitCommentpagination
+    filter_backends=[SearchFilter]
+    search_fields=('board',)
