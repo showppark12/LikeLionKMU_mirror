@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from .models import *
 from .serializer import *
 from rest_framework.decorators import action
@@ -12,12 +12,37 @@ class StudyViewSet(viewsets.ModelViewSet):
     queryset = StudyBoard.objects.all().order_by('pub_date')
     serializer_class = StudySerializer
     pagination_class = Studypagination
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
+    @action(detail=True)
+
+    def scrap(self,request,*args,**kwargs):
+        board=self.get_object()
+        
+        status=None
+        if board.scrap.filter(username=self.request.user.username).exists():
+            board.scrap.remove(self.request.user.id)
+            status=False
+        else:
+            board.scrap.add(self.request.user.id)
+            status=True
+        print(status)
+        return Response({'status': status})
+
 
 #공지 게시판 viewset
 class NoticeViewSet(viewsets.ModelViewSet):
     queryset = NoticeBoard.objects.all().order_by('pub_date')
+
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
+
     serializer_class = NoticeSerializer
     pagination_class = Noticepagination
+    
+
 
 # QnA 게시판 viewset
 class QnAViewSet(viewsets.ModelViewSet):
@@ -48,6 +73,10 @@ class StudyCommentViewSet(viewsets.ModelViewSet):
 #공지 댓글 viewset
 class NoticeCommentViewSet(viewsets.ModelViewSet):
     queryset = NoticeComments.objects.all().order_by('pub_date')
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
+
     serializer_class = NoticeCommentSerializer
     pagination_class = NoticeCommentpagination
     
@@ -56,6 +85,7 @@ class NoticeCommentViewSet(viewsets.ModelViewSet):
         search=self.request.query_params.get('search','')
         if search:
             qs=qs.filter(board=search)
+        print('user : ',self.request.user)
         return qs
 # QnA 댓글 viewset
 class QnACommentViewSet(viewsets.ModelViewSet):
@@ -77,6 +107,10 @@ class RecuitCommentViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         qs=super().get_queryset()
         search=self.request.query_params.get('search','')
+
+
+
+
         if search:
             qs=qs.filter(board=search)
         return qs
