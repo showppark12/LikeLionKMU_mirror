@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from .models import *
 from .serializer import *
 from rest_framework.decorators import action
@@ -15,9 +15,14 @@ class StudyViewSet(viewsets.ModelViewSet):
 
 #공지 게시판 viewset
 class NoticeViewSet(viewsets.ModelViewSet):
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
     queryset = NoticeBoard.objects.all()
     serializer_class = NoticeSerializer
     pagination_class = Noticepagination
+
+    
 
 # QnA 게시판 viewset
 class QnAViewSet(viewsets.ModelViewSet):
@@ -47,6 +52,9 @@ class StudyCommentViewSet(viewsets.ModelViewSet):
 
 #공지 댓글 viewset
 class NoticeCommentViewSet(viewsets.ModelViewSet):
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
     queryset = NoticeComments.objects.all()
     serializer_class = NoticeCommentSerializer
     pagination_class = NoticeCommentpagination
@@ -56,6 +64,7 @@ class NoticeCommentViewSet(viewsets.ModelViewSet):
         search=self.request.query_params.get('search','')
         if search:
             qs=qs.filter(board=search)
+        print('user : ',self.request.user)
         return qs
 # QnA 댓글 viewset
 class QnACommentViewSet(viewsets.ModelViewSet):
