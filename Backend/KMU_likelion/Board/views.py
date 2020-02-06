@@ -36,7 +36,7 @@ class NoticeViewSet(viewsets.ModelViewSet):
     queryset = NoticeBoard.objects.all().order_by('pub_date')
 
     permission_classes = [
-        permissions.IsAuthenticated,
+        permissions.IsAuthenticatedOrReadOnly,
     ]
 
     serializer_class = NoticeSerializer
@@ -74,7 +74,7 @@ class StudyCommentViewSet(viewsets.ModelViewSet):
 class NoticeCommentViewSet(viewsets.ModelViewSet):
     queryset = NoticeComments.objects.all().order_by('pub_date')
     permission_classes = [
-        permissions.IsAuthenticated,
+        permissions.IsAuthenticatedOrReadOnly,
     ]
 
     serializer_class = NoticeCommentSerializer

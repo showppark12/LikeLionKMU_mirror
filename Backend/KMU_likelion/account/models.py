@@ -6,9 +6,6 @@ class StudyGroup(models.Model):
     title = models.CharField(max_length=300)
     pub_date = models.DateField()
     introduction = models.TextField()
-    
-
-
 
 class Profile(AbstractUser):
     major = models.CharField(max_length = 200, null=True)
@@ -17,8 +14,6 @@ class Profile(AbstractUser):
     start_number=models.CharField(max_length = 200, null=True)
     sns_id=models.CharField(max_length = 200, null=True)
     study = models.ForeignKey(StudyGroup, on_delete = models.CASCADE , related_name="study_group", default=None, blank=True, null=True)
-
-
 
 class Record(models.Model):
     title = models.CharField(max_length=200)
