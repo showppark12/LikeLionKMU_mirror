@@ -1,4 +1,5 @@
 # KMU-LIKELION
+
 [Django/React/Python] Kookmin Univ. LikeLion Club Web Service Project
 
 ## Index
@@ -21,8 +22,6 @@
    3. **DB구조**
 7. **추가사항**
 
-
-
 ## 1. 개요
 
 **프로젝트 명**
@@ -32,8 +31,6 @@ KMU - LIKELION WEB SERVICE
 기간
 
 목적 / 목표
-
-
 
 ## 2. 조직도
 
@@ -47,18 +44,12 @@ KMU - LIKELION WEB SERVICE
   - 강승원 [Backend]
   - App : Accounts, JoinForm, Study
   - 이정우 [Backend]
-  
-  
 
 ## 5. 요구사항
 
-![요구사항](C:\Users\labiss96\Desktop\LikeLion\KMU-LikeLion\KMU-LIKELION\요구사항.PNG)
-
-
+<img src = "https://user-images.githubusercontent.com/42925501/73937125-b3f5bd00-4927-11ea-9ef1-65211a71548f.PNG">
 
 ## UseCase (보류)
-
-
 
 ## 6. 구조도
 
@@ -67,26 +58,29 @@ KMU - LIKELION WEB SERVICE
 #### App
 
 - **Accounts**
+
   - 로그인
   - 마이페이지(작성/수정)
 
 - **JoinForm**
   - 신청폼(작성/수정/읽기) -> 비회원
   - 신청자리스트 -> 운영진
-  - 이력서 열람 페이지(선발기능)  -> 운영진
+  - 이력서 열람 페이지(선발기능) -> 운영진
 - **Study**
   - 게시판 리스트
   - 신청폼
   - 게시판 detail
-- **project(가제)  - 프로젝트 인원모집**
+- **project(가제) - 프로젝트 인원모집**
   - 아이디어 제출폼 ,수정 폼
   - 아이디어 detail(댓글,삭제, 신청한 사람)아이디어 list (제출 버튼)
 - **Notice (공지)**
+
   - 공지 글 (작성/수정, 운영진만 사용)
   - 공지 list
   - 공지 detail
 
 - **QnA**
+
   - 질문 폼(생성/수정)
   - 질문 list
   - 질문 detail (comment, like)
@@ -98,8 +92,6 @@ KMU - LIKELION WEB SERVICE
 #### Project
 
 - KMU-LikeLion-Project
-
-
 
 ### 6-2. 사이트맵 구조
 
@@ -124,8 +116,6 @@ KMU - LIKELION WEB SERVICE
     - Contact
     - 주소 및 어드레스 + copyright
 
-
-
 ### 6.3 DB 구조
 
 -- ModelName [AppName] --
@@ -143,19 +133,15 @@ KMU - LIKELION WEB SERVICE
 - etc(TextField) //기타
 - **hashtag(ManyToMany, Hashtag)**
 
-
-
 <보류>
 
 - 과제점수 subject (floatfield)(그 해 기수만 있음)
 - 출석통계 attendance(floatfield)(그 해 기수만 있음)
 
-
-
 **Mentoring [Accounts]**
 
 - pub_date(datefield)
-- mentor(FK, Profile) 
+- mentor(FK, Profile)
 - mentee(FK, Profile)
 
 **Record [Accounts]** // 본인 이력 (수상내역 등)
@@ -184,7 +170,7 @@ KMU - LIKELION WEB SERVICE
 
 - writer(FK, Profile)
 - title(charfield)
-- description(charfield)  
+- description(charfield)
 - pub_date(datefield)
 - **hashtag(ManyToMany, Hashtag)**
 
