@@ -16,7 +16,7 @@ class Profile(AbstractUser):
     is_manager=models.CharField(max_length = 200, null=True)
     start_number=models.CharField(max_length = 200, null=True)
     sns_id=models.CharField(max_length = 200, null=True)
-    study = models.ForeignKey(StudyGroup, on_delete = models.CASCADE , related_name= "study_group", default = None)
+    study = models.ForeignKey(StudyGroup, on_delete = models.CASCADE , related_name="study_group", default=None, blank=True, null=True)
 
 
 
