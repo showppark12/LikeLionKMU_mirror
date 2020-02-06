@@ -15,6 +15,7 @@ class Board(PolymorphicModel):
 #임시로 만든 column 임 나중에 수정가능
 class StudyBoard(Board):
     how_many_people = models.IntegerField() #몇 명이 참가 했는가
+    scrap=models.ManyToManyField(Profile, blank=True,related_name="study_scrap")
 
 class NoticeBoard(Board):
     run_date = models.DateField( default = datetime.now , blank = True) # 해당날짜
