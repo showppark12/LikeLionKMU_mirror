@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 
 class StudyGroup(models.Model):
     title = models.CharField(max_length=300)
-    pub_date = models.DateField()
+    pub_date = models.DateField(auto_now_add=True)
     introduction = models.TextField()
 
 class User(AbstractUser):
