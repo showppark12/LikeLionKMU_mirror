@@ -17,6 +17,18 @@ class StudyViewSet(viewsets.ModelViewSet):
     ]
     @action(detail=True)
 
+    def scrap_status(self,request,*args,**kwargs):
+        board=self.get_object()
+        
+        status=None
+        if board.scrap.filter(username=self.request.user.username).exists():
+            status=True
+        else:
+            status=False
+        
+        return Response({'status': status})
+   
+    @action(detail=True)
     def scrap(self,request,*args,**kwargs):
         board=self.get_object()
         
@@ -27,9 +39,10 @@ class StudyViewSet(viewsets.ModelViewSet):
         else:
             board.scrap.add(self.request.user.id)
             status=True
-        print(status)
+       
         return Response({'status': status})
-
+             
+        
 
 #공지 게시판 viewset
 class NoticeViewSet(viewsets.ModelViewSet):
