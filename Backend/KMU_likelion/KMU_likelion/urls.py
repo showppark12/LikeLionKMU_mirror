@@ -23,5 +23,6 @@ urlpatterns = [
     path("account/", include("account.urls")),
     path("account/auth", include("knox.urls")),
     path("joinform/",include("JoinForm.urls")),
+    path('main/', include('main.urls')),
    
 ]
