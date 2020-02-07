@@ -60,3 +60,10 @@ class StudyGroupViewSet(viewsets.ModelViewSet):
     permission_classes = [
         permissions.IsAuthenticated,
     ]
+
+class StudyGroup_UserViewSet(viewsets.ModelViewSet):
+    queryset = StudyGroup_User.objects.all().order_by('pub_date')
+    serializer_class = StudyGroup_UserSerializer
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]

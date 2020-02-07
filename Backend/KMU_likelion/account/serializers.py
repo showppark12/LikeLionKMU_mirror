@@ -37,3 +37,8 @@ class StudyGroupSerializer(serializers.ModelSerializer):
      class Meta:
          model = StudyGroup
          fields = '__all__'
+
+class StudyGroup_UserSerializer(serializers.ModelSerializer):
+    class Meta:
+         model =StudyGroup_User
+         fields = '__all__'
