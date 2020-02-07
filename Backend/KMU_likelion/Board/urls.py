@@ -11,6 +11,7 @@ router.register('study_comment',views.StudyCommentViewSet)
 router.register('notice_comment',views.NoticeCommentViewSet)
 router.register('QnA_comment',views.QnACommentViewSet)
 router.register('Recuit_comment',views.RecuitCommentViewSet)
+router.register('board',views.BoardViewSet)
 
 
 urlpatterns = [
