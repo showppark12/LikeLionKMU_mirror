@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser
 
 
 
-
 class User(AbstractUser):
     major = models.CharField(max_length = 200, null=True)
     student_id = models.CharField(max_length = 200, null=True)
@@ -25,7 +24,7 @@ class Mentoring(models.Model):
 
 class StudyGroup(models.Model):
     title = models.CharField(max_length=100) 
-    pub_date = models.DateField()
+    pub_date = models.DateField(auto_now_add=True)
     introduction = models.TextField()
 
 class StudyGroup_User(models.Model):
