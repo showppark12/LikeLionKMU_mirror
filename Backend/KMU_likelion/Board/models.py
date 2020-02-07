@@ -2,7 +2,7 @@ from django.db import models
 from polymorphic.models import PolymorphicModel
 from django.conf import settings
 from datetime import datetime
-from account.models import Profile
+from account.models import User
 # Create your models here.
 
 class Board(PolymorphicModel):
@@ -10,8 +10,8 @@ class Board(PolymorphicModel):
     body =  models.TextField()
     pub_date = models.DateTimeField(auto_now_add=True) #게시물 등록 시간 생성 
     update_date = models.DateTimeField(auto_now=True) # 업데이트 될 때만 정보 바뀔때 마다
-    writer = models.ForeignKey(Profile, on_delete = models.CASCADE, related_name = "writer", default = None)
-    scrap=models.ManyToManyField(Profile, blank=True,related_name="board_scrap")
+    writer = models.ForeignKey(User, on_delete = models.CASCADE, related_name = "writer", default = None)
+    scrap=models.ManyToManyField(User, blank=True,related_name="board_scrap")
 
 #임시로 만든 column 임 나중에 수정가능
 class StudyBoard(Board):
@@ -33,7 +33,7 @@ class Comments(PolymorphicModel):
     body = models.TextField()
     pub_date = models.DateTimeField(auto_now_add=True)  
     update_date = models.DateTimeField(auto_now=True) 
-    writer = models.ForeignKey(Profile, on_delete = models.CASCADE, related_name = "comment_writer", default = None)
+    writer = models.ForeignKey(User, on_delete = models.CASCADE, related_name = "comment_writer", default = None)
 
 class StudyComments(Comments):
     board = models.ForeignKey( StudyBoard, on_delete= models.CASCADE, related_name= "study_comments")

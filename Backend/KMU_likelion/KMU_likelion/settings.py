@@ -139,7 +139,7 @@ DATE_INPUT_FORMATS = ['%d-%m-%Y']
 
 STATIC_URL = '/static/'
 
-AUTH_USER_MODEL = 'account.Profile'
+AUTH_USER_MODEL = 'account.User'
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ("knox.auth.TokenAuthentication",
