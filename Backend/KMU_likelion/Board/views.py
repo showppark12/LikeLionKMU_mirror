@@ -17,7 +17,7 @@ class StudyViewSet(viewsets.ModelViewSet):
     ]
     @action(detail=True)
 
-    def scrap_status(self,request,*args,**kwargs):
+    def get_scrap(self,request,*args,**kwargs):
         board=self.get_object()
         
         status=None
@@ -29,15 +29,17 @@ class StudyViewSet(viewsets.ModelViewSet):
         return Response({'status': status})
    
     @action(detail=True)
-    def scrap(self,request,*args,**kwargs):
+    def change_scrap(self,request,*args,**kwargs):
         board=self.get_object()
         
         status=None
         if board.scrap.filter(username=self.request.user.username).exists():
             board.scrap.remove(self.request.user.id)
+            print("user removed(false) : ",board.scrap.filter(username=self.request.user.username).exists())
             status=False
         else:
             board.scrap.add(self.request.user.id)
+            print("user added(true) : ",board.scrap.filter(username=self.request.user.username).exists())
             status=True
        
         return Response({'status': status})
