@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import *
 from django.contrib.auth import authenticate
 
 
@@ -32,3 +32,8 @@ class LoginUserSerializer(serializers.Serializer):
         if user and user.is_active:
             return user
         raise serializers.ValidationError("Unable to log in with provided credentials.")
+
+class StudyGroupSerializer(serializers.ModelSerializer):
+     class Meta:
+         model = StudyGroup
+         fields = '__all__'

@@ -137,3 +137,4 @@ class RecuitCommentViewSet(viewsets.ModelViewSet):
         if search:
             qs=qs.filter(board=search)
         return qs
+

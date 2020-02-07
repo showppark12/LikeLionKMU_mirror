@@ -2,10 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
-class StudyGroup(models.Model):
-    title = models.CharField(max_length=300)
-    pub_date = models.DateField(auto_now_add=True)
-    introduction = models.TextField()
 
 class User(AbstractUser):
     major = models.CharField(max_length = 200, null=True)
@@ -13,7 +9,7 @@ class User(AbstractUser):
     is_manager=models.CharField(max_length = 200, null=True)
     start_number=models.CharField(max_length = 200, null=True)
     sns_id=models.CharField(max_length = 200, null=True)
-    study = models.ForeignKey(StudyGroup, on_delete = models.CASCADE , related_name="study_group", default=None, blank=True, null=True)
+   
 
 class Record(models.Model):
     title = models.CharField(max_length=200)
@@ -26,3 +22,12 @@ class Mentoring(models.Model):
     mentor = models.ForeignKey(User, on_delete = models.CASCADE, related_name="mentor",default = None)
     mentee = models.ForeignKey(User, on_delete = models.CASCADE, related_name="mentee",default = None)
 
+class StudyGroup(models.Model):
+    title = models.CharField(max_length=100) 
+    pub_date = models.DateField(auto_now_add=True)
+    introduction = models.TextField()
+
+class StudyGroup_User(models.Model):
+    participant = models.ForeignKey( User, on_delete= models.CASCADE,null=True)
+    group = models.ForeignKey( StudyGroup, on_delete= models.CASCADE,null=True)
+    
