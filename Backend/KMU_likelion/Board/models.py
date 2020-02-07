@@ -11,11 +11,11 @@ class Board(PolymorphicModel):
     pub_date = models.DateTimeField(auto_now_add=True) #게시물 등록 시간 생성 
     update_date = models.DateTimeField(auto_now=True) # 업데이트 될 때만 정보 바뀔때 마다
     writer = models.ForeignKey(Profile, on_delete = models.CASCADE, related_name = "writer", default = None)
+    scrap=models.ManyToManyField(Profile, blank=True,related_name="board_scrap")
 
 #임시로 만든 column 임 나중에 수정가능
 class StudyBoard(Board):
-    how_many_people = models.IntegerField() #몇 명이 참가 했는가
-    scrap=models.ManyToManyField(Profile, blank=True,related_name="study_scrap")
+    how_many_people = models.IntegerField() #몇 명이 참가 했는
 
 class NoticeBoard(Board):
     run_date = models.DateField( default = datetime.now , blank = True) # 해당날짜
