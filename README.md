@@ -204,3 +204,21 @@ KMU - LIKELION WEB SERVICE
 - contents(Char)
 - type(Char)
 - post_id(Integer)
+
+
+
+-----------------------------------------
+
+### Feedback
+
+**필드 및 모델 명 수정**
+
+- Profile 모델명 -> User 수정
+- record 모델의 belong_to_user 필드 -> user_id로 수정(다른 모델의 필드들도 확인하여 수정)
+- Answer 모델의 answer 필드 -> content나 body로..
+- 유저모델의 is_manager필드 -> user_type 수정 (integer 형으로 타입수정)
+  - 0 : 회장
+  - 1: 일반 운영진
+  - 2: 교육팀
+  - 3: 일반유저
+
