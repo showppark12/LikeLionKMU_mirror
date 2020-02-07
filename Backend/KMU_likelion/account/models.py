@@ -23,3 +23,12 @@ class Mentoring(models.Model):
     mentor = models.ForeignKey(User, on_delete = models.CASCADE, related_name="mentor",default = None)
     mentee = models.ForeignKey(User, on_delete = models.CASCADE, related_name="mentee",default = None)
 
+class StudyGroup(models.Model):
+    title = models.CharField(max_length=100) 
+    pub_date = models.DateField()
+    introduction = models.TextField()
+
+class StudyGroup_User(models.Model):
+    participant = models.ForeignKey( User, on_delete= models.CASCADE,null=True)
+    group = models.ForeignKey( StudyGroup, on_delete= models.CASCADE,null=True)
+    
