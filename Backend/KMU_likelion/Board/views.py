@@ -137,3 +137,10 @@ class RecuitCommentViewSet(viewsets.ModelViewSet):
         if search:
             qs=qs.filter(board=search)
         return qs
+
+class StudyGroupViewSet(viewsets.ModelViewSet):
+    queryset = StudyGroup.objects.all().order_by('pub_date')
+    serializer_class = StudyGroupSerializer
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]

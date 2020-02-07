@@ -58,3 +58,8 @@ class BoardSerializer(serializers.ModelSerializer):
      class Meta:
          model = Board
          fields = '__all__'
+
+class StudyGroupSerializer(serializers.ModelSerializer):
+     class Meta:
+         model = StudyGroup
+         fields = '__all__'
