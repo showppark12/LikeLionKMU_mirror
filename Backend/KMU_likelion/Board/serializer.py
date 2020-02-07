@@ -52,3 +52,9 @@ class RecuitCommentSerializer(serializers.ModelSerializer):
      class Meta:
          model = RecuitComments
          fields = '__all__'
+
+
+class BoardSerializer(serializers.ModelSerializer):
+     class Meta:
+         model = Board
+         fields = '__all__'

@@ -8,10 +8,10 @@ from rest_framework.response import Response
 # Create your views here.
 
 #스터디 게시판 viewset
-class StudyViewSet(viewsets.ModelViewSet):
-    queryset = StudyBoard.objects.all().order_by('pub_date')
-    serializer_class = StudySerializer
-    pagination_class = Studypagination
+
+class BoardViewSet(viewsets.ModelViewSet):
+    queryset = Board.objects.all().order_by('pub_date')
+    serializer_class = BoardSerializer
     permission_classes = [
         permissions.IsAuthenticated,
     ]
@@ -43,6 +43,14 @@ class StudyViewSet(viewsets.ModelViewSet):
             status=True
        
         return Response({'status': status})
+class StudyViewSet(viewsets.ModelViewSet):
+    queryset = StudyBoard.objects.all().order_by('pub_date')
+    serializer_class = StudySerializer
+    pagination_class = Studypagination
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
+  
              
         
 
