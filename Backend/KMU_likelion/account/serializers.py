@@ -1,17 +1,17 @@
 from rest_framework import serializers
-from .models import Profile
+from .models import User
 from django.contrib.auth import authenticate
 
 
 #회원가입
 class CreateUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Profile
+        model = User
         fields = ("id", "username", "password")
         extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data):
-        user = Profile.objects.create_user(
+        user = User.objects.create_user(
             validated_data["username"], None, validated_data["password"]
         )
         return user
@@ -19,7 +19,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
 # 접속 유지중인지 확인
 class UserSerializer(serializers.ModelSerializer):
      class Meta:
-         model = Profile
+         model = User
          fields = '__all__'
 
 #로그인
