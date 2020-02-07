@@ -5,6 +5,7 @@ from . import views
 
 router = DefaultRouter()
 router.register('user', views.UserViewSet)
+router.register('studygroup',views.StudyGroupViewSet)
 urlpatterns = [
     path("hello/", HelloAPI),
     path("auth/register/", RegistrationAPI.as_view()),

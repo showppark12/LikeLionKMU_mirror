@@ -53,3 +53,10 @@ class LoginAPI(generics.GenericAPIView):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+class StudyGroupViewSet(viewsets.ModelViewSet):
+    queryset = StudyGroup.objects.all().order_by('pub_date')
+    serializer_class = StudyGroupSerializer
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]

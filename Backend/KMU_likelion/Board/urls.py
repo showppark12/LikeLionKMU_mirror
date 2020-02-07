@@ -14,6 +14,7 @@ router.register('Recuit_comment',views.RecuitCommentViewSet)
 router.register('board',views.BoardViewSet)
 
 
+
 urlpatterns = [
     path('', include(router.urls)),
 
