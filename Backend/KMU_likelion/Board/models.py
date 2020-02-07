@@ -2,7 +2,7 @@ from django.db import models
 from polymorphic.models import PolymorphicModel
 from django.conf import settings
 from datetime import datetime
-from account.models import User
+from account.models import *
 # Create your models here.
 
 class Board(PolymorphicModel):
@@ -13,14 +13,7 @@ class Board(PolymorphicModel):
     writer = models.ForeignKey(User, on_delete = models.CASCADE, related_name = "writer", default = None)
     scrap=models.ManyToManyField(User, blank=True,related_name="board_scrap")
 
-class StudyGroup(models.Model):
-    title = models.CharField(max_length=100) 
 
-
-class StudyGroup_connection(models.Model):
-    participant = models.ForeignKey( User, on_delete= models.CASCADE,null=True)
-    group = models.ForeignKey( StudyGroup, on_delete= models.CASCADE,null=True)
-    
 #임시로 만든 column 임 나중에 수정가능
 class StudyBoard(Board):
     how_many_people = models.IntegerField() #몇 명이 참가 했는
