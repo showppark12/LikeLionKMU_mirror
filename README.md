@@ -120,18 +120,19 @@ KMU - LIKELION WEB SERVICE
 
 -- ModelName [AppName] --
 
-**Profile [Accounts]**
+#### Accounts
 
-- name
-- password
+**User [Accounts]**
+
 - major ( charfield) //학과
-- student_ID (charfield) //학번
-- is_manager (booleanfield) // 운영진 여부
-- study(foreign key, Study) //소속 스터디
+- student_id (charfield) //학번
+- user_type (integerfield) // 유저 타입
+  - 0: 회장
+  - 1: 운영진
+  - 2: 부원
 - start_number(charfield) //기수 (ex 7기, 7.5기)
 - sns_id (charfield) //sns id
-- etc(TextField) //기타
-- **hashtag(ManyToMany, Hashtag)**
+- image(imageField) //유저 이미지.
 
 <보류>
 
@@ -141,56 +142,138 @@ KMU - LIKELION WEB SERVICE
 **Mentoring [Accounts]**
 
 - pub_date(datefield)
-- mentor(FK, Profile)
-- mentee(FK, Profile)
+- mentor(FK, User)
+- mentee(FK, User)
 
-**Record [Accounts]** // 본인 이력 (수상내역 등)
+**Portfolio [Accounts]** // 본인 이력 (수상내역 등)
 
-- contents (charfield) //내용
-- link (charfield) //소스링크 등
-- belong_to_user(foreignkey, Profile)
+- title (charfield) // 제목
+- contents (textfield) //내용
+- link (textfield) //소스링크 등
+- image(imageField) //포트폴리오 이미지.
+- user_id(FK, User)
 
-**StudyBoard [Study]** //각 스터디 그룹 게시판
+**StudyGroup [Account]** //스터디 그룹
+
+- name(charfield) //그룹명
+- pub_date(datefield) //그룹 생성일
+- introduction(textField) //소개글
+- image(imageField) //그룹 이미지.
+
+**Group_User [Account]** //스터디 그룹
+
+- user_id(FK, User)
+- group_id(FK, Group)
+- is_captain(Boolean) //스터디 장일 시 True.
+
+-------------------------------------
+
+#### Study
+
+**Board:Abstract [Board]**
 
 - title(charfield)
-- reader(foreign key)
-- description(textField)
-- belong_to_group(FK, StudyGroup)
-- **hashtag(ManyToMany, Hashtag)**
+- body(textfield)
+- user_id(FK, User)
+- pub_date = models.DateTimeField(auto_now_add=True) //게시물 등록 시간 생성
+- update_date = models.DateTimeField(auto_now=True) // 업데이트 될 때만 정보 바뀔때 마다
+- like = ManyToManyField(User)
+- image(imagefield)
+- file(filefield)
 
-**StudyGroup [Study]** //스터디 그룹
+**StudyBoard(Board) [Board]** //각 스터디 그룹 게시판
+
+- study_type(integerfield)
+  - 0: 공식 모임
+  - 1: 정보공유
+  - 2: 기타
+- personnel(integerfield) //참여 인원 수.
+- group_id(FK, StudyGroup)
+
+**NoticeBoard(Board) [Board]** //공지사항
+
+- scheduled_date(datefield) //공지관련 예정된 날짜
+
+**QnABoard(Board) [Board]** //QnA 게시판
+
+- subject(charfield) //질문주제
+
+**RecruitBoard(Board) [Board]** //공지사항
+
+- purpose(charfield) //무슨 목적의 팀인지
+
+
+
+**Comments:Abstract [Board]**
+
+- body(textfield)
+- pub_date(datetimefield)
+- update_date(datetimefield)
+- user_id(FK, User)
+
+
+
+
+
+**StudyComments(Comments)**
+
+- board_id(FK, StudyBoard)
+
+**NoticeComments(Comments)**
+
+- board_id(FK, NoticeBoard)
+
+**QnAComments(Comments)**
+
+- board_id(FK, QnABoard)
+
+**RecruitComments(Comments)**
+
+- board_id(FK, RecruitBoard)
+
+--------------------------------------------
+
+#### Admission
+
+**JoinForm [Admission]** //입부신청(이력서)
 
 - name(charfield)
+- phone_number(charfield) //전화번호 (합격여부 연락을 하기 위함)
+- birth(datefield) //생일(나이를 알기 위함)
+- sex(charfield) -> enum //성
+- major(charfield) //학과
+- E-mail(charfield) //이메일
+
+**Question [Admission]** //운영진이 제시할 이력서 질문
+
+- question_id(Integer)
+- question(charfield)
+
+**Answer [Admission]** //입부자가 제출할 문항 별 답변
+
+- answer(charfield)
+- Joinform_id(FK, JoinForm)
+- question_id(FK, Question)
+
+**Evaluation[Admission]** //입부인원에 대한 평가
+
+- joinform_id(FK, JoinForm)
+- user_id(FK, User)
+- body(textfield)
+- score(integerfield)
 - pub_date(datefield)
-- introduction(textField)
-- **hashtag(ManyToMany, Hashtag)**
-- 추가기능...보류
 
-**Notice [notice]** //공지사항
 
-- writer(FK, Profile)
+
+----------------------------------
+
+**Career [Main]** //동아리 커리어
+
 - title(charfield)
-- description(charfield)
-- pub_date(datefield)
-- **hashtag(ManyToMany, Hashtag)**
-
-**JoinForm [JoinForm]** //입부신청(이력서)
-
-- name(charfield)
-- phone_number(charfield)
-- major(charfield)
-- E-mail(charfield)
-
-**Question [JoinForm]** //운영진이 제시할 이력서 질문
-
-- Question_id(Integer)
-- Question(charfield)
-
-**Answer [JoinForm]** //입부자가 제출할 문항 별 답변
-
-- Answer(charfield)
-- belong_to_Join(FK, JoinForm)
-- belong_to_Question(FK, Question)
+- body(textField)
+- image(imagefield)
+- link(textfield)
+- participants(ManyToManyField, User) //참여자
 
 **Hashtag [Main]**
 
@@ -201,9 +284,11 @@ KMU - LIKELION WEB SERVICE
 
 - start_date(datefield)
 - end_date(datefield)
-- contents(Char)
-- type(Char)
-- post_id(Integer)
+- contents(charfield)
+- plan_type(charfield)
+  - "notice" //공지글 작성 시 달력기입 체크했다면 캘린더데이터도 생성됨.
+  - "normal"
+- notice_id(FK, NoticeBoard null=true) //plan_type이 notice일 시에만 사용
 
 
 
@@ -222,3 +307,4 @@ KMU - LIKELION WEB SERVICE
   - 2: 교육팀
   - 3: 일반유저
 
+---- 20.02.08 17:00 피드백 적용완료 -----
