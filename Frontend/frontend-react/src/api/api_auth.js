@@ -7,11 +7,15 @@ export default {
 
   authLogin(data) {
     console.log("login api 실행.");
-    return axios.post("account/auth/login/", data);
+    return axios.post("accounts/auth/login/", data);
   },
   getUser(userId) {
     console.log("getUser api 실행.");
-    return axios.get("account/user/" + String(userId));
+    return axios.get("accounts/user/" + String(userId));
+  },
+  authlogout(token) {
+    console.log("logout api 실행.");
+    console.log("토큰 잘감? : ", token);
+    return axios.post("accounts/auth/logout/", token);
   }
-  // authlogout()
 };
