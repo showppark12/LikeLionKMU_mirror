@@ -41,7 +41,10 @@ INSTALLED_APPS = [
     'knox',
     'accounts',
     'Board',
+    'Admission',
+    'Main',
     'corsheaders',
+
 ]
 
 MIDDLEWARE = [
