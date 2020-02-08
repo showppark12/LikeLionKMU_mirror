@@ -1,40 +1,40 @@
 from django.db import models
-from polymorphic.models import PolymorphicModel
-from django.conf import settings
-from datetime import datetime
-from account.models import *
+from accounts.models import *
 # Create your models here.
-
-class Board(PolymorphicModel):
-    title = models.CharField(max_length=100) 
+class Board(models.Model):
+    title = models.CharField(max_length=200) 
     body =  models.TextField()
     pub_date = models.DateTimeField(auto_now_add=True) #게시물 등록 시간 생성 
     update_date = models.DateTimeField(auto_now=True) # 업데이트 될 때만 정보 바뀔때 마다
-    writer = models.ForeignKey(User, on_delete = models.CASCADE, related_name = "writer", default = None)
-    scrap=models.ManyToManyField(User, blank=True,related_name="board_scrap")
+    user_id = models.ForeignKey(User, on_delete = models.CASCADE, default = None)
+    class Meta:
+        abstract = True
 
-
-#임시로 만든 column 임 나중에 수정가능
 class StudyBoard(Board):
-    how_many_people = models.IntegerField() #몇 명이 참가 했는
-    group = models.ForeignKey( StudyGroup, on_delete= models.CASCADE,null=True)
+    study_type = models.IntegerField( default = 0)
+    personnel = models.IntegerField(default = 0)
+    group_id = models.ForeignKey(StudyGroup, on_delete =models.CASCADE, related_name= "group_board", default = None)
+    like = models.ManyToManyField(User, blank=True,related_name="study_like")
+
 class NoticeBoard(Board):
-    run_date = models.DateField( default = datetime.now , blank = True) # 해당날짜
+    notice_date = models.DateField(null = True)
+    like = models.ManyToManyField(User, blank=True,related_name="notice_like")
+
+class RecruitBoard(Board):
+    purpose = models.CharField(max_length= 100)
+    like = models.ManyToManyField(User, blank=True,related_name="recruit_like")
 
 class QnABoard(Board):
-    subject = models.CharField(max_length =100) #과목
-
-class RecuitBoard(Board):
-    purpose = models.CharField(max_length = 200) # 무슨 목적의 팀원 모집인지
+    subject = models.CharField(max_length= 200)
 
 
-
-#댓글 모델
-class Comments(PolymorphicModel):
+class Comments(models.Model):
     body = models.TextField()
     pub_date = models.DateTimeField(auto_now_add=True)  
     update_date = models.DateTimeField(auto_now=True) 
-    writer = models.ForeignKey(User, on_delete = models.CASCADE, related_name = "comment_writer", default = None)
+    user_id = models.ForeignKey(User, on_delete = models.CASCADE, default = None)
+    class Meta:
+        abstract = True
 
 class StudyComments(Comments):
     board = models.ForeignKey( StudyBoard, on_delete= models.CASCADE, related_name= "study_comments")
@@ -45,6 +45,5 @@ class NoticeComments(Comments):
 class QnAComments(Comments):
     board = models.ForeignKey( QnABoard, on_delete= models.CASCADE, related_name= "QnA_comments")
 
-class RecuitComments(Comments):
-    board = models.ForeignKey( RecuitBoard, on_delete= models.CASCADE, related_name= "recuit_comments")
-
+class RecruitComments(Comments):
+    board = models.ForeignKey( RecruitBoard, on_delete= models.CASCADE, related_name= "recruit_comments")
