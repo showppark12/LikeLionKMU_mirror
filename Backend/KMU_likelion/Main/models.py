@@ -16,4 +16,6 @@ class Calender(models.Model):
     contents = models.CharField(max_length=200)
     plan_type = models.IntegerField(default = 0) # 0이면 notice 1이면 normal
     notice_id = models.ForeignKey(NoticeBoard, on_delete = models.CASCADE , related_name= "calender", default = None)
+    
+
 
