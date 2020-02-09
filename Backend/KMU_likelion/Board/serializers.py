@@ -36,10 +36,10 @@ class StudyCommentSerializer(serializers.ModelSerializer):
 
 #공지 댓글 Serializer
 class NoticeCommentSerializer(serializers.ModelSerializer):
-     author_name = serializers.ReadOnlyField(source='writer.username')
+     author_name = serializers.ReadOnlyField(source='user_id.username')
      class Meta:
          model = NoticeComments
-         fields = ['id','author_name','body','writer','board']
+         fields = ['id','author_name','body','user_id','board']
 
 #QnA 댓글 Serializer
 class QnACommentSerializer(serializers.ModelSerializer):
