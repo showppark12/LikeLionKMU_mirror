@@ -69,7 +69,7 @@ class RecuitViewSet(viewsets.ModelViewSet):
     pagination_class = Recruitpagination
 
     @action(detail=True, methods = ['GET','POST'])
-    def _like(self,request,*args,**kwargs):
+    def like(self,request,*args,**kwargs):
         return like_status(self,request,*args,**kwargs)
 
 
