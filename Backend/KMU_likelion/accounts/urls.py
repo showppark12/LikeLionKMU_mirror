@@ -6,6 +6,9 @@ from knox import views as knox_views
 
 router = DefaultRouter()
 router.register('user', views.UserViewSet)
+router.register('studygroup',views.StudyGroupViewSet)
+router.register('portfolio',views.PortfolioViewSet)
+
 urlpatterns = [
     # path("hello/", HelloAPI),
     # path('auth/', include('knox.urls')),
