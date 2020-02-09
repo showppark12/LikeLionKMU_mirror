@@ -7,9 +7,10 @@ from knox import views as knox_views
 router = DefaultRouter()
 router.register('user', views.UserViewSet)
 urlpatterns = [
-    path("hello/", HelloAPI),
+    # path("hello/", HelloAPI),
+    # path('auth/', include('knox.urls')),
     path("auth/register/", RegistrationAPI.as_view()),
     path("auth/login/", LoginAPI.as_view()),
-    path("auth/logout", knox_views.LogoutView.as_view(), name='knox_logout'),
+    path("auth/logout/", knox_views.LogoutView.as_view(), name='knox_logout'),
     path('', include(router.urls)),
 ]

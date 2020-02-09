@@ -1,16 +1,18 @@
 # api/views.py
 from rest_framework import viewsets, permissions, generics, status
+from django.contrib.auth.signals import user_logged_in, user_logged_out
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from knox.models import AuthToken
+from knox.auth import TokenAuthentication
 from .serializers import *
 from .models import *
 
 # Create your views here.
-@api_view(["GET"])
-def HelloAPI(request):
-    return Response("hello world!")
+# @api_view(["GET"])
+# def HelloAPI(request):
+#     return Response("hello world!")
 
 
 class RegistrationAPI(generics.GenericAPIView):
@@ -48,6 +50,16 @@ class LoginAPI(generics.GenericAPIView):
                 "token": AuthToken.objects.create(user)[1],
             }
         )
+
+# class LogoutView(APIView):
+#     authentication_classes = (TokenAuthentication,)
+#     permission_classes = (permissions.IsAuthenticated,)
+
+#     def post(self, request, format=None):
+#         request._auth.delete()
+#         user_logged_out.send(sender=request.user.__class__,
+#                              request=request, user=request.user)
+#         return Response(None, status=status.HTTP_204_NO_CONTENT)
 
 
 class UserViewSet(viewsets.ModelViewSet):
