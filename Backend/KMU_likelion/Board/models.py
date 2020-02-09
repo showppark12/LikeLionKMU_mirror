@@ -15,18 +15,26 @@ class StudyBoard(Board):
     personnel = models.IntegerField(default = 0)
     group_id = models.ForeignKey(StudyGroup, on_delete =models.CASCADE, related_name= "group_board", default = None)
     like = models.ManyToManyField(User, blank=True,related_name="study_like")
+    def total_likes(self):
+        return self.like.count()
 
 class NoticeBoard(Board):
     notice_date = models.DateField(null = True)
     like = models.ManyToManyField(User, blank=True,related_name="notice_like")
+    def total_likes(self):
+        return self.like.count()
 
 class RecruitBoard(Board):
     purpose = models.CharField(max_length= 100)
     like = models.ManyToManyField(User, blank=True,related_name="recruit_like")
+    def total_likes(self):
+        return self.like.count()
 
 class QnABoard(Board):
     subject = models.CharField(max_length= 200)
     like = models.ManyToManyField(User, blank=True,related_name="qna_like")
+    def total_likes(self):
+        return self.like.count() 
 
 class Comments(models.Model):
     body = models.TextField()
