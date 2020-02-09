@@ -26,7 +26,7 @@ class RecruitBoard(Board):
 
 class QnABoard(Board):
     subject = models.CharField(max_length= 200)
-
+    like = models.ManyToManyField(User, blank=True,related_name="qna_like")
 
 class Comments(models.Model):
     body = models.TextField()
