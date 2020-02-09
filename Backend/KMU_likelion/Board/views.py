@@ -16,7 +16,7 @@ def like_status(self,request,*args,**kwargs):
 
     if request.method == 'POST':
         # print("fdff",request.body) #react에서 request 요청을 받을때
-            print("유저어어어:",request.user)
+            
             if board.like.filter(username=self.request.user.username).exists():
                     
                     board.like.remove(self.request.user.id)
@@ -29,7 +29,7 @@ def like_status(self,request,*args,**kwargs):
 
             return Response({"state":status})
     else:
-            print("get유저어어어:",request.user)
+            
             if board.like.filter(username=self.request.user.username).exists():
                     status=True
             else:
