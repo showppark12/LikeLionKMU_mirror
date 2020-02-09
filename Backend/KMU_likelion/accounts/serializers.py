@@ -44,3 +44,10 @@ class PortfolioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Portfolio
         fields  = '__all__'
+
+
+
+class Group_UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group_User
+        fields  = '__all__'
