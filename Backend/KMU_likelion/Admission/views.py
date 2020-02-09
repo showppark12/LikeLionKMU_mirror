@@ -21,17 +21,27 @@ class AnswerViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         qs=super().get_queryset()
-        joinform = self.request.query_params.get('joinform','')
-        question = self.request.query_params.get('question','')
-        if joinform:
-            qs=qs.filter(belong_to_join=joinform)
-        elif question:
-            qs=qs.filter(belong_to_question = question)
+        joinform_id = self.request.query_params.get('joinform_id','')
+        question_id = self.request.query_params.get('question_id','')
+        if joinform_id:
+            qs=qs.filter(joinform_id=joinform_id)
+        elif question_id:
+            qs=qs.filter(question_id = question_id)
         return qs
 
 class EvaluationViewSet(viewsets.ModelViewSet):
     queryset = Evaluation.objects.all()
     serializer_class = EvaluationSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        joinform_id = self.request.query_params.get('joinform_id','')
+        user_id = self.request.query_params.get('user_id','')
+        if joinform_id:
+            qs = qs.filter(joinform_id = joinform_id)
+        elif user_id:
+            qs = qs.filter(user_id = user_id)
+        return qs
 
 
 
