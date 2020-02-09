@@ -136,8 +136,16 @@ AUTH_USER_MODEL = 'accounts.User'
 
 STATIC_URL = '/static/'
 
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": ("knox.auth.TokenAuthentication",
-    ),
+# REST_FRAMEWORK = {
+#     "DEFAULT_AUTHENTICATION_CLASSES": ("knox.auth.TokenAuthentication",
+#     ),
+# }
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',)
 }
+# REST_FRAMEWORK["DEFAULT_AUTHENTICATION_CLASSES"]
+# REST_FRAMEWORK = {
+# 	'DEFAULT_AUTHENTICATION_CLASSED':
+#     ('knox.auth.TokenAuthentication',)
+# }
