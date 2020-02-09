@@ -50,6 +50,12 @@ class StudyCommentViewSet(viewsets.ModelViewSet):
     queryset = StudyComments.objects.all().order_by('pub_date')
     serializer_class = StudyCommentSerializer
     pagination_class = StudyCommentpagination
+    def get_queryset(self):
+        qs=super().get_queryset()
+        board_id=self.request.query_params.get('id','')
+        if board_id:
+            qs=qs.filter(board=board_id)
+        return qs
  
 
 #공지 댓글 viewset
@@ -61,6 +67,13 @@ class NoticeCommentViewSet(viewsets.ModelViewSet):
 
     serializer_class = NoticeCommentSerializer
     pagination_class = NoticeCommentpagination
+
+    def get_queryset(self):
+        qs=super().get_queryset()
+        board_id=self.request.query_params.get('id','')
+        if board_id:
+            qs=qs.filter(board=board_id)
+        return qs
     
   
 # QnA 댓글 viewset
@@ -69,6 +82,12 @@ class QnACommentViewSet(viewsets.ModelViewSet):
     serializer_class = QnACommentSerializer
     pagination_class = QnACommentpagination
   
+    def get_queryset(self):
+        qs=super().get_queryset()
+        board_id=self.request.query_params.get('id','')
+        if board_id:
+            qs=qs.filter(board=board_id)
+        return qs
 
 # 팀원모집 댓글 viewset
 class RecuitCommentViewSet(viewsets.ModelViewSet):
@@ -77,3 +96,9 @@ class RecuitCommentViewSet(viewsets.ModelViewSet):
     pagination_class = RecruitCommentpagination
    
 
+    def get_queryset(self):
+        qs=super().get_queryset()
+        board_id=self.request.query_params.get('id','')
+        if board_id:
+            qs=qs.filter(board=board_id)
+        return qs
