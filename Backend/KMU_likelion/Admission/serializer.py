@@ -20,6 +20,8 @@ class AnswerSerializer(serializers.ModelSerializer):
 
 
 class EvaluationSerializer(serializers.ModelSerializer):
+    user_name = serializers.ReadOnlyField(source='user_id.username')
+    joinform_name = serializers.ReadOnlyField(source = 'joinform_id.name')
     class Meta:
         model = Evaluation
-        fields = '__all__'
+        fields = ['id','user_name','user_id','joinform_name','joinform_id','body','score','pub_date']
