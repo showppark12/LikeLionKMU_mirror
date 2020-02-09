@@ -1,13 +1,37 @@
 from rest_framework import viewsets, permissions
 from .models import *
 from .serializers import *
-from rest_framework.decorators import action
+from rest_framework.decorators import action,api_view
 from .pagination import *
 from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
+import json
 
 
 #스터디 게시판 viewset
+def like_status(self,request,*args,**kwargs):
+    board=self.get_object()
+    status=None
+    if request.method == 'POST':
+        # print("fdff",request.body) #react에서 request 요청을 받을때
+            if board.like.filter(username=self.request.user.username).exists():
+                    board.like.remove(self.request.user.id)
+                    print("user removed(false) : ",board.like.filter(username=self.request.user.username).exists())
+                    status=False
+            else:
+                    board.like.add(self.request.user.id)
+                    print("user added(true) : ",board.like.filter(username=self.request.user.username).exists())
+                    status=True
+            return Response({'status': status})
+    else:
+            if board.like.filter(username=self.request.user.username).exists():
+                    status=True
+            else:
+                    status=False
+        
+            return Response({'status': status})
+  
+
 
 
 class StudyViewSet(viewsets.ModelViewSet):
@@ -17,6 +41,7 @@ class StudyViewSet(viewsets.ModelViewSet):
     permission_classes = [
         permissions.IsAuthenticated,
     ]     
+
 
 #공지 게시판 viewset
 class NoticeViewSet(viewsets.ModelViewSet):
@@ -28,7 +53,6 @@ class NoticeViewSet(viewsets.ModelViewSet):
 
     serializer_class = NoticeSerializer
     pagination_class = Noticepagination
-    
 
 
 # QnA 게시판 viewset
@@ -37,11 +61,17 @@ class QnAViewSet(viewsets.ModelViewSet):
     serializer_class = QnASerializer
     pagination_class = QnApagination
 
+
 # 팀원모집 게시판 viewset
 class RecuitViewSet(viewsets.ModelViewSet):
     queryset = RecruitBoard.objects.all().order_by('pub_date')
     serializer_class = RecruitSerializer 
     pagination_class = Recruitpagination
+
+    @action(detail=True, methods = ['GET','POST'])
+    def _like(self,request,*args,**kwargs):
+        return like_status(self,request,*args,**kwargs)
+
 
 
 

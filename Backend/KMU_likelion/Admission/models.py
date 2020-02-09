@@ -3,6 +3,7 @@ from accounts.models import User
 # Create your models here.
 
 class JoinForm(models.Model):
+
     name = models.CharField(max_length=30)
     phone_number = models.CharField(max_length=50)
     student_id = models.CharField(max_length=50, default=None)
@@ -11,13 +12,14 @@ class JoinForm(models.Model):
     major = models.CharField(max_length=30)
     email = models.CharField(max_length = 100, default=None)
 
+
 class Question(models.Model):
     body = models.TextField()
 
 class Answer(models.Model):
     body  = models.TextField()
-    joinform_id = models.ForeignKey(JoinForm, on_delete = models.CASCADE, related_name= "join_answer")
-    question_id = models.ForeignKey(Question, on_delete = models.CASCADE, related_name= "question_answer")
+    joinform_id = models.ForeignKey(JoinForm, on_delete = models.CASCADE, related_name= "join_answer",default = None)
+    question_id = models.ForeignKey(Question, on_delete = models.CASCADE, related_name= "question_answer",default = None)
 
 class Evaluation(models.Model):
     joinform_id = models.ForeignKey(JoinForm, on_delete = models.CASCADE, related_name = "join_evaluation",default = None)
