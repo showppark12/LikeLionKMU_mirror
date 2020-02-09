@@ -24,6 +24,7 @@ class JoinFormViewSet(viewsets.ModelViewSet):
         average_score = total_score/count
 
         return Response({'total_score': total_score,'average_score':average_score})
+        
 
 
 

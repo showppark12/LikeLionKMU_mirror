@@ -10,6 +10,8 @@ class JoinForm(models.Model):
     sex = models.CharField(max_length=50, null =True)
     start_number = models.CharField(max_length=100, null =True)
     e_mail = models.CharField(max_length = 300, null =True)
+    password = models.CharField(max_length=100, null =True)
+    status = models.IntegerField( default = 0 ) # 0 심사중, 1 합격 2 나가리 
 
 class Question(models.Model):
     body = models.TextField()
