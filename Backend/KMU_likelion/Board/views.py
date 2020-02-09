@@ -8,13 +8,17 @@ from rest_framework.response import Response
 import json
 
 
+
 #스터디 게시판 viewset
 def like_status(self,request,*args,**kwargs):
     board=self.get_object()
-    status=None
+    status = None
+
     if request.method == 'POST':
         # print("fdff",request.body) #react에서 request 요청을 받을때
+            print("유저어어어:",request.user)
             if board.like.filter(username=self.request.user.username).exists():
+                    
                     board.like.remove(self.request.user.id)
                     print("user removed(false) : ",board.like.filter(username=self.request.user.username).exists())
                     status=False
@@ -22,14 +26,16 @@ def like_status(self,request,*args,**kwargs):
                     board.like.add(self.request.user.id)
                     print("user added(true) : ",board.like.filter(username=self.request.user.username).exists())
                     status=True
-            return Response({'status': status})
+
+            return Response({"state":status})
     else:
+            print("get유저어어어:",request.user)
             if board.like.filter(username=self.request.user.username).exists():
                     status=True
             else:
                     status=False
-        
-            return Response({'status': status})
+
+            return Response({"state":status})
   
 
 
@@ -69,7 +75,7 @@ class RecuitViewSet(viewsets.ModelViewSet):
     pagination_class = Recruitpagination
 
     @action(detail=True, methods = ['GET','POST'])
-    def _like(self,request,*args,**kwargs):
+    def like(self,request,*args,**kwargs):
         return like_status(self,request,*args,**kwargs)
 
 
