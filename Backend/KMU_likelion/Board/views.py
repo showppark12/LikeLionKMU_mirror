@@ -49,8 +49,12 @@ class StudyViewSet(viewsets.ModelViewSet):
     ]     
 
 
+    @action(detail=True, methods = ['GET','POST'])
+    def like(self,request,*args,**kwargs):
+        return like_status(self,request,*args,**kwargs)
+
 #공지 게시판 viewset
-class NoticeViewSet(viewsets.ModelViewSet):
+class NoticeViewSet(viewsets.ModelViewSet): 
     queryset = NoticeBoard.objects.all().order_by('pub_date')
 
     permission_classes = [
@@ -60,12 +64,20 @@ class NoticeViewSet(viewsets.ModelViewSet):
     serializer_class = NoticeSerializer
     pagination_class = Noticepagination
 
+    @action(detail=True, methods = ['GET','POST'])
+    def like(self,request,*args,**kwargs):
+        return like_status(self,request,*args,**kwargs)
+
 
 # QnA 게시판 viewset
 class QnAViewSet(viewsets.ModelViewSet):
     queryset = QnABoard.objects.all().order_by('pub_date')
     serializer_class = QnASerializer
     pagination_class = QnApagination
+
+    @action(detail=True, methods = ['GET','POST'])
+    def like(self,request,*args,**kwargs):
+        return like_status(self,request,*args,**kwargs)
 
 
 # 팀원모집 게시판 viewset
