@@ -3,13 +3,13 @@ from accounts.models import User
 # Create your models here.
 
 class JoinForm(models.Model):
-    name = models.CharField(max_length=200)
-    phone_number = models.CharField(max_length=300)
-    major = models.CharField(max_length=300)
+    name = models.CharField(max_length=30)
+    phone_number = models.CharField(max_length=50)
+    student_id = models.CharField(max_length=50, default=None)
     birth = models.DateField()
     sex = models.CharField(max_length=50)
-    major = models.CharField(max_length=100)
-    e_mail = models.CharField(max_length = 300)
+    major = models.CharField(max_length=30)
+    email = models.CharField(max_length = 100, default=None)
 
 class Question(models.Model):
     body = models.TextField()

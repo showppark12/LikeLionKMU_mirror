@@ -24,9 +24,9 @@ class AnswerViewSet(viewsets.ModelViewSet):
         joinform = self.request.query_params.get('joinform','')
         question = self.request.query_params.get('question','')
         if joinform:
-            qs=qs.filter(belong_to_join=joinform)
+            qs=qs.filter(joinform_id = joinform)
         elif question:
-            qs=qs.filter(belong_to_question = question)
+            qs=qs.filter(question_id = question)
         return qs
 
 class EvaluationViewSet(viewsets.ModelViewSet):
