@@ -9,7 +9,7 @@ import json
 
 
 #스터디 게시판 viewset
-def handling_like(self,request,*args,**kwargs):
+def like_status(self,request,*args,**kwargs):
     board=self.get_object()
     status=None
     if request.method == 'POST':
@@ -42,11 +42,6 @@ class StudyViewSet(viewsets.ModelViewSet):
         permissions.IsAuthenticated,
     ]     
 
-    @action(detail=True, methods = ['GET','POST'])
-    def like(self,request,*args,**kwargs):
-        return like_status(self,request,*args,**kwargs)
-
-
 
 #공지 게시판 viewset
 class NoticeViewSet(viewsets.ModelViewSet):
@@ -58,10 +53,6 @@ class NoticeViewSet(viewsets.ModelViewSet):
 
     serializer_class = NoticeSerializer
     pagination_class = Noticepagination
-    
-    @action(detail=True, methods = ['GET','POST'])
-    def like(self,request,*args,**kwargs):
-        return like_status(self,request,*args,**kwargs)
 
 
 # QnA 게시판 viewset
@@ -69,11 +60,6 @@ class QnAViewSet(viewsets.ModelViewSet):
     queryset = QnABoard.objects.all().order_by('pub_date')
     serializer_class = QnASerializer
     pagination_class = QnApagination
-    
-    @action(detail=True, methods = ['GET','POST'])
-    def like(self,request,*args,**kwargs):
-        return like_status(self,request,*args,**kwargs)
-
 
 
 # 팀원모집 게시판 viewset
@@ -83,7 +69,7 @@ class RecuitViewSet(viewsets.ModelViewSet):
     pagination_class = Recruitpagination
 
     @action(detail=True, methods = ['GET','POST'])
-    def like(self,request,*args,**kwargs):
+    def _like(self,request,*args,**kwargs):
         return like_status(self,request,*args,**kwargs)
 
 

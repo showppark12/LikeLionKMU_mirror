@@ -33,3 +33,14 @@ class LoginUserSerializer(serializers.Serializer):
             return user
         raise serializers.ValidationError("Unable to log in with provided credentials.")
 
+
+class StudyGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudyGroup
+        fields  = '__all__'
+
+
+class PortfolioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Portfolio
+        fields  = '__all__'

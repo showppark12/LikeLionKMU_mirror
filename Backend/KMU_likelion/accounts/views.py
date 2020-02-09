@@ -66,3 +66,12 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+class StudyGroupViewSet(viewsets.ModelViewSet):
+    queryset = StudyGroup.objects.all().order_by('pub_date')
+    serializer_class = StudyGroupSerializer
+
+
+class PortfolioViewSet(viewsets.ModelViewSet):
+    queryset =Portfolio.objects.all()
+    serializer_class = PortfolioSerializer
+
