@@ -24,6 +24,26 @@ class JoinFormViewSet(viewsets.ModelViewSet):
         average_score = total_score/count
 
         return Response({'total_score': total_score,'average_score':average_score})
+
+    @action(detail = False, methods = ['POST'])
+    def get_joinform(self,request,*args, **kwargs):
+        json_joinform = request.body
+        join = json.loads(json_joinform)
+        number = join['number']
+        password = join['password'] 
+        try:
+            joinform = JoinForm.objects.filter(phone_number = number)
+            joinform = joinform[0]
+        except:
+            return Response({'joinform':'이 번호는 없는 전화번호입니다.'})
+        
+
+        if joinform.pw == password:
+            serializer = JoinFormSerializer(joinform)
+            return Response(serializer.data)
+        
+        else: 
+            return Response({'joinform':'잘못된 비밀번호 입니다.'})
         
 
 

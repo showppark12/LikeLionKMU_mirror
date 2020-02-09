@@ -4,13 +4,13 @@ from accounts.models import User
 
 class JoinForm(models.Model):
     name = models.CharField(max_length=30)
-    phone_number = models.CharField(max_length=50)
+    phone_number = models.CharField(max_length=50, unique= True)
     student_id = models.CharField(max_length=50, default=None)
     birth = models.DateField()
     sex = models.CharField(max_length=50, null =True)
     major = models.CharField(max_length=50, null =True)
     email = models.CharField(max_length = 50, null =True)
-    password = models.CharField(max_length=50, null =True)
+    pw = models.CharField(max_length=50, null =True)
     status = models.IntegerField( default = 0 ) # 0 심사중, 1 합격 2 나가리 
 
 class Question(models.Model):
