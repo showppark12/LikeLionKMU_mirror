@@ -27,4 +27,3 @@ class StudyGroup(models.Model):
     pub_date = models.DateField(auto_now_add=True)
     introduction = models.TextField()
 
-    

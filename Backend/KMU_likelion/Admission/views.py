@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from .models import *
 from .serializer import *
 from rest_framework.decorators import action
@@ -55,6 +55,26 @@ class QuestionViewSet(viewsets.ModelViewSet):
 class AnswerViewSet(viewsets.ModelViewSet):
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]     
+    @action(detail = False, methods = ['POST'])
+    def post_answers(self,request,*args, **kwargs):
+        json_datas=request.body
+        datas=json.loads(json_datas)
+        answer_list=datas['answers']
+        join_id=datas['joinform_id']
+        join_instance=JoinForm.objects.get(id=join_id)
+        for question_id,answer in answer_list.items():
+         
+            tmp=Answer()
+            tmp.joinform_id=join_instance
+            tmp.question_id=Question.objects.get(id=question_id)
+            tmp.body=answer
+            tmp.save()
+        return Response({'잘 등록되었습니다.'})
+        
+
 
     def get_queryset(self):
         qs=super().get_queryset()
