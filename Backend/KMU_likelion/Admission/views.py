@@ -55,9 +55,9 @@ class QuestionViewSet(viewsets.ModelViewSet):
 class AnswerViewSet(viewsets.ModelViewSet):
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
-    permission_classes = [
-        permissions.IsAuthenticated,
-    ]     
+    # permission_classes = [
+    #     permissions.IsAuthenticated,
+    # ]     
     @action(detail = False, methods = ['POST'])
     def post_answers(self,request,*args, **kwargs):
         json_datas=request.body
@@ -72,7 +72,9 @@ class AnswerViewSet(viewsets.ModelViewSet):
             tmp.question_id=Question.objects.get(id=question_id)
             tmp.body=answer
             tmp.save()
-        return Response({'잘 등록되었습니다.'})
+        answers=Answer.objects.filter(joinform_id=join_id)
+        serializer=AnswerSerializer(answers,many=True)
+        return Response(serializer.data)
         
 
 
