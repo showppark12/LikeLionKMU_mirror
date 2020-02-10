@@ -27,8 +27,4 @@ class StudyGroup(models.Model):
     pub_date = models.DateField(auto_now_add=True)
     introduction = models.TextField()
 
-class Group_User(models.Model):
-    user_id = models.ForeignKey(User, on_delete= models.CASCADE,null=True)
-    group_id = models.ForeignKey(StudyGroup, on_delete= models.CASCADE,null=True)
-    is_captain = models.BooleanField(default = False)
     
