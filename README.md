@@ -270,10 +270,10 @@ KMU - LIKELION WEB SERVICE
 **Career [Main]** //동아리 커리어
 
 - title(charfield)
-- body(textField)
-- image(imagefield)
-- link(textfield)
+- pub_date(DateTimeField)
+- link(URLField)
 - participants(ManyToManyField, User) //참여자
+- body(ckeditor.fields.RichTextField)
 
 **Hashtag [Main]**
 
