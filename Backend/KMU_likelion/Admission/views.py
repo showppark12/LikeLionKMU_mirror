@@ -29,18 +29,21 @@ class JoinFormViewSet(viewsets.ModelViewSet):
     def get_joinform(self,request,*args, **kwargs):
         json_joinform = request.body
         join = json.loads(json_joinform)
-        number = join['number']
+        email = join['email']
         password = join['password'] 
+        print(email)
         try:
-            joinform = JoinForm.objects.filter(phone_number = number)
-            joinform = joinform[0]
+            joinform = JoinForm.objects.get(email = email)
+            answers=Answer.objects.filter(joinform_id=joinform.id)
+            print(answers)
         except:
-            return Response({'joinform':'이 번호는 없는 전화번호입니다.'})
+            return Response({'joinform':'이 이메일은 없는 이메일입니다.'})
         
 
         if joinform.pw == password:
             serializer = JoinFormSerializer(joinform)
-            return Response(serializer.data)
+            answer_serializer=AnswerSerializer(answers,many=True)
+            return Response({"join_forms":serializer.data,"answers":answer_serializer.data})
         
         else: 
             return Response({'joinform':'잘못된 비밀번호 입니다.'})
@@ -55,9 +58,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
 class AnswerViewSet(viewsets.ModelViewSet):
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
-    # permission_classes = [
-    #     permissions.IsAuthenticated,
-    # ]     
+
     @action(detail = False, methods = ['POST'])
     def post_answers(self,request,*args, **kwargs):
         json_datas=request.body
