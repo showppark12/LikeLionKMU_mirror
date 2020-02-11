@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'Admission',
     'Main',
 
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
