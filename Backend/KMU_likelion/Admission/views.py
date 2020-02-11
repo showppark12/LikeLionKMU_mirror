@@ -55,9 +55,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
 class AnswerViewSet(viewsets.ModelViewSet):
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
-    # permission_classes = [
-    #     permissions.IsAuthenticated,
-    # ]     
+
     @action(detail = False, methods = ['POST'])
     def post_answers(self,request,*args, **kwargs):
         json_datas=request.body
