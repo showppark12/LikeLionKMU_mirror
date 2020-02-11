@@ -49,7 +49,10 @@ INSTALLED_APPS = [
 
     # 글쓰기 지원
     'ckeditor',
+    'ckeditor_uploader'
 ]
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -142,16 +145,9 @@ AUTH_USER_MODEL = 'accounts.User'
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, '.static_root')
 
-# REST_FRAMEWORK = {
-#     "DEFAULT_AUTHENTICATION_CLASSES": ("knox.auth.TokenAuthentication",
-#     ),
-# }
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',)
 }
-# REST_FRAMEWORK["DEFAULT_AUTHENTICATION_CLASSES"]
-# REST_FRAMEWORK = {
-# 	'DEFAULT_AUTHENTICATION_CLASSED':
-#     ('knox.auth.TokenAuthentication',)
-# }
