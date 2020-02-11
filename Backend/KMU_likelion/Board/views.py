@@ -138,7 +138,7 @@ class QnACommentViewSet(viewsets.ModelViewSet):
         return qs
 
 # 팀원모집 댓글 viewset
-class RecuitCommentViewSet(viewsets.ModelViewSet):
+class RecruitCommentViewSet(viewsets.ModelViewSet):
     queryset = RecruitComments.objects.all().order_by('pub_date')
     serializer_class = RecruitCommentSerializer
     pagination_class = RecruitCommentpagination
