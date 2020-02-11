@@ -1,4 +1,6 @@
 from django.db import models
+from ckeditor.fields import RichTextField
+
 from accounts.models import User
 from Board.models import NoticeBoard
 
@@ -6,9 +8,10 @@ from Board.models import NoticeBoard
 
 class Career(models.Model):
     title = models.CharField(max_length= 100)
-    body =models.TextField()
-    link = models.TextField()
+    pub_date = models.DateTimeField(auto_now=True)
+    link = models.URLField()
     participants = models.ManyToManyField(User,blank=True,related_name="career_user")
+    body = RichTextField()
 
 class Calender(models.Model):
     start_date = models.DateField()
