@@ -70,7 +70,9 @@ class AnswerViewSet(viewsets.ModelViewSet):
             tmp.question_id=Question.objects.get(id=question_id)
             tmp.body=answer
             tmp.save()
-        return Response({'잘 등록되었습니다.'})
+        answers=Answer.objects.filter(joinform_id=join_id)
+        serializer=AnswerSerializer(answers,many=True)
+        return Response(serializer.data)
         
 
 
