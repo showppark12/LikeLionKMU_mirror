@@ -44,9 +44,9 @@ class StudyViewSet(viewsets.ModelViewSet):
     queryset = StudyBoard.objects.all().order_by('pub_date')
     serializer_class = StudySerializer
     pagination_class = Studypagination
-    permission_classes = [
-        permissions.IsAuthenticated,
-    ]     
+    # permission_classes = [
+    #     permissions.IsAuthenticated,
+    # ]     
 
 
     @action(detail=True, methods = ['GET','POST'])
@@ -57,9 +57,9 @@ class StudyViewSet(viewsets.ModelViewSet):
 class NoticeViewSet(viewsets.ModelViewSet): 
     queryset = NoticeBoard.objects.all().order_by('pub_date')
 
-    permission_classes = [
-        permissions.IsAuthenticatedOrReadOnly,
-    ]
+    # permission_classes = [
+    #     permissions.IsAuthenticatedOrReadOnly,
+    # ]
 
     serializer_class = NoticeSerializer
     pagination_class = Noticepagination
