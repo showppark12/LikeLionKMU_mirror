@@ -4,10 +4,10 @@ from rest_framework import serializers
 #스터디 게시판 Serializer
 class StudySerializer(serializers.ModelSerializer):
      author_name = serializers.ReadOnlyField(source='user_id.username')
-     group_name = serializers.ReadOnlyField(source='group_id.username')
+     group_name = serializers.ReadOnlyField(source='group_id.name')
      class Meta:
          model = StudyBoard
-         fields =  ['id','author_name','body','user_id','title','pub_date','update_date','like','total_likes','study_type','personnel','group_name']
+         fields =  ['id','author_name','body','user_id','title','pub_date','update_date','like','total_likes','study_type','personnel','group_name','group_id']
 
 #공지 게시판 Serializer
 class NoticeSerializer(serializers.ModelSerializer):
