@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     'Main',
 
     'drf_yasg',
+
+    # 글쓰기 지원
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -137,6 +140,7 @@ AUTH_USER_MODEL = 'accounts.User'
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, '.static_root')
 
 # REST_FRAMEWORK = {
 #     "DEFAULT_AUTHENTICATION_CLASSES": ("knox.auth.TokenAuthentication",
