@@ -31,12 +31,30 @@ def like_status(self,request,*args,**kwargs):
     else:
             
             if board.like.filter(username=self.request.user.username).exists():
+
                     status=True
             else:
                     status=False
-
+          
             return Response({"state":status})
-  
+
+def like_content(self,request,cat,*args,**kwargs):
+    board_list=None
+    serializer=None
+    if cat == "study":
+        board_list=self.request.user.study_like.all()
+        serializer=StudySerializer(board_list,many=True)
+    elif cat == "notice":
+         board_list=self.request.user.notice_like.all()
+         serializer=NoticeSerializer(board_list,many=True)
+    elif cat == "recruit":
+        board_list=self.request.user.recruit_like.all()
+        serializer=RecruitSerializer(board_list,many=True)
+    elif cat == "qna":
+        board_list=self.request.user.qna_like.all()
+        serializer=QnASerializer(board_list,many=True)
+    
+    return Response({"board_contents":serializer.data})
 
 
 
@@ -48,7 +66,10 @@ class StudyViewSet(viewsets.ModelViewSet):
     #     permissions.IsAuthenticated,
     # ]     
 
-
+    @action(detail=False, methods = ['POST'])
+    def user_like(self,request,*args,**kwargs):
+        cat="study"
+        return like_content(self,request,cat,*args,**kwargs)
     @action(detail=True, methods = ['GET','POST'])
     def like(self,request,*args,**kwargs):
         return like_status(self,request,*args,**kwargs)
@@ -63,7 +84,11 @@ class NoticeViewSet(viewsets.ModelViewSet):
 
     serializer_class = NoticeSerializer
     pagination_class = Noticepagination
-
+    @action(detail=False, methods = ['POST'])
+    def user_like(self,request,*args,**kwargs):
+        cat="notice"
+        return like_content(self,request,cat,*args,**kwargs)
+    
     @action(detail=True, methods = ['GET','POST'])
     def like(self,request,*args,**kwargs):
         return like_status(self,request,*args,**kwargs)
@@ -74,6 +99,10 @@ class QnAViewSet(viewsets.ModelViewSet):
     queryset = QnABoard.objects.all().order_by('pub_date')
     serializer_class = QnASerializer
     pagination_class = QnApagination
+    @action(detail=False, methods = ['POST'])
+    def user_like(self,request,*args,**kwargs):
+        cat="qna"
+        return like_content(self,request,cat,*args,**kwargs)
 
     @action(detail=True, methods = ['GET','POST'])
     def like(self,request,*args,**kwargs):
@@ -81,10 +110,14 @@ class QnAViewSet(viewsets.ModelViewSet):
 
 
 # 팀원모집 게시판 viewset
-class RecuitViewSet(viewsets.ModelViewSet):
+class RecruitViewSet(viewsets.ModelViewSet):
     queryset = RecruitBoard.objects.all().order_by('pub_date')
     serializer_class = RecruitSerializer 
     pagination_class = Recruitpagination
+    @action(detail=False, methods = ['POST'])
+    def user_like(self,request,*args,**kwargs):
+        cat="recruit"
+        return like_content(self,request,cat,*args,**kwargs)
 
     @action(detail=True, methods = ['GET','POST'])
     def like(self,request,*args,**kwargs):
