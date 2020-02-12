@@ -66,7 +66,7 @@ class StudyViewSet(viewsets.ModelViewSet):
     #     permissions.IsAuthenticated,
     # ]     
     filter_backends=[SearchFilter]
-    search_fields=('group_id__name',)
+    search_fields=('group_id__id',)
 
     @action(detail=False, methods = ['POST'])
     def user_like(self,request,*args,**kwargs):
