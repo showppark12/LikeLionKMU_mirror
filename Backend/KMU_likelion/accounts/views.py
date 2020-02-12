@@ -66,6 +66,7 @@ class StudyGroupViewSet(viewsets.ModelViewSet):
         if group_name:
             qs = qs.filter(name=group_name)
         return qs
+
 class PortfolioViewSet(viewsets.ModelViewSet):
     queryset =Portfolio.objects.all()
     serializer_class = PortfolioSerializer
