@@ -23,7 +23,7 @@ class Portfolio(models.Model):
 
 
 class StudyGroup(models.Model):
-    name = models.CharField(max_length=100) 
+    name = models.CharField(max_length=100,unique=True) 
     pub_date = models.DateField(auto_now_add=True)
     introduction = models.TextField()
 

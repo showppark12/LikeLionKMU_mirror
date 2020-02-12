@@ -9,6 +9,7 @@ from knox.auth import TokenAuthentication
 from .serializers import *
 from .models import *
 
+
 # Create your views here.
 # @api_view(["GET"])
 # def HelloAPI(request):
@@ -58,7 +59,11 @@ class UserViewSet(viewsets.ModelViewSet):
 class StudyGroupViewSet(viewsets.ModelViewSet):
     queryset = StudyGroup.objects.all().order_by('pub_date')
     serializer_class = StudyGroupSerializer
-
+   
+    def get_queryset(self):
+        group_name=self.request.query_params.get('group_name','')
+        groups = StudyGroup.objects.filter(name=group_name)
+        return groups
 class PortfolioViewSet(viewsets.ModelViewSet):
     queryset =Portfolio.objects.all()
     serializer_class = PortfolioSerializer
@@ -67,3 +72,4 @@ class PortfolioViewSet(viewsets.ModelViewSet):
 class Group_UserViewSet(viewsets.ModelViewSet):
     queryset =Group_User.objects.all()
     serializer_class = Group_UserSerializer
+    
