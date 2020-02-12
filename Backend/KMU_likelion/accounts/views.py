@@ -64,6 +64,8 @@ class StudyGroupViewSet(viewsets.ModelViewSet):
         group_name=self.request.query_params.get('group_name','')
         groups = StudyGroup.objects.filter(name=group_name)
         return groups
+
+        
 class PortfolioViewSet(viewsets.ModelViewSet):
     queryset =Portfolio.objects.all()
     serializer_class = PortfolioSerializer
