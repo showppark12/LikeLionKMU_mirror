@@ -10,6 +10,7 @@ from .serializers import *
 from .models import *
 
 
+
 # Create your views here.
 # @api_view(["GET"])
 # def HelloAPI(request):
@@ -59,13 +60,13 @@ class UserViewSet(viewsets.ModelViewSet):
 class StudyGroupViewSet(viewsets.ModelViewSet):
     queryset = StudyGroup.objects.all().order_by('pub_date')
     serializer_class = StudyGroupSerializer
-   
     def get_queryset(self):
+        qs=super().get_queryset()
         group_name=self.request.query_params.get('group_name','')
-        groups = StudyGroup.objects.filter(name=group_name)
-        return groups
+        if group_name:
+            qs = qs.filter(name=group_name)
+        return qs
 
-        
 class PortfolioViewSet(viewsets.ModelViewSet):
     queryset =Portfolio.objects.all()
     serializer_class = PortfolioSerializer
