@@ -11,7 +11,7 @@ class Board(models.Model):
         abstract = True
 
 class StudyBoard(Board):
-    study_type = models.IntegerField( default = 0)
+    study_type = models.IntegerField( default = 0) # 0: 공식모임, 1: 정보공유 2: etc
     personnel = models.IntegerField(default = 0)
     group_id = models.ForeignKey(StudyGroup, on_delete =models.CASCADE, related_name= "group_board", default = None)
     like = models.ManyToManyField(User, blank=True,related_name="study_like")
