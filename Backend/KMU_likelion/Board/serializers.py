@@ -14,7 +14,7 @@ class NoticeSerializer(serializers.ModelSerializer):
      author_name = serializers.ReadOnlyField(source='user_id.username')
      class Meta:
          model = NoticeBoard
-         fields = ['id','author_name','body','user_id','title','pub_date','update_date','like','total_likes','notice_date']
+         fields = ['id','author_name','body','user_id','title','pub_date','update_date','like','total_likes','notice_date','is_valid_date']
 
 #QnA 게시판 Serializer
 class QnASerializer(serializers.ModelSerializer):
