@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions,status
 from .models import *
 from .serializer import *
 from rest_framework.decorators import action
@@ -37,7 +37,7 @@ class JoinFormViewSet(viewsets.ModelViewSet):
             answers=Answer.objects.filter(joinform_id=joinform.id)
             print(answers)
         except:
-            return Response({'joinform':'이 이메일은 없는 이메일입니다.'})
+            return Response({'joinform':'이 이메일은 없는 이메일입니다.'},status=status.HTTP_404_NOT_FOUND)
         
 
         if joinform.pw == password:
@@ -46,7 +46,7 @@ class JoinFormViewSet(viewsets.ModelViewSet):
             return Response({"join_forms":serializer.data,"answers":answer_serializer.data})
         
         else: 
-            return Response({'joinform':'잘못된 비밀번호 입니다.'})
+            return Response({'joinform':'잘못된 비밀번호 입니다.'},status=status.HTTP_404_NOT_FOUND)
         
 
 
