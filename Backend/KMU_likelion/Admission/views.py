@@ -103,24 +103,5 @@ class EvaluationViewSet(viewsets.ModelViewSet):
         elif user_id:
             qs = qs.filter(user_id = user_id)
         return qs
-    
-    # @action(detail=False)
-    # def count_score(self,request, *args, **kwargs):
-    #     # print("제이슨:___", request.body)
-    #     # json_object = json.loads(request.body)
-    #     # joinform_id = json_object['pk']
-    #     qs = super().get_queryset()
-    #     evaluations = qs.filter(joinform_id = pk)
-    #     total_score = 0.0
-    #     for  evaluation in evaluations:
-    #         total_score = total_score +evaluation.score
-    #     rater = evaluations.user_id.count()
-        
-    #     average_score = total_score/rater
-
-    #     return Response({'total_score': total_score,'average_score':average_score})
-  
-
-
 
 
