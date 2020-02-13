@@ -16,7 +16,7 @@ class Career(models.Model):
     def __str__(self):
         return self.title        
 
-class Calender(models.Model):
+class Calendar(models.Model):
     title = models.CharField(max_length= 100, null= True)
     start_date = models.DateField()
     end_date = models.DateField()
