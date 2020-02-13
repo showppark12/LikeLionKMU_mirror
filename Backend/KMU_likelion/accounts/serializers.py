@@ -51,3 +51,8 @@ class Group_UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group_User
         fields  = '__all__'
+
+class MentoringSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Mentoring
+        fields = '__all__'
