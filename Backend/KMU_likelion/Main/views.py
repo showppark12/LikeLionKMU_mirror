@@ -12,9 +12,9 @@ class CareerViewSet(viewsets.ModelViewSet):
         permissions.IsAuthenticated,
     ]     
 
-class CalenderViewSet(viewsets.ModelViewSet):
-    queryset = Calender.objects.all()
-    serializer_class = CalenderSerializer
+class CalendarViewSet(viewsets.ModelViewSet):
+    queryset = Calendar.objects.all()
+    serializer_class = CalendarSerializer
 
 
 

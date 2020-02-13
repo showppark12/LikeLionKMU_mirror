@@ -7,7 +7,7 @@ class CareerSerializer(serializers.ModelSerializer):
         fields  = '__all__'
 
 
-class CalenderSerializer(serializers.ModelSerializer):
+class CalendarSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Calender
+        model = Calendar
         fields = '__all__'
