@@ -75,4 +75,7 @@ class PortfolioViewSet(viewsets.ModelViewSet):
 class Group_UserViewSet(viewsets.ModelViewSet):
     queryset =Group_User.objects.all()
     serializer_class = Group_UserSerializer
-    
+
+class MentoringViewSet(viewsets.ModelViewSet):
+    queryset = Mentoring.objects.all()
+    serializer_class = MentoringSerializer
