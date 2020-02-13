@@ -92,6 +92,7 @@ class NoticeViewSet(viewsets.ModelViewSet):
 
     serializer_class = NoticeSerializer
     pagination_class = Noticepagination
+
     @action(detail=False, methods = ['POST'])
     def user_like(self,request,*args,**kwargs):
         cat="notice"
