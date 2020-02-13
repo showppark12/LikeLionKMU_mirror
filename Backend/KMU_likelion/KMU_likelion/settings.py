@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'Board',
     'Admission',
     'Main',
-
     'drf_yasg',
 ]
 
