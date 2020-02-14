@@ -3,7 +3,7 @@ from rest_framework import viewsets, permissions, generics, status
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view
+from rest_framework.decorators import action, api_view
 from knox.models import AuthToken
 from knox.auth import TokenAuthentication
 from .serializers import *
@@ -56,6 +56,18 @@ class LoginAPI(generics.GenericAPIView):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    action_serializer_classes = {
+        "activity": UserActivitySerializer
+    }
+
+    def get_serializer_class(self):
+        return self.action_serializer_classes.get(self.action, self.serializer_class)
+
+    @action(detail=True, methods=["GET"])
+    def activity(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = self.get_serializer(user)
+        return Response(serializer.data)
 
 class StudyGroupViewSet(viewsets.ModelViewSet):
     queryset = StudyGroup.objects.all().order_by('pub_date')

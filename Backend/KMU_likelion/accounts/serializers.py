@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import *
 from django.contrib.auth import authenticate
 
+from Board.serializers import *
 
 #회원가입
 class CreateUserSerializer(serializers.ModelSerializer):
@@ -21,6 +22,24 @@ class UserSerializer(serializers.ModelSerializer):
      class Meta:
          model = User
          fields = '__all__'
+
+# 유저의 활동 내역(글, 댓글)을 포함  
+class UserActivitySerializer(serializers.ModelSerializer):
+    studyboard = StudySerializer(many=True, source="studyboard_set")
+    noticeboard = NoticeSerializer(many=True, source="noticeboard_set")
+    qnaboard = QnASerializer(many=True, source="qnaboard_set")
+    recruitboard = RecruitSerializer(many=True, source="recruitboard_set")
+
+    studycomments = StudyCommentSerializer(many=True, source="studycomments_set")
+    noticecomments = NoticeCommentSerializer(many=True, source="noticecomments_set")
+    qnacomments = QnACommentSerializer(many=True, source="qnacomments_set")
+    recruitcomments = RecruitCommentSerializer(many=True, source="recruitcomments_set")
+
+    class Meta:
+        model = User
+        fields = ["studyboard", "noticeboard", "qnaboard", "recruitboard", "studycomments", 
+        "noticecomments", "qnacomments", "recruitcomments"]
+
 
 #로그인
 class LoginUserSerializer(serializers.Serializer):
