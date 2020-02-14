@@ -9,6 +9,7 @@ class User(AbstractUser):
     user_type=models.IntegerField(null=True)
     start_number=models.CharField(max_length = 200, null=True)
     sns_id=models.CharField(max_length = 200, null=True)
+    img = models.ImageField(upload_to= 'images/', default= '../static/images/default_profile_img.png')
    
 class Mentoring(models.Model):
     pub_date = models.DateField(auto_now_add=True)
@@ -26,6 +27,7 @@ class StudyGroup(models.Model):
     name = models.CharField(max_length=100,unique=True) 
     pub_date = models.DateField(auto_now_add=True)
     introduction = models.TextField()
+    img = models.ImageField(upload_to= 'images/', default= '../static/images/defaut_group_image.png')
 
 
 class Group_User(models.Model):	

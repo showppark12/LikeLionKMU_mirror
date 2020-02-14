@@ -65,6 +65,14 @@ class StudyViewSet(viewsets.ModelViewSet):
     # permission_classes = [
     #     permissions.IsAuthenticated,
     # ]     
+    # filter_backends=[SearchFilter]
+    # search_fields=('group_id__id',)
+    def get_queryset(self):
+        qs=super().get_queryset()
+        group_id=self.request.query_params.get('group_id','')
+        if group_id:
+            qs = qs.filter(group_id=group_id)
+        return qs
 
     @action(detail=False, methods = ['POST'])
     def user_like(self,request,*args,**kwargs):
@@ -84,6 +92,7 @@ class NoticeViewSet(viewsets.ModelViewSet):
 
     serializer_class = NoticeSerializer
     pagination_class = Noticepagination
+
     @action(detail=False, methods = ['POST'])
     def user_like(self,request,*args,**kwargs):
         cat="notice"

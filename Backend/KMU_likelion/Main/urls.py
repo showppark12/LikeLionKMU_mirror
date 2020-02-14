@@ -4,6 +4,8 @@ from . import views
 
 router = DefaultRouter()
 router.register('career', views.CareerViewSet)
+router.register('calendar',views.CalendarViewSet)
+
 
 urlpatterns = [
     path('', include(router.urls)),

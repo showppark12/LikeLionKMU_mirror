@@ -11,7 +11,7 @@ class Board(models.Model):
         abstract = True
 
 class StudyBoard(Board):
-    study_type = models.IntegerField( default = 0)
+    study_type = models.IntegerField( default = 0) # 0: 공식모임, 1: 정보공유 2: etc
     personnel = models.IntegerField(default = 0)
     group_id = models.ForeignKey(StudyGroup, on_delete =models.CASCADE, related_name= "group_board", default = None)
     like = models.ManyToManyField(User, blank=True,related_name="study_like")
@@ -19,10 +19,12 @@ class StudyBoard(Board):
         return self.like.count()
 
 class NoticeBoard(Board):
-    notice_date = models.DateField(null = True)
+    notice_date = models.DateField(null=True)
     like = models.ManyToManyField(User, blank=True,related_name="notice_like")
+    is_valid_date = models.BooleanField(default = False)
     def total_likes(self):
         return self.like.count()
+
 
 class RecruitBoard(Board):
     purpose = models.CharField(max_length= 100)
