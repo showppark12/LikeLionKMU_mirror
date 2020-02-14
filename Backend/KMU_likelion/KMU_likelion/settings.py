@@ -45,10 +45,13 @@ INSTALLED_APPS = [
     'Admission',
     'Main',
     'drf_yasg',
-
+    'django_filters',
     # 글쓰기 지원
     'ckeditor',
-    'ckeditor_uploader'
+    'ckeditor_uploader',
+    'crispy_forms',
+    
+    
 ]
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
@@ -148,5 +151,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',)
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
 }

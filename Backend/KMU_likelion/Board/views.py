@@ -6,6 +6,7 @@ from .pagination import *
 from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
 import json
+from .filterings import *
 
 
 
@@ -57,7 +58,6 @@ def like_content(self,request,cat,*args,**kwargs):
     return Response({"board_contents":serializer.data})
 
 
-
 class StudyViewSet(viewsets.ModelViewSet):
     queryset = StudyBoard.objects.all().order_by('pub_date')
     serializer_class = StudySerializer
@@ -65,14 +65,7 @@ class StudyViewSet(viewsets.ModelViewSet):
     # permission_classes = [
     #     permissions.IsAuthenticated,
     # ]     
-    # filter_backends=[SearchFilter]
-    # search_fields=('group_id__id',)
-    def get_queryset(self):
-        qs=super().get_queryset()
-        group_id=self.request.query_params.get('group_id','')
-        if group_id:
-            qs = qs.filter(group_id=group_id)
-        return qs
+    filter_class=StudyFilter
 
     @action(detail=False, methods = ['POST'])
     def user_like(self,request,*args,**kwargs):
@@ -92,7 +85,7 @@ class NoticeViewSet(viewsets.ModelViewSet):
 
     serializer_class = NoticeSerializer
     pagination_class = Noticepagination
-
+    filter_class=NoticeFilter
     @action(detail=False, methods = ['POST'])
     def user_like(self,request,*args,**kwargs):
         cat="notice"
@@ -108,6 +101,7 @@ class QnAViewSet(viewsets.ModelViewSet):
     queryset = QnABoard.objects.all().order_by('pub_date')
     serializer_class = QnASerializer
     pagination_class = QnApagination
+    filter_class=QnAFilter
     @action(detail=False, methods = ['POST'])
     def user_like(self,request,*args,**kwargs):
         cat="qna"
@@ -123,6 +117,7 @@ class RecruitViewSet(viewsets.ModelViewSet):
     queryset = RecruitBoard.objects.all().order_by('pub_date')
     serializer_class = RecruitSerializer 
     pagination_class = Recruitpagination
+    filter_class=RecruitFilter
     @action(detail=False, methods = ['POST'])
     def user_like(self,request,*args,**kwargs):
         cat="recruit"
@@ -140,12 +135,8 @@ class StudyCommentViewSet(viewsets.ModelViewSet):
     queryset = StudyComments.objects.all().order_by('pub_date')
     serializer_class = StudyCommentSerializer
     pagination_class = StudyCommentpagination
-    def get_queryset(self):
-        qs=super().get_queryset()
-        board_id=self.request.query_params.get('id','')
-        if board_id:
-            qs=qs.filter(board=board_id)
-        return qs
+    filter_class=StudyCommentFilter
+ 
  
 
 #공지 댓글 viewset
@@ -157,13 +148,8 @@ class NoticeCommentViewSet(viewsets.ModelViewSet):
 
     serializer_class = NoticeCommentSerializer
     pagination_class = NoticeCommentpagination
-
-    def get_queryset(self):
-        qs=super().get_queryset()
-        board_id=self.request.query_params.get('id','')
-        if board_id:
-            qs=qs.filter(board=board_id)
-        return qs
+    filter_class=NoticeCommentFilter
+   
     
   
 # QnA 댓글 viewset
@@ -171,24 +157,14 @@ class QnACommentViewSet(viewsets.ModelViewSet):
     queryset = QnAComments.objects.all().order_by('pub_date')
     serializer_class = QnACommentSerializer
     pagination_class = QnACommentpagination
+    filter_class=QnACommentFilter
   
-    def get_queryset(self):
-        qs=super().get_queryset()
-        board_id=self.request.query_params.get('id','')
-        if board_id:
-            qs=qs.filter(board=board_id)
-        return qs
+   
 
 # 팀원모집 댓글 viewset
 class RecruitCommentViewSet(viewsets.ModelViewSet):
     queryset = RecruitComments.objects.all().order_by('pub_date')
     serializer_class = RecruitCommentSerializer
     pagination_class = RecruitCommentpagination
-   
+    filter_class=RecruitCommentFilter
 
-    def get_queryset(self):
-        qs=super().get_queryset()
-        board_id=self.request.query_params.get('id','')
-        if board_id:
-            qs=qs.filter(board=board_id)
-        return qs
