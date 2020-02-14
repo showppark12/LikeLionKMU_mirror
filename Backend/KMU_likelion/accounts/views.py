@@ -8,6 +8,7 @@ from knox.models import AuthToken
 from knox.auth import TokenAuthentication
 from .serializers import *
 from .models import *
+from .filterings import *
 
 
 
@@ -59,7 +60,7 @@ class UserViewSet(viewsets.ModelViewSet):
     action_serializer_classes = {
         "activity": UserActivitySerializer
     }
-
+    filter_class=UserFilter
     def get_serializer_class(self):
         return self.action_serializer_classes.get(self.action, self.serializer_class)
 
@@ -72,22 +73,21 @@ class UserViewSet(viewsets.ModelViewSet):
 class StudyGroupViewSet(viewsets.ModelViewSet):
     queryset = StudyGroup.objects.all().order_by('pub_date')
     serializer_class = StudyGroupSerializer
-    def get_queryset(self):
-        qs=super().get_queryset()
-        group_name=self.request.query_params.get('group_name','')
-        if group_name:
-            qs = qs.filter(name=group_name)
-        return qs
+    filter_class=StudyGroupFilter
+
 
 class PortfolioViewSet(viewsets.ModelViewSet):
     queryset =Portfolio.objects.all()
     serializer_class = PortfolioSerializer
+    filter_class=PortfolioFilter
 
 
 class Group_UserViewSet(viewsets.ModelViewSet):
     queryset =Group_User.objects.all()
     serializer_class = Group_UserSerializer
+    filter_class=Group_UserFilter
 
 class MentoringViewSet(viewsets.ModelViewSet):
     queryset = Mentoring.objects.all()
     serializer_class = MentoringSerializer
+    filter_class=MentoringFilter

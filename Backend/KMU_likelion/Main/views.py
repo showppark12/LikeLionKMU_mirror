@@ -3,6 +3,7 @@ from .models import *
 from .serializers import *
 from rest_framework.decorators import action,api_view
 from rest_framework.response import Response
+from .filterings import *
 
 # Create your views here.
 class CareerViewSet(viewsets.ModelViewSet):
@@ -11,10 +12,12 @@ class CareerViewSet(viewsets.ModelViewSet):
     permission_classes = [
         permissions.IsAuthenticated,
     ]     
+    filter_class=CareerFilter
 
 class CalendarViewSet(viewsets.ModelViewSet):
     queryset = Calendar.objects.all()
     serializer_class = CalendarSerializer
+    filter_class=CalendarFilter
 
 
 
