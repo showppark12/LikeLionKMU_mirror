@@ -5,12 +5,15 @@ from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
 import json
+from .filterings import *
+
 # Create your views here.
 
 
 class JoinFormViewSet(viewsets.ModelViewSet):
     queryset = JoinForm.objects.all()
     serializer_class = JoinFormSerializer
+    filter_class=JoinFormFilter
     @action(detail=True)
     def count_score(self,request, *args, **kwargs):
         joinform = self.get_object()
@@ -54,10 +57,12 @@ class JoinFormViewSet(viewsets.ModelViewSet):
 class QuestionViewSet(viewsets.ModelViewSet):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
+    filter_class=QuestionFilter
 
 class AnswerViewSet(viewsets.ModelViewSet):
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
+    filter_class=AnswerFilter
 
     @action(detail = False, methods = ['POST'])
     def post_answers(self,request,*args, **kwargs):
@@ -79,29 +84,12 @@ class AnswerViewSet(viewsets.ModelViewSet):
         
 
 
-    def get_queryset(self):
-        qs=super().get_queryset()
-        joinform = self.request.query_params.get('joinform','')
-        question = self.request.query_params.get('question','')
-        if joinform:
-            qs=qs.filter(joinform_id = joinform)
-        elif question:
-            qs=qs.filter(question_id = question)
 
-        return qs
 
 class EvaluationViewSet(viewsets.ModelViewSet):
     queryset = Evaluation.objects.all()
     serializer_class = EvaluationSerializer
+    filter_class=EvaluationFilter
 
-    def get_queryset(self):
-        qs = super().get_queryset()
-        joinform_id = self.request.query_params.get('joinform_id','')
-        user_id = self.request.query_params.get('user_id','')
-        if joinform_id:
-            qs = qs.filter(joinform_id = joinform_id)
-        elif user_id:
-            qs = qs.filter(user_id = user_id)
-        return qs
-
+   
 
