@@ -142,9 +142,9 @@ class StudyCommentViewSet(viewsets.ModelViewSet):
 #공지 댓글 viewset
 class NoticeCommentViewSet(viewsets.ModelViewSet):
     queryset = NoticeComments.objects.all().order_by('pub_date')
-    permission_classes = [
-        permissions.IsAuthenticatedOrReadOnly,
-    ]
+    # permission_classes = [
+    #     permissions.IsAuthenticatedOrReadOnly,
+    # ]
 
     serializer_class = NoticeCommentSerializer
     pagination_class = NoticeCommentpagination

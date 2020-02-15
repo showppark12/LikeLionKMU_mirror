@@ -35,30 +35,34 @@ class RecruitSerializer(serializers.ModelSerializer):
 #스터디 댓글 Serializer
 class StudyCommentSerializer(serializers.ModelSerializer):     
      author_name = serializers.ReadOnlyField(source='user_id.username')
+     user_img = serializers.ImageField(source= 'user_id.img',read_only= True, use_url =True)
      class Meta:
          model = StudyComments
-         fields = ['id','author_name','body','user_id','board','pub_date','update_date']
+         fields = ['id','author_name','body','user_id','board','pub_date','update_date','user_img']
 
 #공지 댓글 Serializer
 class NoticeCommentSerializer(serializers.ModelSerializer):
      author_name = serializers.ReadOnlyField(source='user_id.username')
+     user_img = serializers.ImageField(source= 'user_id.img',read_only= True, use_url =True)
      class Meta:
          model = NoticeComments
-         fields = ['id','author_name','body','user_id','board','pub_date','update_date']
+         fields = ['id','author_name','body','user_id','board','pub_date','update_date','user_img']
 
 #QnA 댓글 Serializer
 class QnACommentSerializer(serializers.ModelSerializer):
      author_name = serializers.ReadOnlyField(source='user_id.username')
+     user_img = serializers.ImageField(source= 'user_id.img',read_only= True, use_url =True)
      class Meta:
          model = QnAComments
-         fields = ['id','author_name','body','user_id','board','pub_date','update_date']
+         fields = ['id','author_name','body','user_id','board','pub_date','update_date','user_img']
 
 #질문 댓글 Serializer
 class RecruitCommentSerializer(serializers.ModelSerializer):
      author_name = serializers.ReadOnlyField(source='user_id.username')
+     user_img = serializers.ImageField(source= 'user_id.img',read_only= True, use_url =True)
      class Meta:
          model = RecruitComments
-         fields = ['id','author_name','body','user_id','board','pub_date','update_date']
+         fields = ['id','author_name','body','user_id','board','pub_date','update_date','user_img']
 
 
 
