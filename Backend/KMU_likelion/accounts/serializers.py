@@ -72,6 +72,8 @@ class Group_UserSerializer(serializers.ModelSerializer):
         fields  = '__all__'
 
 class MentoringSerializer(serializers.ModelSerializer):
+    mentor_name = serializers.ReadOnlyField(source='mentor.username')
+    mentee_name = serializers.ReadOnlyField(source = 'mentee.username')
     class Meta:
         model = Mentoring
-        fields = '__all__'
+        fields = ['id','pub_date','mentor','mentee','mentor_name','mentee_name']
