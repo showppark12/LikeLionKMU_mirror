@@ -91,3 +91,14 @@ class MentoringViewSet(viewsets.ModelViewSet):
     queryset = Mentoring.objects.all()
     serializer_class = MentoringSerializer
     filter_class=MentoringFilter
+
+    @action(detail=False, methods=["GET"])
+    def get_mentors(self, request, *args, **kwargs):
+        qs=Mentoring.objects.exclude(mentor=None)
+       
+     
+        serializer=mentorSerializer(qs,many=True)
+        return Response(serializer.data)
+       
+
+        

@@ -77,3 +77,12 @@ class MentoringSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mentoring
         fields = ['id','pub_date','mentor','mentee','mentor_name','mentee_name']
+
+
+class mentorSerializer(serializers.ModelSerializer):
+    user = UserSerializer(source='mentor')
+    
+    class Meta:
+       
+        model = Mentoring
+        fields  = ['user']
