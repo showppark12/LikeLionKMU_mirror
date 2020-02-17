@@ -13,8 +13,8 @@ class User(AbstractUser):
    
 class Mentoring(models.Model):
     pub_date = models.DateField(auto_now_add=True)
-    mentor = models.ForeignKey(User, on_delete = models.CASCADE, related_name= "mentor")
-    mentee = models.ForeignKey(User, on_delete = models.CASCADE, related_name= "mentee")
+    mentor = models.ForeignKey(User, on_delete = models.CASCADE, null=True,related_name= "mentor")
+    mentee = models.ForeignKey(User, on_delete = models.CASCADE, null=True,related_name= "mentee")
 
 class Portfolio(models.Model):
     title = models.CharField(max_length= 200)

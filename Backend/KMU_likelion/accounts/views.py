@@ -92,6 +92,17 @@ class MentoringViewSet(viewsets.ModelViewSet):
     serializer_class = MentoringSerializer
     filter_class=MentoringFilter
 
+    @action(detail=False, methods=["GET"])
+    def get_mentors(self, request, *args, **kwargs):
+        qs=Mentoring.objects.exclude(mentor=None)
+       
+     
+        serializer=mentorSerializer(qs,many=True)
+        return Response(serializer.data)
+       
+
+        
+
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -109,4 +120,5 @@ class MentoringViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
 
