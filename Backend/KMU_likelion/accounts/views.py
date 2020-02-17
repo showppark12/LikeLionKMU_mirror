@@ -94,28 +94,32 @@ class MentoringViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["GET"])
     def get_mentors(self, request, *args, **kwargs):
-        qs=Mentoring.objects.exclude(mentor=None)
-       
-     
-        serializer=mentorSerializer(qs,many=True)
+        queryset=Mentoring.objects.exclude(mentor=None)
+        querylist =[]
+        #중복제거
+        for qs in queryset:
+            flags = False
+            if not querylist:
+                querylist.append(qs)
+                flags = True
+            else:
+                for query in querylist:
+                    if query.mentor.id == qs.mentor.id:
+                        flags = True
+            if flags == False:
+                querylist.append(qs)
+                
+        serializer=MentorSerializer(querylist,many=True)
         return Response(serializer.data)
        
-
-        
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        print("얘가 뭐니?", serializer.validated_data)
         check = serializer.validated_data
-        print("가져오기:", check['mentor'], check['mentee'])
-        print("호우호우:",check['mentor'].id, check['mentee'].id)
         mentoring_log = Mentoring.objects.filter(mentor = check['mentor'].id)
         for mentor in mentoring_log:
-            print("mentee~~~~:",check['mentee'].id)
-            print("멘티멘티:",mentor.mentee.id)
             if mentor.mentee.id == check['mentee'].id:
-                print("왔오?")
                 return Response(status=status.HTTP_400_BAD_REQUEST) 
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
