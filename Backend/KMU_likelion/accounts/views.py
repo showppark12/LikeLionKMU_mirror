@@ -111,7 +111,26 @@ class MentoringViewSet(viewsets.ModelViewSet):
                 
         serializer=MentorSerializer(querylist,many=True)
         return Response(serializer.data)
-       
+
+    @action(detail=False, methods=["GET"])
+    def get_mentees(self, request, *args, **kwargs):
+        queryset=Mentoring.objects.exclude(mentee=None)
+        querylist =[]
+        #중복제거
+        for qs in queryset:
+            flags = False
+            if not querylist:
+                querylist.append(qs)
+                flags = True
+            else:
+                for query in querylist:
+                    if query.mentee.id == qs.mentee.id:
+                        flags = True
+            if flags == False:
+                querylist.append(qs)
+                
+        serializer=MenteeSerializer(querylist,many=True)
+        return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

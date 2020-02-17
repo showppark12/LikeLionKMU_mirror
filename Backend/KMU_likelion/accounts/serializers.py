@@ -84,3 +84,10 @@ class MentorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mentoring
         fields  = ['user']
+
+
+class MenteeSerializer(serializers.ModelSerializer):
+    user = UserSerializer(source='mentee')
+    class Meta:
+        model = Mentoring
+        fields  = ['user']
