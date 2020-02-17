@@ -102,3 +102,23 @@ class MentoringViewSet(viewsets.ModelViewSet):
        
 
         
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        print("얘가 뭐니?", serializer.validated_data)
+        check = serializer.validated_data
+        print("가져오기:", check['mentor'], check['mentee'])
+        print("호우호우:",check['mentor'].id, check['mentee'].id)
+        mentoring_log = Mentoring.objects.filter(mentor = check['mentor'].id)
+        for mentor in mentoring_log:
+            print("mentee~~~~:",check['mentee'].id)
+            print("멘티멘티:",mentor.mentee.id)
+            if mentor.mentee.id == check['mentee'].id:
+                print("왔오?")
+                return Response(status=status.HTTP_400_BAD_REQUEST) 
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
