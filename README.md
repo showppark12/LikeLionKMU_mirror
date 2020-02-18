@@ -36,20 +36,19 @@ KMU - LIKELION WEB SERVICE
 
 - **역할 및 책임**
 
-  - 이정현 [Frontend]
+  - Front-end [이정현, 박종민]
     - React.js
-    - JS / Jquery / Ajax
-  - 박종민 [Frontend]
-    - React.js
-  - 강승원 [Backend]
-  - App : Accounts, JoinForm, Study
-  - 이정우 [Backend]
+    - JavaScript / Jquery / Ajax
+  - Back-end [강승원, 이정우, 허태정]
+    - DRF / Python / MariaDB
+  
+  
 
 ## 5. 요구사항
 
 <img src = "https://user-images.githubusercontent.com/42925501/73937125-b3f5bd00-4927-11ea-9ef1-65211a71548f.PNG">
 
-## UseCase (보류)
+
 
 ## 6. 구조도
 
@@ -58,14 +57,9 @@ KMU - LIKELION WEB SERVICE
 #### App
 
 - **Accounts**
-
-  - 로그인
+- 로그인
   - 마이페이지(작성/수정)
-
-- **JoinForm**
-  - 신청폼(작성/수정/읽기) -> 비회원
-  - 신청자리스트 -> 운영진
-  - 이력서 열람 페이지(선발기능) -> 운영진
+  
 - **Study**
   - 게시판 리스트
   - 신청폼
@@ -292,19 +286,44 @@ KMU - LIKELION WEB SERVICE
 
 
 
------------------------------------------
+<hr>
 
-### Feedback
+### Refactoring
 
-**필드 및 모델 명 수정**
+- **일정**
+  - 20.02.18 ~ 20.02.26
 
-- Profile 모델명 -> User 수정
-- record 모델의 belong_to_user 필드 -> user_id로 수정(다른 모델의 필드들도 확인하여 수정)
-- Answer 모델의 answer 필드 -> content나 body로..
-- 유저모델의 is_manager필드 -> user_type 수정 (integer 형으로 타입수정)
-  - 0 : 회장
-  - 1: 일반 운영진
-  - 2: 교육팀
-  - 3: 일반유저
+- **기능 / DB 구조 변경**
 
----- 20.02.08 17:00 피드백 적용완료 -----
+  - JoinForm(입부신청) 기능 제거
+  - DB 변경(sqlite -> Postgre or Mysql or **MariaDB**)
+  - QnA 모델 변경
+    - Question / Answer 모델로 분할, 각 모델에 comment 연결.
+    - ex ) StackOverFlow QnA
+  - Calendar 모델 과 Notice 모델 병합
+  - Back-end 내부 전반적으로 명명규칙 통일
+    - Django document상의 convention 참고하여 통일.
+    - https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/#
+  - 정규세션 게시판(Lecture) 모델 생성
+    - 정규세션 진행내용과 강의자료 업로드 용
+    - 과제제출(Assignment) 모델 또한 생성하여 해당 세션의 과제제출을 할 수 있도록 함
+      -> 세션보드에 과제문제를 올릴 것인가?
+  - ckeditor 활용
+    - 복수의 첨부파일과 이미지 등을 업로드 할 수 있도록..
+
+- **Design**
+
+  - material-ui와 bootstrap 등 제공되는 라이브러리를 최대한 활용
+  - 구조는 grid로 잡고 css의 직접적인 사용은 최소한으로 줄여보도록 하자
+  - 모바일 반응형
+
+- **Git Branch**
+
+  - refactoring 기간동안 모든 작업은 master가 아닌 **refactoring** branch로 병합할 것.
+
+- **Deploy**
+
+  - AWS ec2..
+
+  
+
