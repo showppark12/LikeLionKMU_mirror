@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Paper from "@material-ui/core/Paper";
-import api from "../../api/api_board";
+import api from "../../api/BoardAPI";
 // import Card from '@material-ui/core/Card';
 // import CardActions from '@material-ui/core/CardActions';
 // import CardContent from '@material-ui/core/CardContent';
@@ -53,7 +53,7 @@ export default class MyLike extends Component {
   }
 
   render() {
-    const { id, title, body, purpose } = this.props;
+    // const { id, title, body, purpose } = this.props;
 
     return (
       <Paper elevation={10} className="MyLike">
