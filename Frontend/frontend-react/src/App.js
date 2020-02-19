@@ -9,6 +9,7 @@ import Main from "./components/main/Main";
 
 import Login from "./components/accounts/login";
 import Mypage from "./components/accounts/mypage/Mypage";
+
 import Store from "./store/store";
 
 import { authlogout, tokenConfig } from "./api/AuthAPI";
@@ -18,6 +19,7 @@ import StudyRouter from "./routes/StudyRouter";
 // import AdmissionRouter from "./components/admission/AdmissionRouter";
 
 import MentoringContainer from "./components/mentoring/MentoringContainer";
+import Register from "./components/accounts/Register";
 
 class App extends React.Component {
   constructor(props) {
@@ -77,6 +79,7 @@ class App extends React.Component {
           <Route path="/mentoring" component={MentoringContainer} />
 
           <Route path="/login" component={Login} />
+          <Route path="/register" component={Register} />
           <Route path="/mypage/:id" component={Mypage} id="number" />
           <Footer />
         </Router>
