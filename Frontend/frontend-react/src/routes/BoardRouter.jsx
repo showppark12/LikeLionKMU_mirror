@@ -1,17 +1,18 @@
-import NoticeList from "./notice/NoticeList";
-import NoticeDetail from "./notice/NoticeDetail";
-import NoticeNew from "./notice/NoticeNew";
-import NoticeUpdate from "./notice/NoticeUpdate";
+import NoticeList from "../components/board/notice/NoticeList";
+import NoticeDetail from "../components/board/notice/NoticeDetail";
+import NoticeNew from "../components/board/notice/NoticeNew";
+import NoticeUpdate from "../components/board/notice/NoticeUpdate";
 
-import QnANew from "./qna/QnANew";
-import QnAList from "./qna/QnAList";
-import QnADetail from "./qna/QnADetail";
-import QnAUpdate from "./qna/QnAUpdate";
+import QnANew from "../components/board/qna/QnANew";
+import QnAList from "../components/board/qna/QnAList";
+import QnADetail from "../components/board/qna/QnADetail";
+import QnAUpdate from "../components/board/qna/QnAUpdate";
 
-import RecruitNew from "./recruit/RecruitNew";
-import RecruitList from "./recruit/RecruitList";
-import RecruitDetail from "./recruit/RecruitDetail";
-import RecruitUpdate from "./recruit/RecruitUpdate";
+// import RecruitNew from "./recruit/RecruitNew";
+// import RecruitList from "./recruit/RecruitList";
+// import RecruitDetail from "./recruit/RecruitDetail";
+// import RecruitUpdate from "./recruit/RecruitUpdate";
+
 
 import React from "react";
 import { Route } from "react-router-dom";
@@ -34,12 +35,12 @@ function BoardRouter({ match }) {
       updateComponent = QnAUpdate;
       break;
 
-    case "/recruit":
-      listComponent = RecruitList;
-      newComponent = RecruitNew;
-      detailComponent = RecruitDetail;
-      updateComponent = RecruitUpdate;
-      break;
+    // case "/recruit":
+    //   listComponent = RecruitList;
+    //   newComponent = RecruitNew;
+    //   detailComponent = RecruitDetail;
+    //   updateComponent = RecruitUpdate;
+    //   break;
 
     default:
       listComponent = "";

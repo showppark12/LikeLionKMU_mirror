@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { authlogin } from "../../api/api_auth";
-import Store from "../../Store/store";
-
+import { authlogin } from "../../api/AuthAPI";
+import Store from "../../store/store";
 import { Link, Redirect } from "react-router-dom";
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";

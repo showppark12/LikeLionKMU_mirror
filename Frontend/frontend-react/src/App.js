@@ -9,13 +9,13 @@ import Main from "./components/main/Main";
 
 import Login from "./components/accounts/login";
 import Mypage from "./components/accounts/Mypage";
-import Store from "./Store/store";
+import Store from "./store/store";
 
-import { authlogout, tokenConfig } from "./api/api_auth";
+import { authlogout, tokenConfig } from "./api/AuthAPI";
 
-import BoardRouter from "./components/board/BoardRouter";
-import StudyRouter from "./components/board/StudyRouter";
-import AdmissionRouter from "./components/admission/AdmissionRouter";
+import BoardRouter from "./routes/BoardRouter";
+import StudyRouter from "./routes/StudyRouter";
+// import AdmissionRouter from "./components/admission/AdmissionRouter";
 
 import MentoringContainer from "./components/mentoring/MentoringContainer";
 
@@ -73,7 +73,7 @@ class App extends React.Component {
           <Route path="/study" component={StudyRouter} />
           <Route path="/recruit" component={BoardRouter} />
 
-          <Route path="/admission" component={AdmissionRouter} />
+          {/* <Route path="/admission" component={AdmissionRouter} /> */}
           <Route path="/mentoring" component={MentoringContainer} />
 
           <Route path="/login" component={Login} />

@@ -1,14 +1,14 @@
 import React, { Component } from "react";
-import { getUser } from "../../api/api_auth";
+import { getUser } from "../../api/AuthAPI";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
-import Paper from "@material-ui/core/Paper";
+// import Paper from "@material-ui/core/Paper";
 // import api from "../../api/api_board";
 // import VirtualizedList from "./likedPostView";
 // import { Link } from "react-router-dom";
 import MyLike from "./MyLike";
-import Button from "@material-ui/core/Button";
-import TextField from '@material-ui/core/TextField';
+// import Button from "@material-ui/core/Button";
+// import TextField from '@material-ui/core/TextField';
 import LeftProfileView from "./LeftProfileView";
 import MyProfile from "./MyProfile";
 

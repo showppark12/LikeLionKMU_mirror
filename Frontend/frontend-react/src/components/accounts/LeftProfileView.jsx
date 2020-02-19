@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import Paper from "@material-ui/core/Paper";
-import Card from '@material-ui/core/Card';
+// import Card from '@material-ui/core/Card';
 // import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
+// import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import { makeStyles } from '@material-ui/core/styles';
+// import { makeStyles } from '@material-ui/core/styles';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 
 import DraftsIcon from '@material-ui/icons/Drafts';
@@ -20,7 +20,7 @@ import PriorityHighIcon from '@material-ui/icons/PriorityHigh';
 
 export default class LeftProfileView extends Component {
     render() {
-        const {username, sns_id, } = this.props
+        const {username, sns_id } = this.props
 
 
         return (
