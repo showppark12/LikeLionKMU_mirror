@@ -1,8 +1,14 @@
+from django.contrib.auth import authenticate, get_user_model
 from rest_framework import serializers
-from .models import *
-from django.contrib.auth import authenticate
 
-from Board.serializers import *
+from Board.serializers import (NoticeCommentSerializer, NoticeSerializer,
+                               QnACommentSerializer, QnASerializer,
+                               RecruitCommentSerializer, RecruitSerializer,
+                               StudyCommentSerializer, StudySerializer)
+
+from .models import GroupUser, Mentoring, Portfolio, StudyGroup
+
+User = get_user_model()
 
 
 # 회원가입
@@ -66,9 +72,9 @@ class PortfolioSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class Group_UserSerializer(serializers.ModelSerializer):
+class GroupUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Group_User
+        model = GroupUser
         fields = '__all__'
 
 

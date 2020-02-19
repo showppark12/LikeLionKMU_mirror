@@ -1,14 +1,20 @@
 # api/views.py
-from rest_framework import viewsets, permissions, generics, status
-from django.contrib.auth.signals import user_logged_in, user_logged_out
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework.decorators import action, api_view
+from django.contrib.auth import get_user_model
 from knox.models import AuthToken
-from knox.auth import TokenAuthentication
-from .serializers import *
-from .models import *
-from .filterings import *
+from rest_framework import generics, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
+from .filters import (GroupUserFilter, MentoringFilter, PortfolioFilter,
+                      StudyGroupFilter, UserFilter)
+from .models import GroupUser, Mentoring, Portfolio, StudyGroup
+from .serializers import (CreateUserSerializer, GroupUserSerializer,
+                          LoginUserSerializer, MenteeSerializer,
+                          MentoringSerializer, MentorSerializer,
+                          PortfolioSerializer, StudyGroupSerializer,
+                          UserActivitySerializer, UserSerializer)
+
+User = get_user_model()
 
 
 class RegistrationAPI(generics.GenericAPIView):
@@ -21,7 +27,8 @@ class RegistrationAPI(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        return Response({"user": UserSerializer(user, context=self.get_serializer_context()).data, "token": AuthToken.objects.create(user)[1], })
+        return Response({"user": UserSerializer(user, context=self.get_serializer_context()).data,
+                         "token": AuthToken.objects.create(user)[1], })
 
 
 class LoginAPI(generics.GenericAPIView):
@@ -31,7 +38,8 @@ class LoginAPI(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
-        return Response({"user": UserSerializer(user, context=self.get_serializer_context()).data, "token": AuthToken.objects.create(user)[1], })
+        return Response({"user": UserSerializer(user, context=self.get_serializer_context()).data,
+                         "token": AuthToken.objects.create(user)[1], })
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -87,7 +95,7 @@ class MentoringViewSet(viewsets.ModelViewSet):
                 for query in querylist:
                     if query.mentor.id == qs.mentor.id:
                         flags = True
-            if flags == False:
+            if not flags:
                 querylist.append(qs)
 
         serializer = MentorSerializer(querylist, many=True)
@@ -107,7 +115,7 @@ class MentoringViewSet(viewsets.ModelViewSet):
                 for query in querylist:
                     if query.mentee.id == qs.mentee.id:
                         flags = True
-            if flags == False:
+            if not flags:
                 querylist.append(qs)
 
         serializer = MenteeSerializer(querylist, many=True)

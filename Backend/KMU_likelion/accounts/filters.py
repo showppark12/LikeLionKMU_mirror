@@ -1,7 +1,10 @@
 import django_filters
+from django.contrib.auth import get_user_model
 from django_filters import filters
 
-from .models import *
+from .models import GroupUser, Mentoring, Portfolio, StudyGroup
+
+User = get_user_model()
 
 
 class UserFilter(django_filters.rest_framework.FilterSet):
