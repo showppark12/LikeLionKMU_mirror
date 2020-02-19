@@ -7,8 +7,9 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Main from "./components/main/Main";
 
-import Login from "./components/accounts/Login";
-import Mypage from "./components/accounts/Mypage";
+import Login from "./components/accounts/login";
+import Mypage from "./components/accounts/mypage/Mypage";
+
 import Store from "./store/store";
 
 import { authlogout, tokenConfig } from "./api/AuthAPI";

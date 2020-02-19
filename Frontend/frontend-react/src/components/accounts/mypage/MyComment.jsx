@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Paper from "@material-ui/core/Paper";
-import api from "../../api/BoardAPI";
+import api from "../../../api/BoardAPI";
 // import Card from '@material-ui/core/Card';
 // import CardActions from '@material-ui/core/CardActions';
 // import CardContent from '@material-ui/core/CardContent';
@@ -12,42 +12,33 @@ import api from "../../api/BoardAPI";
 // import ListItemText from '@material-ui/core/ListItemText';
 // import {FixedSizeList} from 'react-window';
 
-export default class MyLike extends Component {
+export default class MyComment extends Component {
   state = {
-    likeNotice: [],
-    likeQnA: [],
-    likeStudy: [],
-    likeRecruit: []
+    studycomments: [],
+    noticecomments: [],
+    qnacomments: [],
+    recruitcomments: [],
   };
   componentDidMount() {
-    this.getLikePosts("notice");
-    this.getLikePosts("QnA");
-    this.getLikePosts("study");
-    this.getLikePosts("recruit");
+    const id = this.props.id;
+    this.getMyPost(id);
   }
 
-  async getLikePosts(target) {
+  async getMyPost(id) {
     await api
-      .getUserLikePost(target)
-      .then(likePosts => {
-        console.log(likePosts);
-        var posts = likePosts.data.board_contents;
-        switch (target) {
-          case "notice":
-            this.setState({ likeNotice: posts });
-            break;
-          case "QnA":
-            this.setState({ likeQnA: posts });
-            break;
-          case "study":
-            this.setState({ likeStudy: posts });
-            break;
-          case "recruit":
-            this.setState({ likeRecruit: posts });
-            break;
-          default:
-            break;
-        }
+      .getMyPost(id)
+      .then(myPosts => {
+        console.log(myPosts);
+        var mystudy = myPosts.data.studycomments;
+        var mynotice = myPosts.data.noticecomments;
+        var myqna = myPosts.data.qnacomments;
+        var myrecruit = myPosts.data.recruitcomments;
+        
+        this.setState({studycomments:mystudy});
+        this.setState({noticecomments:mynotice});
+        this.setState({qnacomments:myqna});
+        this.setState({recruitcomments:myrecruit});
+
       })
       .catch(err => console.log(err));
   }
@@ -56,55 +47,55 @@ export default class MyLike extends Component {
     // const { id, title, body, purpose } = this.props;
 
     return (
-      <Paper elevation={10} className="MyLike">
+      <Paper elevation={10} className="MyComment">
         <>
-          <h1>Liked Post</h1>
+          <h1>My Comments</h1>
           <br />
-          {this.state.likeNotice.map(liked_post => (
+          {this.state.noticecomments.map(mycomment => (
             <div>
               <h4>Notice board</h4>
 
               <Link
-                to={`/notice/detail/${liked_post.id}`}
+                to={`/notice/detail/${mycomment.id}`}
                 className={"main-postTitle"}
               >
-                -{liked_post.title}
+                -{mycomment.body}
               </Link>
             </div>
           ))}
           <br />
-          {this.state.likeQnA.map(liked_post => (
+          {this.state.qnacomments.map(mycomment => (
             <div>
               <h4>QnA board</h4>
               <Link
-                to={`/QnA/detail/${liked_post.id}`}
+                to={`/qna/detail/${mycomment.id}`}
                 className={"main-postTitle"}
               >
-                -{liked_post.title}
+                -{mycomment.body}
               </Link>
             </div>
           ))}
           <br />
-          {this.state.likeStudy.map(liked_post => (
+          {this.state.studycomments.map(mycomment => (
             <div>
               <h4>study board</h4>
               <Link
-                to={`/study/detail/${liked_post.id}`}
+                to={`/study/detail/${mycomment.id}`}
                 className={"main-postTitle"}
               >
-                -{liked_post.title}
+                -{mycomment.body}
               </Link>
             </div>
           ))}
           <br />
-          {this.state.likeRecruit.map(liked_post => (
+          {this.state.recruitcomments.map(mycomment => (
             <div>
               <h4>recruit board</h4>
               <Link
-                to={`/recruit/detail/${liked_post.id}`}
+                to={`/recruit/detail/${mycomment.id}`}
                 className={"main-postTitle"}
               >
-                -{liked_post.title}
+                -{mycomment.body}
               </Link>
             </div>
           ))}
