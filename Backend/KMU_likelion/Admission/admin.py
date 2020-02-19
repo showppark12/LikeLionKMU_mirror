@@ -1,10 +1,9 @@
 from django.contrib import admin
 
-from .models import *
+from .models import Answer, Application
+
 # Register your models here.
 
 
 admin.site.register(Answer)
-admin.site.register(JoinForm)
-
-
+admin.site.register(Application)

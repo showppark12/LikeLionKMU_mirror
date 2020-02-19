@@ -13,26 +13,25 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path,include
 from django.conf import settings
 from django.conf.urls import url
 from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import include, path
 
-from .yasg import *
-
+from .yasg import schema_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path("accounts/auth", include("knox.urls")),
     path("accounts/", include("accounts.urls")),
-    path("admission/",include("Admission.urls")),
-    path('board/', include('Board.urls')),
-    path('main/', include('Main.urls')),
+    path("admission/", include("admission.urls")),
+    path('board/', include('board.urls')),
+    path('main/', include('main.urls')),
 
     # Ckeditor
     path('ckeditor/', include('ckeditor_uploader.urls')),
-     
+
     # API Docs
     url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

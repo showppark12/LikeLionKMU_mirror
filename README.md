@@ -291,8 +291,9 @@ KMU - LIKELION WEB SERVICE
 ### Refactoring
 
 - **일정**
-  - 20.02.18 ~ 20.02.26
-
+  
+- 20.02.18 ~ 20.02.26
+  
 - **기능 / DB 구조 변경**
 
   - JoinForm(입부신청) 기능 제거
@@ -311,11 +312,12 @@ KMU - LIKELION WEB SERVICE
   - ckeditor 활용
     - 복수의 첨부파일과 이미지 등을 업로드 할 수 있도록..
 
-- **Design**
+- **Front-end**
 
   - material-ui와 bootstrap 등 제공되는 라이브러리를 최대한 활용
   - 구조는 grid로 잡고 css의 직접적인 사용은 최소한으로 줄여보도록 하자
   - 모바일 반응형
+  - react 디렉터리 구조 변경
 
 - **Git Branch**
 

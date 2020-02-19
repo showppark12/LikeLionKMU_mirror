@@ -1,15 +1,16 @@
-from django.urls import path, include
-from .views import *
-from rest_framework.routers import DefaultRouter
-from . import views
+from django.urls import include, path
 from knox import views as knox_views
+from rest_framework.routers import DefaultRouter
+
+from . import views
+from .views import *
 
 router = DefaultRouter()
 router.register('user', views.UserViewSet)
-router.register('studygroup',views.StudyGroupViewSet)
-router.register('portfolio',views.PortfolioViewSet)
-router.register('group_user',views.Group_UserViewSet)
-router.register('mentoring',views.MentoringViewSet)
+router.register('studygroup', views.StudyGroupViewSet)
+router.register('portfolio', views.PortfolioViewSet)
+router.register('GroupUser', views.GroupUserViewSet)
+router.register('mentoring', views.MentoringViewSet)
 
 urlpatterns = [
     # path("hello/", HelloAPI),

@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class AdmissionConfig(AppConfig):
-    name = 'Admission'
+    name = 'admission'
