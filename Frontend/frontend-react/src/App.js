@@ -16,7 +16,7 @@ import { authlogout, tokenConfig } from "./api/AuthAPI";
 
 import BoardRouter from "./routes/BoardRouter";
 import StudyRouter from "./routes/StudyRouter";
-// import AdmissionRouter from "./components/admission/AdmissionRouter";
+import AdmissionRouter from "./routes/AdmissionRouter";
 
 import MentoringContainer from "./components/mentoring/MentoringContainer";
 import Register from "./components/accounts/Register";
@@ -75,7 +75,7 @@ class App extends React.Component {
           <Route path="/study" component={StudyRouter} />
           <Route path="/recruit" component={BoardRouter} />
 
-          {/* <Route path="/admission" component={AdmissionRouter} /> */}
+          <Route path="/admission" component={AdmissionRouter} />
           <Route path="/mentoring" component={MentoringContainer} />
 
           <Route path="/login" component={Login} />
