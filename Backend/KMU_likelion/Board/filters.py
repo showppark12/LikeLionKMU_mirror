@@ -1,7 +1,8 @@
 import django_filters
 from django_filters import filters
 
-from .models import (NoticeBoard, NoticeComment, QnABoard, QnAComment, StudyBoard, StudyComment)
+from .models import (NoticeBoard, NoticeComment, QnABoard, QnAComment,
+                     StudyBoard, StudyComment)
 
 
 class StudyFilter(django_filters.rest_framework.FilterSet):

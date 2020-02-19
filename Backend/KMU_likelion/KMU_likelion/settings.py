@@ -41,18 +41,20 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'knox',
-    'accounts',
-    'Board',
-    'Admission',
-    'Main',
+
     'drf_yasg',
     'django_filters',
+
     # 글쓰기 지원
     'ckeditor',
     'ckeditor_uploader',
     'crispy_forms',
-    
-    
+
+    # 사용자 앱
+    'accounts',
+    'board',
+    'admission',
+    'main',
 ]
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
@@ -73,7 +75,7 @@ CORS_ORIGIN_WHITELIST = (
     'http://127.0.0.1:3000',
     'http://localhost:8000',
     'http://127.0.0.1:8000',
-    
+
 )
 
 ROOT_URLCONF = 'KMU_likelion.urls'

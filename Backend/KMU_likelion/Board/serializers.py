@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from .models import (NoticeBoard, NoticeComment, QnABoard, QnAComment, StudyBoard, StudyComment)
+from .models import (NoticeBoard, NoticeComment, QnABoard, QnAComment,
+                     StudyBoard, StudyComment)
 
 
 # 스터디 게시판 Serializer
