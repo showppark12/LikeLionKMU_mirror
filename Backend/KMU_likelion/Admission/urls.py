@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 from . import views
 
 router = DefaultRouter()
-router.register('joinform', views.JoinFormViewSet)
+router.register('application', views.ApplicationViewSet)
 router.register('question', views.QuestionViewSet)
 router.register('answer', views.AnswerViewSet)
 router.register('evaluation', views.EvaluationViewSet)

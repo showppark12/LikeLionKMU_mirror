@@ -19,8 +19,8 @@ class AbstractBaseBoard(models.Model):
 
 
 class Score(models.Model):
-    score_type = models.CharField()
-    score = models.PositiveIntegerField()
+    score_types = models.CharField(max_length=10)
+    scores = models.PositiveIntegerField()
 
 
 class LectureBoard(AbstractBaseBoard):

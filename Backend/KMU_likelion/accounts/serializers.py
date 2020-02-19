@@ -1,10 +1,9 @@
 from django.contrib.auth import authenticate, get_user_model
 from rest_framework import serializers
 
-from Board.serializers import (NoticeCommentSerializer, NoticeSerializer,
-                               QnACommentSerializer, QnASerializer,
-                               RecruitCommentSerializer, RecruitSerializer,
-                               StudyCommentSerializer, StudySerializer)
+from board.serializers import (NoticeBoardCommentSerializer, NoticeSerializer,
+                               QnABoardCommentSerializer, QnASerializer,
+                               StudyBoardCommentSerializer, StudySerializer)
 
 from .models import GroupUser, Mentoring, Portfolio, StudyGroup
 
@@ -35,17 +34,15 @@ class UserActivitySerializer(serializers.ModelSerializer):
     studyboard = StudySerializer(many=True, source="studyboard_set")
     noticeboard = NoticeSerializer(many=True, source="noticeboard_set")
     qnaboard = QnASerializer(many=True, source="qnaboard_set")
-    recruitboard = RecruitSerializer(many=True, source="recruitboard_set")
 
-    studycomments = StudyCommentSerializer(many=True, source="studycomments_set")
-    noticecomments = NoticeCommentSerializer(many=True, source="noticecomments_set")
-    qnacomments = QnACommentSerializer(many=True, source="qnacomments_set")
-    recruitcomments = RecruitCommentSerializer(many=True, source="recruitcomments_set")
+    StudyBoardComments = StudyBoardCommentSerializer(many=True, source="StudyBoardComments_set")
+    NoticeBoardComments = NoticeBoardCommentSerializer(many=True, source="NoticeBoardComments_set")
+    QnABoardComments = QnABoardCommentSerializer(many=True, source="QnABoardComments_set")
 
     class Meta:
         model = User
         fields = ["studyboard", "noticeboard", "qnaboard", "recruitboard",
-                  "studycomments", "noticecomments", "qnacomments", "recruitcomments"]
+                  "StudyBoardComments", "NoticeBoardComments", "QnABoardComments", "recruitcomments"]
 
 
 # 로그인

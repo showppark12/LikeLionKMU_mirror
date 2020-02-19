@@ -4,7 +4,7 @@ from django_filters import filters
 from .models import Answer, Application, Evaluation, Question
 
 
-class JoinFormFilter(django_filters.rest_framework.FilterSet):
+class ApplicationFilter(django_filters.rest_framework.FilterSet):
 
     class Meta:
         model = Application

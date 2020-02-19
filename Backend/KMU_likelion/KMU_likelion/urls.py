@@ -25,9 +25,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # path("accounts/auth", include("knox.urls")),
     path("accounts/", include("accounts.urls")),
-    path("admission/", include("Admission.urls")),
-    path('board/', include('Board.urls')),
-    path('main/', include('Main.urls')),
+    path("admission/", include("admission.urls")),
+    path('board/', include('board.urls')),
+    path('main/', include('main.urls')),
 
     # Ckeditor
     path('ckeditor/', include('ckeditor_uploader.urls')),

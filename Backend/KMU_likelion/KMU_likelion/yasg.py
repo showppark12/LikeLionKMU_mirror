@@ -3,9 +3,9 @@ from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
 
 from accounts.urls import router as accounts_router
-from Admission.urls import router as addmission_router
-from Board.urls import router as board_router
-from Main.urls import router as main_router
+from admission.urls import router as addmission_router
+from board.urls import router as board_router
+from main.urls import router as main_router
 
 router = routers.DefaultRouter()
 router.registry.extend(accounts_router.registry)
