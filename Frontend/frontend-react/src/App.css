@@ -141,6 +141,22 @@
   height: 100%;
 }
 
+.MyPost {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  padding-inline-start: 2rem;
+  height: 100%;
+}
+
+.MyComment {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  padding-inline-start: 2rem;
+  height: 100%;
+}
+
+
+
 .faked {
   float: right;
   margin-bottom: 2rem;

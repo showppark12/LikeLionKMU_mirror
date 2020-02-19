@@ -8,7 +8,7 @@ import Footer from "./components/Footer";
 import Main from "./components/main/Main";
 
 import Login from "./components/accounts/login";
-import Mypage from "./components/accounts/Mypage";
+import Mypage from "./components/accounts/mypage/Mypage";
 import Store from "./store/store";
 
 import { authlogout, tokenConfig } from "./api/AuthAPI";

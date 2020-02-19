@@ -37,24 +37,35 @@ export default class LeftProfileView extends Component {
 
               <MenuList>
                 <hr/>
-                <MenuItem onClick={event => this.props.handlingSubmit1(event)}>
+                <MenuItem onClick={event => this.props.handlingSubmit(event, "Myprofile")}>
                 <ListItemIcon>
                     <SendIcon fontSize="small" />
                 </ListItemIcon>
                 <Typography variant="inherit">My Profile</Typography>
                 </MenuItem>
-                <MenuItem onClick={event => this.props.handlingSubmit(event)}>
+
+                <MenuItem onClick={event => this.props.handlingSubmit(event, "MyLike")}>
                 <ListItemIcon>
                     <PriorityHighIcon fontSize="small" />
                 </ListItemIcon>
                 <Typography variant="inherit">My Liked Post</Typography>
                 </MenuItem>
-                <MenuItem>
+
+                <MenuItem onClick={event => this.props.handlingSubmit(event, "MyPost")}>
                 <ListItemIcon>
                     <DraftsIcon fontSize="small" />
                 </ListItemIcon>
                 <Typography variant="inherit" noWrap>
                     My Post
+                </Typography>
+                </MenuItem>
+
+                <MenuItem onClick={event => this.props.handlingSubmit(event, "MyComment")}>
+                <ListItemIcon>
+                    <DraftsIcon fontSize="small" />
+                </ListItemIcon>
+                <Typography variant="inherit" noWrap>
+                    My Comment
                 </Typography>
                 </MenuItem>
                 
