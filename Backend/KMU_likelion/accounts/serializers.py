@@ -1,9 +1,9 @@
 from django.contrib.auth import authenticate, get_user_model
 from rest_framework import serializers
 
-from board.serializers import (NoticeBoardCommentSerializer, NoticeSerializer,
-                               QnABoardCommentSerializer, QnASerializer,
-                               StudyBoardCommentSerializer, StudySerializer)
+from board.serializers import (NoticeBoardCommentSerializer, NoticeBoardSerializer,
+                               QnABoardCommentSerializer, QnABoardSerializer,
+                               StudyBoardCommentSerializer, StudyBoardSerializer)
 
 from .models import GroupUser, Mentoring, Portfolio, StudyGroup
 
@@ -31,9 +31,9 @@ class UserSerializer(serializers.ModelSerializer):
 
 # 유저의 활동 내역(글, 댓글)을 포함
 class UserActivitySerializer(serializers.ModelSerializer):
-    studyboard = StudySerializer(many=True, source="studyboard_set")
-    noticeboard = NoticeSerializer(many=True, source="noticeboard_set")
-    qnaboard = QnASerializer(many=True, source="qnaboard_set")
+    studyboard = StudyBoardSerializer(many=True, source="studyboard_set")
+    noticeboard = NoticeBoardSerializer(many=True, source="noticeboard_set")
+    qnaboard = QnABoardSerializer(many=True, source="qnaboard_set")
 
     StudyBoardComments = StudyBoardCommentSerializer(many=True, source="StudyBoardComments_set")
     NoticeBoardComments = NoticeBoardCommentSerializer(many=True, source="NoticeBoardComments_set")

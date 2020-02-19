@@ -5,7 +5,7 @@ from .models import (NoticeBoard, NoticeBoardComment, QnABoard,
 
 
 # 스터디 게시판 Serializer
-class StudySerializer(serializers.ModelSerializer):
+class StudyBoardSerializer(serializers.ModelSerializer):
     author_name = serializers.ReadOnlyField(source='user_id.username')
     group_name = serializers.ReadOnlyField(source='group_id.name')
 
@@ -16,7 +16,7 @@ class StudySerializer(serializers.ModelSerializer):
 
 
 # 공지 게시판 Serializer
-class NoticeSerializer(serializers.ModelSerializer):
+class NoticeBoardSerializer(serializers.ModelSerializer):
     author_name = serializers.ReadOnlyField(source='user_id.username')
 
     class Meta:
@@ -26,7 +26,7 @@ class NoticeSerializer(serializers.ModelSerializer):
 
 
 # QnA 게시판 Serializer
-class QnASerializer(serializers.ModelSerializer):
+class QnABoardSerializer(serializers.ModelSerializer):
     author_name = serializers.ReadOnlyField(source='user_id.username')
 
     class Meta:

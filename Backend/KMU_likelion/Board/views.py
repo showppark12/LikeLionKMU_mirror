@@ -7,9 +7,9 @@ from .filters import (NoticeBoardCommentFilter, NoticeFilter,
                       StudyBoardCommentFilter, StudyFilter)
 from .models import (NoticeBoard, NoticeBoardComment, QnABoard,
                      QnABoardComment, StudyBoard, StudyBoardComment)
-from .serializers import (NoticeBoardCommentSerializer, NoticeSerializer,
-                          QnABoardCommentSerializer, QnASerializer,
-                          StudyBoardCommentSerializer, StudySerializer)
+from .serializers import (NoticeBoardCommentSerializer, NoticeBoardSerializer,
+                          QnABoardCommentSerializer, QnABoardSerializer,
+                          StudyBoardCommentSerializer, StudyBoardSerializer)
 
 
 # 스터디 게시판 viewset
@@ -47,20 +47,20 @@ def like_content(self, request, cat, *args, **kwargs):
     serializer = None
     if cat == "study":
         board_list = self.request.user.study_like.all()
-        serializer = StudySerializer(board_list, many=True)
+        serializer = StudyBoardSerializer(board_list, many=True)
     elif cat == "notice":
         board_list = self.request.user.notice_like.all()
-        serializer = NoticeSerializer(board_list, many=True)
+        serializer = NoticeBoardSerializer(board_list, many=True)
     elif cat == "qna":
         board_list = self.request.user.qna_like.all()
-        serializer = QnASerializer(board_list, many=True)
+        serializer = QnABoardSerializer(board_list, many=True)
 
     return Response({"board_contents": serializer.data})
 
 
 class StudyViewSet(viewsets.ModelViewSet):
     queryset = StudyBoard.objects.all().order_by('pub_date')
-    serializer_class = StudySerializer
+    serializer_class = StudyBoardSerializer
     # permission_classes = [
     #     permissions.IsAuthenticated,
     # ]
@@ -85,7 +85,7 @@ class NoticeViewSet(viewsets.ModelViewSet):
     #     permissions.IsAuthenticatedOrReadOnly,
     # ]
 
-    serializer_class = NoticeSerializer
+    serializer_class = NoticeBoardSerializer
     filter_class = NoticeFilter
     @action(detail=False, methods=['POST'])
     def user_like(self, request, *args, **kwargs):
@@ -100,7 +100,7 @@ class NoticeViewSet(viewsets.ModelViewSet):
 # QnA 게시판 viewset
 class QnAViewSet(viewsets.ModelViewSet):
     queryset = QnABoard.objects.all().order_by('pub_date')
-    serializer_class = QnASerializer
+    serializer_class = QnABoardSerializer
     filter_class = QnAFilter
     @action(detail=False, methods=['POST'])
     def user_like(self, request, *args, **kwargs):
