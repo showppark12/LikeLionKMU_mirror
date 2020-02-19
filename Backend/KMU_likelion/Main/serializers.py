@@ -1,10 +1,12 @@
-from .models import *
 from rest_framework import serializers
+
+from .models import Calendar, Career
+
 
 class CareerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Career
-        fields  = '__all__'
+        fields = '__all__'
 
 
 class CalendarSerializer(serializers.ModelSerializer):

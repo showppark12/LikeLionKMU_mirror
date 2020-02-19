@@ -1,11 +1,13 @@
-from rest_framework import viewsets, permissions,status
-from .models import *
-from Board.models import *
-from .serializers import *
-from rest_framework.decorators import action,api_view
-from rest_framework.response import Response
-from .filterings import *
 from django.http import Http404
+from rest_framework import permissions, status, viewsets
+from rest_framework.response import Response
+
+from board.models import NoticeBoard
+
+from .filters import CalendarFilter, CareerFilter
+from .models import Calendar, Career
+from .serializers import CalendarSerializer, CareerSerializer
+
 
 # Create your views here.
 class CareerViewSet(viewsets.ModelViewSet):
@@ -13,19 +15,20 @@ class CareerViewSet(viewsets.ModelViewSet):
     serializer_class = CareerSerializer
     permission_classes = [
         permissions.IsAuthenticated,
-    ]     
-    filter_class=CareerFilter
+    ]
+    filter_class = CareerFilter
+
 
 class CalendarViewSet(viewsets.ModelViewSet):
     queryset = Calendar.objects.all()
     serializer_class = CalendarSerializer
-    filter_class=CalendarFilter
+    filter_class = CalendarFilter
 
     def destroy(self, request, *args, **kwargs):
         try:
             instance = self.get_object()
-            notice = NoticeBoard.objects.get(id = instance.notice_id.id)
-            print("notice 객체:",notice)
+            notice = NoticeBoard.objects.get(id=instance.notice_id.id)
+            print("notice 객체:", notice)
             print("notice의 boolean", notice.is_valid_date)
             notice.is_valid_date = False
             notice.save()
@@ -34,6 +37,3 @@ class CalendarViewSet(viewsets.ModelViewSet):
         except Http404:
             pass
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-
