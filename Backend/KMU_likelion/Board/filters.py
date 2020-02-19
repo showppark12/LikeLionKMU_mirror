@@ -1,8 +1,7 @@
 import django_filters
 from django_filters import filters
 
-from .models import (NoticeBoard, NoticeComments, QnABoard, QnAComments,
-                     RecruitBoard, RecruitComments, StudyBoard, StudyComments)
+from .models import (NoticeBoard, NoticeComment, QnABoard, QnAComment, StudyBoard, StudyComment)
 
 
 class StudyFilter(django_filters.rest_framework.FilterSet):
@@ -30,20 +29,12 @@ class QnAFilter(django_filters.rest_framework.FilterSet):
         fields = '__all__'
 
 
-class RecruitFilter(django_filters.rest_framework.FilterSet):
-    user_id = filters.NumberFilter(field_name="user_id__id")
-
-    class Meta:
-        model = RecruitBoard
-        fields = '__all__'
-
-
 class StudyCommentFilter(django_filters.rest_framework.FilterSet):
     user_id = filters.NumberFilter(field_name="user_id__id")
     board_id = filters.NumberFilter(field_name="board__id")
 
     class Meta:
-        model = StudyComments
+        model = StudyComment
         fields = '__all__'
 
 
@@ -52,7 +43,7 @@ class NoticeCommentFilter(django_filters.rest_framework.FilterSet):
     board_id = filters.NumberFilter(field_name="board__id")
 
     class Meta:
-        model = NoticeComments
+        model = NoticeComment
         fields = '__all__'
 
 
@@ -61,14 +52,5 @@ class QnACommentFilter(django_filters.rest_framework.FilterSet):
     board_id = filters.NumberFilter(field_name="board__id")
 
     class Meta:
-        model = QnAComments
-        fields = '__all__'
-
-
-class RecruitCommentFilter(django_filters.rest_framework.FilterSet):
-    user_id = filters.NumberFilter(field_name="user_id__id")
-    board_id = filters.NumberFilter(field_name="board__id")
-
-    class Meta:
-        model = RecruitComments
+        model = QnAComment
         fields = '__all__'

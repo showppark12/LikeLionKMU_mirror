@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
-from .models import (NoticeBoard, NoticeComments, QnABoard, QnAComments,
-                     RecruitBoard, RecruitComments, StudyBoard, StudyComments)
+from .models import (NoticeBoard, NoticeComment, QnABoard, QnAComment, StudyBoard, StudyComment)
 
 
 # 스터디 게시판 Serializer
@@ -35,23 +34,13 @@ class QnASerializer(serializers.ModelSerializer):
                   'subject', 'pub_date', 'update_date', 'like', 'total_likes']
 
 
-# 질문 게시판 Serializer
-class RecruitSerializer(serializers.ModelSerializer):
-    author_name = serializers.ReadOnlyField(source='user_id.username')
-
-    class Meta:
-        model = RecruitBoard
-        fields = ['id', 'author_name', 'body', 'user_id', 'title',
-                  'pub_date', 'update_date', 'like', 'total_likes', 'purpose']
-
-
 # 스터디 댓글 Serializer
 class StudyCommentSerializer(serializers.ModelSerializer):
     author_name = serializers.ReadOnlyField(source='user_id.username')
     user_img = serializers.ImageField(source='user_id.img', read_only=True, use_url=True)
 
     class Meta:
-        model = StudyComments
+        model = StudyComment
         fields = ['id', 'author_name', 'body', 'user_id', 'board', 'pub_date', 'update_date', 'user_img']
 
 
@@ -61,7 +50,7 @@ class NoticeCommentSerializer(serializers.ModelSerializer):
     user_img = serializers.ImageField(source='user_id.img', read_only=True, use_url=True)
 
     class Meta:
-        model = NoticeComments
+        model = NoticeComment
         fields = ['id', 'author_name', 'body', 'user_id', 'board', 'pub_date', 'update_date', 'user_img']
 
 
@@ -71,15 +60,5 @@ class QnACommentSerializer(serializers.ModelSerializer):
     user_img = serializers.ImageField(source='user_id.img', read_only=True, use_url=True)
 
     class Meta:
-        model = QnAComments
-        fields = ['id', 'author_name', 'body', 'user_id', 'board', 'pub_date', 'update_date', 'user_img']
-
-
-# 질문 댓글 Serializer
-class RecruitCommentSerializer(serializers.ModelSerializer):
-    author_name = serializers.ReadOnlyField(source='user_id.username')
-    user_img = serializers.ImageField(source='user_id.img', read_only=True, use_url=True)
-
-    class Meta:
-        model = RecruitComments
+        model = QnAComment
         fields = ['id', 'author_name', 'body', 'user_id', 'board', 'pub_date', 'update_date', 'user_img']
