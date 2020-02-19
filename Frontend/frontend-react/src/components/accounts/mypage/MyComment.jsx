@@ -2,17 +2,32 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Paper from "@material-ui/core/Paper";
 import api from "../../../api/BoardAPI";
-// import Card from '@material-ui/core/Card';
-// import CardActions from '@material-ui/core/CardActions';
-// import CardContent from '@material-ui/core/CardContent';
-// import Typography from '@material-ui/core/Typography';
-// import PropTypes from 'prop-types';
-// import { makeStyles } from '@material-ui/core/styles';
-// import ListItem from '@material-ui/core/ListItem';
-// import ListItemText from '@material-ui/core/ListItemText';
-// import {FixedSizeList} from 'react-window';
+import { withStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
 
-export default class MyComment extends Component {
+const useStyles = theme => ({
+  root: {
+    width: '100%',
+    maxWidth: 360,
+    backgroundColor: theme.palette.background.paper,
+    position: 'relative',
+    overflow: 'auto',
+    maxHeight: 300,
+
+  },
+  listSection: {
+    backgroundColor: 'inherit',
+  },
+  ul: {
+    backgroundColor: 'inherit',
+    padding: 0,
+  },
+});
+
+class MyComment extends Component {
   state = {
     studycomments: [],
     noticecomments: [],
@@ -43,64 +58,85 @@ export default class MyComment extends Component {
       .catch(err => console.log(err));
   }
 
+  show(type){
+    let commentlist =[];
+    let board_type = "";
+    switch(type){
+      case "Notice Board":
+        commentlist = this.state.noticecomments;
+        board_type = "notice";
+        break;
+      case "QnA Board":
+        commentlist = this.state.qnacomments;
+        board_type = "qna";
+        break;
+      case "Study Board":
+        commentlist = this.state.studycomments;
+        board_type = "study";
+        break;
+      case "Recruit Board":
+        commentlist = this.state.recruitcomments;
+        board_type = "recruit";
+        break;
+      default:
+        commentlist=[];
+        break;
+    }
+    if(board_type === "study"){
+      return(
+        commentlist.map(item => (
+          <ListItem>
+            <Link
+                  to={`/${board_type}/${item.group_name}/detail/${item.board}`}
+                  className={"main-postTitle"}
+                >
+                  <ListItemText primary={`${item.title}`} />
+                </Link>
+            
+          </ListItem>
+        ))
+      )
+    }
+
+
+    return(
+      commentlist.map(item => (
+        <ListItem>
+          <Link
+                to={`/${board_type}/detail/${item.board}`}
+                className={"main-postTitle"}
+              >
+                <ListItemText primary={`${item.body}`} />
+              </Link>
+          
+        </ListItem>
+      ))
+    )
+    
+  }
+
   render() {
-    // const { id, title, body, purpose } = this.props;
+    const { classes } = this.props;
 
     return (
       <Paper elevation={10} className="MyComment">
         <>
           <h1>My Comments</h1>
           <br />
-          {this.state.noticecomments.map(mycomment => (
-            <div>
-              <h4>Notice board</h4>
-
-              <Link
-                to={`/notice/detail/${mycomment.id}`}
-                className={"main-postTitle"}
-              >
-                -{mycomment.body}
-              </Link>
-            </div>
-          ))}
-          <br />
-          {this.state.qnacomments.map(mycomment => (
-            <div>
-              <h4>QnA board</h4>
-              <Link
-                to={`/qna/detail/${mycomment.id}`}
-                className={"main-postTitle"}
-              >
-                -{mycomment.body}
-              </Link>
-            </div>
-          ))}
-          <br />
-          {this.state.studycomments.map(mycomment => (
-            <div>
-              <h4>study board</h4>
-              <Link
-                to={`/study/detail/${mycomment.id}`}
-                className={"main-postTitle"}
-              >
-                -{mycomment.body}
-              </Link>
-            </div>
-          ))}
-          <br />
-          {this.state.recruitcomments.map(mycomment => (
-            <div>
-              <h4>recruit board</h4>
-              <Link
-                to={`/recruit/detail/${mycomment.id}`}
-                className={"main-postTitle"}
-              >
-                -{mycomment.body}
-              </Link>
-            </div>
-          ))}
+          <List className={classes.root} subheader={<li />}>
+            {["Notice Board", "QnA Board", "Study Board","Recruit Board"].map(sectionId => (
+              <li key={`section-${sectionId}`} className={classes.listSection}>
+                <ul className={classes.ul}>
+                  <ListSubheader><h3>{`${sectionId}`}</h3></ListSubheader>
+                  {this.show(sectionId)}
+                </ul>
+              </li>
+            ))}
+          </List>
         </>
       </Paper>
     );
   }
 }
+
+export default withStyles(useStyles)(MyComment)

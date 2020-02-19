@@ -13,6 +13,8 @@ import QnAUpdate from "../components/board/qna/QnAUpdate";
 // import RecruitDetail from "./recruit/RecruitDetail";
 // import RecruitUpdate from "./recruit/RecruitUpdate";
 
+import BoardContainer from "../components/board/common/BoardContainer"
+import PostDetial from "../components/board/common/PostDetail"
 
 import React from "react";
 import { Route } from "react-router-dom";
@@ -52,11 +54,11 @@ function BoardRouter({ match }) {
 
   return (
     <>
-      <Route exact path={match.path} component={listComponent} />
+      <Route exact path={match.path} component={BoardContainer} />
       <Route path={`${match.path}/new`} component={newComponent} />
       <Route
         path={`${match.path}/detail/:id`}
-        component={detailComponent}
+        component={PostDetial}
         id="number"
       />
       <Route

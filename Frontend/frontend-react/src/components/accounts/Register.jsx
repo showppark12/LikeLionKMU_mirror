@@ -79,28 +79,6 @@ class Register extends React.Component {
     }
   }
 
-  // handlingSubmit = async event => {
-  //   event.preventDefault();
-
-  // await authlogin({
-  //   username: this.state.email,
-  //   password: this.state.password
-  //   })
-  //   .then(result => {
-  //   console.log("로그인 성공!", result);
-  //   this.doSignup(
-  //       result.data.user.id,
-  //       result.data.user.username,
-  //       result.data.img,
-  //       result.data.token
-  //   );
-  //   this.context.onLogin();
-  //   })
-  //   .catch(err => console.log(err));
-
-  //   this.setState({ email: "", password: "" });
-  // };
-
   doSignup = (id, name, img, token) => {
     window.sessionStorage.setItem("id", id);
     window.sessionStorage.setItem("username", name);
