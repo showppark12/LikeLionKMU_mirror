@@ -1,9 +1,11 @@
-from .models import *
 from rest_framework import serializers
 
-class JoinFormSerializer(serializers.ModelSerializer):
+from .models import Answer, Application, Evaluation, Question
+
+
+class ApplicationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = JoinForm
+        model = Application
         fields = '__all__'
 
 
@@ -21,7 +23,8 @@ class AnswerSerializer(serializers.ModelSerializer):
 
 class EvaluationSerializer(serializers.ModelSerializer):
     user_name = serializers.ReadOnlyField(source='user_id.username')
-    joinform_name = serializers.ReadOnlyField(source = 'joinform_id.name')
+    application_name = serializers.ReadOnlyField(source='application_id.name')
+
     class Meta:
         model = Evaluation
-        fields = ['id','user_name','user_id','joinform_name','joinform_id','body','score','pub_date']
+        fields = ['id', 'user_name', 'user_id', 'application_name', 'application_id', 'body', 'score', 'pub_date']
