@@ -45,7 +45,8 @@ class StudyBoard(AbstractBaseBoard):
 class NoticeBoard(AbstractBaseBoard):
     notice_date = models.DateField(null=True)
     like = models.ManyToManyField(User, blank=True, related_name="notice_like")
-    is_valid_date = models.BooleanField(default=False)
+    is_recorded = models.BooleanField(default=False) #달력 기록여부
+    event_name = models.CharField(max_length=20, blank=True, null=True) #달력에 표시될 이벤트의 이름
 
     @property
     def total_likes(self):

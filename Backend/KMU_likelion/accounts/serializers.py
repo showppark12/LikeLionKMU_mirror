@@ -1,9 +1,11 @@
 from django.contrib.auth import authenticate, get_user_model
 from rest_framework import serializers
 
-from board.serializers import (NoticeBoardCommentSerializer, NoticeBoardSerializer,
+from board.serializers import (NoticeBoardCommentSerializer,
+                               NoticeBoardSerializer,
                                QnABoardCommentSerializer, QnABoardSerializer,
-                               StudyBoardCommentSerializer, StudyBoardSerializer)
+                               StudyBoardCommentSerializer,
+                               StudyBoardSerializer)
 
 from .models import GroupUser, Mentoring, Portfolio, StudyGroup
 
