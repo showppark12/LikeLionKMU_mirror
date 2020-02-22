@@ -24,7 +24,8 @@ class Score(models.Model):
 
 
 class LectureBoard(AbstractBaseBoard):
-    scores = models.ManyToManyField(Score, blank=True, related_name="+", symmetrical=False)
+    scores = models.ManyToManyField(
+        Score, blank=True, related_name="+", symmetrical=False)
 
     @property
     def total_score(self):
@@ -34,7 +35,8 @@ class LectureBoard(AbstractBaseBoard):
 class StudyBoard(AbstractBaseBoard):
     study_type = models.IntegerField(default=0)  # 0: 공식모임, 1: 정보공유 2: etc
     personnel = models.IntegerField(default=0)
-    group_id = models.ForeignKey(StudyGroup, on_delete=models.CASCADE, related_name="group_board", default=None)
+    group_id = models.ForeignKey(
+        StudyGroup, on_delete=models.CASCADE, related_name="group_board", default=None)
     like = models.ManyToManyField(User, blank=True, related_name="study_like")
 
     @property
@@ -45,8 +47,9 @@ class StudyBoard(AbstractBaseBoard):
 class NoticeBoard(AbstractBaseBoard):
     notice_date = models.DateField(null=True)
     like = models.ManyToManyField(User, blank=True, related_name="notice_like")
-    is_recorded = models.BooleanField(default=False) #달력 기록여부
-    event_name = models.CharField(max_length=20, blank=True, null=True) #달력에 표시될 이벤트의 이름
+    is_recorded = models.BooleanField(default=False)  # 달력 기록여부
+    event_name = models.CharField(
+        max_length=20, blank=True, null=True)  # 달력에 표시될 이벤트의 이름
 
     @property
     def total_likes(self):
@@ -62,6 +65,12 @@ class QnABoard(AbstractBaseBoard):
         return self.like.count()
 
 
+class CareerBoard(AbstractBaseBoard):
+    link = models.URLField()
+    participants = models.ManyToManyField(
+        User, blank=True, related_name="career_user")
+
+
 class AbstractBaseComment(models.Model):
     body = models.TextField()
     pub_date = models.DateTimeField(auto_now_add=True)
@@ -73,12 +82,15 @@ class AbstractBaseComment(models.Model):
 
 
 class StudyBoardComment(AbstractBaseComment):
-    board = models.ForeignKey(StudyBoard, on_delete=models.CASCADE, related_name="study_comments")
+    board = models.ForeignKey(
+        StudyBoard, on_delete=models.CASCADE, related_name="study_comments")
 
 
 class NoticeBoardComment(AbstractBaseComment):
-    board = models.ForeignKey(NoticeBoard, on_delete=models.CASCADE, related_name="notice_comments")
+    board = models.ForeignKey(
+        NoticeBoard, on_delete=models.CASCADE, related_name="notice_comments")
 
 
 class QnABoardComment(AbstractBaseComment):
-    board = models.ForeignKey(QnABoard, on_delete=models.CASCADE, related_name="QnA_comments")
+    board = models.ForeignKey(
+        QnABoard, on_delete=models.CASCADE, related_name="QnA_comments")

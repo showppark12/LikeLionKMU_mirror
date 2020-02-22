@@ -7,17 +7,6 @@ from board.models import NoticeBoard
 User = get_user_model()
 
 
-class Career(models.Model):
-    title = models.CharField(max_length=100)
-    pub_date = models.DateTimeField(auto_now=True)
-    link = models.URLField()
-    participants = models.ManyToManyField(User, blank=True, related_name="career_user")
-    body = RichTextUploadingField()
-
-    def __str__(self):
-        return self.title
-
-
 class Calendar(models.Model):
     title = models.CharField(max_length=100, null=True)
     start_date = models.DateField()

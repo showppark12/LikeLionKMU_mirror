@@ -1,7 +1,7 @@
 import django_filters
 from django_filters import filters
 
-from .models import (NoticeBoard, NoticeBoardComment, QnABoard,
+from .models import (CareerBoard, NoticeBoard, NoticeBoardComment, QnABoard,
                      QnABoardComment, StudyBoard, StudyBoardComment)
 
 
@@ -27,6 +27,14 @@ class QnAFilter(django_filters.rest_framework.FilterSet):
 
     class Meta:
         model = QnABoard
+        fields = '__all__'
+
+
+class CareerFilter(django_filters.rest_framework.FilterSet):
+    user_id = filters.NumberFilter(field_name="user_id__id")
+
+    class Meta:
+        model = CareerBoard
         fields = '__all__'
 
 

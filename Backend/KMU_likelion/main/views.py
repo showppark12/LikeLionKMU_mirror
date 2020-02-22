@@ -4,21 +4,12 @@ from rest_framework.response import Response
 
 from board.models import NoticeBoard
 
-from .filters import CalendarFilter, CareerFilter
-from .models import Calendar, Career
-from .serializers import CalendarSerializer, CareerSerializer
+from .filters import CalendarFilter
+from .models import Calendar
+from .serializers import CalendarSerializer
 
 
 # Create your views here.
-class CareerViewSet(viewsets.ModelViewSet):
-    queryset = Career.objects.all()
-    serializer_class = CareerSerializer
-    permission_classes = [
-        permissions.IsAuthenticated,
-    ]
-    filter_class = CareerFilter
-
-
 class CalendarViewSet(viewsets.ModelViewSet):
     queryset = Calendar.objects.all()
     serializer_class = CalendarSerializer
