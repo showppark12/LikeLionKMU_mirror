@@ -27,12 +27,14 @@ class Application(models.Model):
 
 
 class Question(models.Model):
-    pass
+    body = models.TextField()
 
 
 class Answer(models.Model):
-    pass
-
+    body  = models.TextField()
+    application_id = models.ForeignKey(Application, on_delete = models.CASCADE, related_name= "application_answer")
+    question_id = models.ForeignKey(Question, on_delete = models.CASCADE, related_name= "question_answer")
+    
 
 class Evaluation(models.Model):
     applicationform_id = models.ForeignKey(Application, on_delete=models.CASCADE,
