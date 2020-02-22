@@ -11,7 +11,7 @@ from .models import (CareerBoard, NoticeBoard, NoticeBoardComment, QnABoard,
 from .serializers import (CareerBoardSerializer, NoticeBoardCommentSerializer,
                           NoticeBoardSerializer, QnABoardCommentSerializer,
                           QnABoardSerializer, StudyBoardCommentSerializer,
-                          StudyBoardSerializer)
+                          StudyBoardSerializer, RecommentSerializer)
 
 
 # 스터디 게시판 viewset
