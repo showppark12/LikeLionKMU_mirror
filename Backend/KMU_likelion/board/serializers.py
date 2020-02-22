@@ -62,4 +62,4 @@ class QnABoardCommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = QnABoardComment
-        fields = ['id', 'author_name', 'body', 'user_id', 'board', 'pub_date', 'update_date', 'user_img']
+        fields = ['id', 'author_name', 'body', 'user_id', 'board', 'pub_date', 'update_date', 'user_img','parent_id','is_child']
