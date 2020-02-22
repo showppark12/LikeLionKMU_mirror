@@ -49,6 +49,9 @@ export default function Header(props) {
             <Nav.Link as={Link} to="/QnA">
               QnA
             </Nav.Link>
+            <Nav.Link as={Link} to="/career">
+              career
+            </Nav.Link>
           </Nav>
           {store.logged ? (
             <>
