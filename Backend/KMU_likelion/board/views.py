@@ -1,17 +1,18 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets,status
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .filters import (CareerFilter, NoticeBoardCommentFilter, NoticeFilter,
-                      QnABoardCommentFilter, QnAFilter,
-                      StudyBoardCommentFilter, StudyFilter)
+from .filters import (
+    CareerBoardFilter, NoticeBoardCommentFilter, NoticeBoardFilter,
+    QnABoardCommentFilter, QnABoardFilter, StudyBoardCommentFilter,
+    StudyBoardFilter)
 from .models import (CareerBoard, NoticeBoard, NoticeBoardComment, QnABoard,
                      QnABoardComment, StudyBoard, StudyBoardComment)
 from .serializers import (CareerBoardSerializer, NoticeBoardCommentSerializer,
                           NoticeBoardSerializer, QnABoardCommentSerializer,
-                          QnABoardSerializer, StudyBoardCommentSerializer,
-                          StudyBoardSerializer, RecommentSerializer)
+                          QnABoardSerializer, RecommentSerializer,
+                          StudyBoardCommentSerializer, StudyBoardSerializer)
 
 
 # 스터디 게시판 viewset
