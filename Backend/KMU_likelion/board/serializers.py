@@ -66,12 +66,21 @@ class NoticeBoardCommentSerializer(serializers.ModelSerializer):
 
 
 # QnA 댓글 Serializer
-class QnABoardCommentSerializer(serializers.ModelSerializer):
+class RecommentSerializer(serializers.ModelSerializer):
     author_name = serializers.ReadOnlyField(source='user_id.username')
-    user_img = serializers.ImageField(
-        source='user_id.img', read_only=True, use_url=True)
+    user_img = serializers.ImageField(source='user_id.img', read_only=True, use_url=True)
 
     class Meta:
         model = QnABoardComment
-        fields = ['id', 'author_name', 'body', 'user_id',
-                  'board', 'pub_date', 'update_date', 'user_img']
+        fields = ['id', 'author_name', 'body', 'user_id', 'board', 'pub_date', 'update_date', 'user_img','parent_id','is_child']
+
+
+class QnABoardCommentSerializer(serializers.ModelSerializer):
+    author_name = serializers.ReadOnlyField(source='user_id.username')
+    user_img = serializers.ImageField(source='user_id.img', read_only=True, use_url=True)
+    recomments = RecommentSerializer(many = True, source= 'recomment', read_only= True)
+    
+
+    class Meta:
+        model = QnABoardComment
+        fields = ['id', 'author_name', 'body', 'user_id', 'board', 'pub_date', 'update_date', 'user_img','parent_id','is_child','recomments']

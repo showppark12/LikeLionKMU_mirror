@@ -92,5 +92,8 @@ class NoticeBoardComment(AbstractBaseComment):
 
 
 class QnABoardComment(AbstractBaseComment):
-    board = models.ForeignKey(
-        QnABoard, on_delete=models.CASCADE, related_name="QnA_comments")
+    board = models.ForeignKey(QnABoard, on_delete=models.CASCADE, related_name="QnA_comments")
+    parent_id = models.ForeignKey("self", on_delete = models.CASCADE, null = True, blank = True,related_name= "recomment")
+    is_child = models.BooleanField(default = False) #false는 부모 댓글 true는 대댓글, 대대댓글은 안할꼬얌
+
+
