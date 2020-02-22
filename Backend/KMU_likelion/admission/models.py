@@ -9,8 +9,8 @@ class Application(models.Model):
     FAIL = "F"
     STATUS = {
         (REVIWING, "심사중"),
-        (PASS, "합격"),
         (FAIL, "불합격"),
+        (PASS, "합격"),
     }
 
     name = models.CharField(max_length=30)
