@@ -116,12 +116,13 @@ class QnAViewSet(viewsets.ModelViewSet):
 
 
 class CarrerViewSet(viewsets.ModelViewSet):
-    queryset = QnABoard.objects.all().order_by('pub_date')
-    serializer_class = QnABoardSerializer
-    filter_class = QnAFilter
+    queryset = CareerBoard.objects.all().order_by('pub_date')
+    serializer_class = CareerBoardSerializer
+    filter_class = CareerFilter
+
     @action(detail=False, methods=['POST'])
     def user_like(self, request, *args, **kwargs):
-        cat = "qna"
+        cat = "carrer"
         return like_content(self, request, cat, *args, **kwargs)
 
     @action(detail=True, methods=['GET', 'POST'])

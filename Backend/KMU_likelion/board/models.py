@@ -66,7 +66,7 @@ class QnABoard(AbstractBaseBoard):
 
 
 class CareerBoard(AbstractBaseBoard):
-    link = models.URLField()
+    link = models.URLField(blank=True)
     participants = models.ManyToManyField(
         User, blank=True, related_name="career_user")
 
