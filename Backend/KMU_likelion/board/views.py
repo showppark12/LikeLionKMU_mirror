@@ -9,7 +9,7 @@ from .models import (NoticeBoard, NoticeBoardComment, QnABoard,
                      QnABoardComment, StudyBoard, StudyBoardComment)
 from .serializers import (NoticeBoardCommentSerializer, NoticeBoardSerializer,
                           QnABoardCommentSerializer, QnABoardSerializer,
-                          StudyBoardCommentSerializer, StudyBoardSerializer)
+                          StudyBoardCommentSerializer, StudyBoardSerializer,RecommentSerializer)
 
 
 # 스터디 게시판 viewset
@@ -132,14 +132,26 @@ class QnACommentViewSet(viewsets.ModelViewSet):
     serializer_class = QnABoardCommentSerializer
     filter_class = QnABoardCommentFilter
 
+    def get_queryset(self):
+        query = super().get_queryset()
+        qs = query.filter(is_child = False)
+        return qs
+
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        check = serializer.validated_data
-        if  not check['parent_id'] :
-            pass
-        else: 
+        print(request.data)
+        if not request.data['parent_id']:    
+            serializer = self.get_serializer(data=request.data)
+            print("1번으로 들어와야 정상",serializer)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+          
+        else:
+            
+            serializer = RecommentSerializer(data =request.data)
+            print("얘로 들어오면 안돼")
+            serializer.is_valid(raise_exception=True)
+            check = serializer.validated_data
             check['is_child'] = True
-        self.perform_create(serializer)
+            self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
