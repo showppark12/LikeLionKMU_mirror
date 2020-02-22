@@ -56,6 +56,21 @@ class UserViewSet(viewsets.ModelViewSet):
         user = self.get_object()
         serializer = self.get_serializer(user)
         return Response(serializer.data)
+    
+    
+    @action(detail=True, methods=["GET"])
+    def get_mymentees(self, request, *args, **kwargs):
+        mentor = self.get_object()
+        mentees = Mentoring.objects.filter(mentor = mentor.id)
+        serializer = MenteeSerializer(mentees, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=True, methods=["GET"])
+    def get_mymentors(self, request, *args, **kwargs):
+        mentee = self.get_object()
+        mentors = Mentoring.objects.filter(mentee = mentee.id)
+        serializer = MentorSerializer(mentors, many=True)
+        return Response(serializer.data)
 
 
 class StudyGroupViewSet(viewsets.ModelViewSet):
