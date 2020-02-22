@@ -68,7 +68,7 @@ class StudyViewSet(viewsets.ModelViewSet):
     # permission_classes = [
     #     permissions.IsAuthenticated,
     # ]
-    filter_class = StudyFilter
+    filter_class = StudyBoardFilter
 
     @action(detail=False, methods=['POST'])
     def user_like(self, request, *args, **kwargs):
@@ -90,7 +90,7 @@ class NoticeViewSet(viewsets.ModelViewSet):
     # ]
 
     serializer_class = NoticeBoardSerializer
-    filter_class = NoticeFilter
+    filter_class = NoticeBoardFilter
     @action(detail=False, methods=['POST'])
     def user_like(self, request, *args, **kwargs):
         cat = "notice"
@@ -105,7 +105,7 @@ class NoticeViewSet(viewsets.ModelViewSet):
 class QnAViewSet(viewsets.ModelViewSet):
     queryset = QnABoard.objects.all().order_by('pub_date')
     serializer_class = QnABoardSerializer
-    filter_class = QnAFilter
+    filter_class = QnABoardFilter
     @action(detail=False, methods=['POST'])
     def user_like(self, request, *args, **kwargs):
         cat = "qna"
@@ -119,7 +119,7 @@ class QnAViewSet(viewsets.ModelViewSet):
 class CareerViewSet(viewsets.ModelViewSet):
     queryset = CareerBoard.objects.all().order_by('pub_date')
     serializer_class = CareerBoardSerializer
-    filter_class = CareerFilter
+    filter_class = CareerBoardFilter
 
     @action(detail=False, methods=['POST'])
     def user_like(self, request, *args, **kwargs):

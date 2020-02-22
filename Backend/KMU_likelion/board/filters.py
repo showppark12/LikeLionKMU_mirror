@@ -5,7 +5,7 @@ from .models import (CareerBoard, NoticeBoard, NoticeBoardComment, QnABoard,
                      QnABoardComment, StudyBoard, StudyBoardComment)
 
 
-class StudyFilter(django_filters.rest_framework.FilterSet):
+class StudyBoardFilter(django_filters.rest_framework.FilterSet):
     group_id = filters.NumberFilter(field_name="group_id__id")
     user_id = filters.NumberFilter(field_name="user_id__id")
 
@@ -14,7 +14,7 @@ class StudyFilter(django_filters.rest_framework.FilterSet):
         fields = '__all__'
 
 
-class NoticeFilter(django_filters.rest_framework.FilterSet):
+class NoticeBoardFilter(django_filters.rest_framework.FilterSet):
     user_id = filters.NumberFilter(field_name="user_id__id")
 
     class Meta:
@@ -22,7 +22,7 @@ class NoticeFilter(django_filters.rest_framework.FilterSet):
         fields = '__all__'
 
 
-class QnAFilter(django_filters.rest_framework.FilterSet):
+class QnABoardFilter(django_filters.rest_framework.FilterSet):
     user_id = filters.NumberFilter(field_name="user_id__id")
 
     class Meta:
@@ -30,7 +30,7 @@ class QnAFilter(django_filters.rest_framework.FilterSet):
         fields = '__all__'
 
 
-class CareerFilter(django_filters.rest_framework.FilterSet):
+class CareerBoardFilter(django_filters.rest_framework.FilterSet):
     user_id = filters.NumberFilter(field_name="user_id__id")
 
     class Meta:
