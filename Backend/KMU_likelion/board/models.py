@@ -17,19 +17,54 @@ class AbstractBaseBoard(models.Model):
     class Meta:
         abstract = True
 
+    def __str__(self):
+        return self.title
+
+
+class Session(AbstractBaseBoard):
+    LECTURE = 'L'
+    ASSIGNMENT = 'A'
+    TYPE = (
+        (LECTURE, "강의자료"),
+        (ASSIGNMENT, '과제')
+    )
+    session_type = models.CharField(max_length=1, choices=TYPE)
+    deadline = models.DateTimeField(blank=True, null=True)  # 과제 기한
+    lecture = models.ForeignKey(
+        'self', blank=True, null=True, on_delete=models.PROTECT, related_name='assignments')
+
+    def get_lectures(self):
+        return get_queryset().filter(session_type=self.LECTURE)
+
+    def get_assignments(self):
+        return get_queryset().filter(session_type=self.ASSIGNMENT)
+
+    def add_assignment(self, **kwargs):
+        print(kwargs)
+        for key, value in kwargs.items():
+            kwargs[key] = value[0]
+        kwargs['lecture'] = self.id
+        kwargs['session_type'] = self.ASSIGNMENT
+        print(kwargs)
+        return kwargs
+
 
 class Score(models.Model):
-    score_types = models.CharField(max_length=10)
-    scores = models.PositiveIntegerField()
+    score_type = models.CharField(max_length=10)
+    score = models.PositiveIntegerField()
+
+    def set_score(request, score_num):
+        score = score_num
 
 
-class LectureBoard(AbstractBaseBoard):
+class Submission(AbstractBaseBoard):
+    lecture = models.ForeignKey(Session, on_delete=models.CASCADE)
     scores = models.ManyToManyField(
         Score, blank=True, related_name="+", symmetrical=False)
 
     @property
     def total_score(self):
-        self.scores.aggregate(Sum('score'))
+        self.scores.aggregate(Sum('score')) or 0
 
 
 class StudyBoard(AbstractBaseBoard):
@@ -92,8 +127,9 @@ class NoticeBoardComment(AbstractBaseComment):
 
 
 class QnABoardComment(AbstractBaseComment):
-    board = models.ForeignKey(QnABoard, on_delete=models.CASCADE, related_name="QnA_comments")
-    parent_id = models.ForeignKey("self", on_delete = models.CASCADE, null = True, blank = True,related_name= "recomment")
-    is_child = models.BooleanField(default = False) #false는 부모 댓글 true는 대댓글, 대대댓글은 안할꼬얌
-
-
+    board = models.ForeignKey(
+        QnABoard, on_delete=models.CASCADE, related_name="QnA_comments")
+    parent_id = models.ForeignKey(
+        "self", on_delete=models.CASCADE, null=True, blank=True, related_name="recomment")
+    # false는 부모 댓글 true는 대댓글, 대대댓글은 안할꼬얌
+    is_child = models.BooleanField(default=False)

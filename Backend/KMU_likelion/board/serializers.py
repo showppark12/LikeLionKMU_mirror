@@ -1,10 +1,56 @@
 from rest_framework import serializers
 
 from .models import (CareerBoard, NoticeBoard, NoticeBoardComment, QnABoard,
-                     QnABoardComment, StudyBoard, StudyBoardComment)
+                     QnABoardComment, Session, Submission, Score, StudyBoard, StudyBoardComment)
 
+
+# Session type=LECTURE Serializer
+class LectureSerializer(serializers.ModelSerializer):
+    author_name = serializers.ReadOnlyField(source='user_id.username')
+
+    class Meta:
+        model = Session
+        fields = ['id', 'author_name', 'title', 'body', 'user_id',
+                  'pub_date', 'update_date', 'session_type', 'assignments']
+
+
+# Session type=ASSIGNMENT Serializer
+class AssignmentSerializer(serializers.ModelSerializer):
+    author_name = serializers.ReadOnlyField(source='user_id.username')
+    session_type = serializers.HiddenField(default='A')
+
+    class Meta:
+        model = Session
+        fields = ['id', 'author_name', 'title', 'user_id', 'body',
+                  'pub_date', 'update_date', 'session_type', 'lecture']
+
+
+class ScoreSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Score
+        fields = '__all__'
+
+# 과제 제출 Serializer
+
+
+class SubmissionSerializer(serializers.ModelSerializer):
+    author_name = serializers.ReadOnlyField(source='user_id.username')
+    scores = ScoreSerializer(many=True, read_only=True)
+    total_score = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Submission
+        fields = ['id', 'author_name', 'title', 'user_id', 'body', 'pub_date',
+                  'update_date', 'lecture', 'scores', 'total_score']
+
+    def total_score(self):
+        submission = self.get_object()
+        return submission.total_score()
 
 # 스터디 게시판 Serializer
+
+
 class StudyBoardSerializer(serializers.ModelSerializer):
     author_name = serializers.ReadOnlyField(source='user_id.username')
     group_name = serializers.ReadOnlyField(source='group_id.name')
@@ -68,19 +114,23 @@ class NoticeBoardCommentSerializer(serializers.ModelSerializer):
 # QnA 댓글 Serializer
 class RecommentSerializer(serializers.ModelSerializer):
     author_name = serializers.ReadOnlyField(source='user_id.username')
-    user_img = serializers.ImageField(source='user_id.img', read_only=True, use_url=True)
+    user_img = serializers.ImageField(
+        source='user_id.img', read_only=True, use_url=True)
 
     class Meta:
         model = QnABoardComment
-        fields = ['id', 'author_name', 'body', 'user_id', 'board', 'pub_date', 'update_date', 'user_img','parent_id','is_child']
+        fields = ['id', 'author_name', 'body', 'user_id', 'board',
+                  'pub_date', 'update_date', 'user_img', 'parent_id', 'is_child']
 
 
 class QnABoardCommentSerializer(serializers.ModelSerializer):
     author_name = serializers.ReadOnlyField(source='user_id.username')
-    user_img = serializers.ImageField(source='user_id.img', read_only=True, use_url=True)
-    recomments = RecommentSerializer(many = True, source= 'recomment', read_only= True)
-    
+    user_img = serializers.ImageField(
+        source='user_id.img', read_only=True, use_url=True)
+    recomments = RecommentSerializer(
+        many=True, source='recomment', read_only=True)
 
     class Meta:
         model = QnABoardComment
-        fields = ['id', 'author_name', 'body', 'user_id', 'board', 'pub_date', 'update_date', 'user_img','parent_id','is_child','recomments']
+        fields = ['id', 'author_name', 'body', 'user_id', 'board', 'pub_date',
+                  'update_date', 'user_img', 'parent_id', 'is_child', 'recomments']

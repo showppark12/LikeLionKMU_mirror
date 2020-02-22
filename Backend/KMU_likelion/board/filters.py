@@ -2,7 +2,23 @@ import django_filters
 from django_filters import filters
 
 from .models import (CareerBoard, NoticeBoard, NoticeBoardComment, QnABoard,
-                     QnABoardComment, StudyBoard, StudyBoardComment)
+                     QnABoardComment, Session, Submission,  StudyBoard, StudyBoardComment)
+
+
+class SessionFilter(django_filters.rest_framework.FilterSet):
+    user_id = filters.NumberFilter(field_name="user_id__id")
+
+    class Meta:
+        model = Session
+        fields = '__all__'
+
+
+class SubmissionFilter(django_filters.rest_framework.FilterSet):
+    user_id = filters.NumberFilter(field_name="user_id__id")
+
+    class Meta:
+        model = Submission
+        fields = '__all__'
 
 
 class StudyBoardFilter(django_filters.rest_framework.FilterSet):

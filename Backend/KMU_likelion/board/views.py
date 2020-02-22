@@ -5,14 +5,16 @@ from rest_framework.response import Response
 
 from .filters import (
     CareerBoardFilter, NoticeBoardCommentFilter, NoticeBoardFilter,
-    QnABoardCommentFilter, QnABoardFilter, StudyBoardCommentFilter,
-    StudyBoardFilter)
+    QnABoardCommentFilter, QnABoardFilter, SessionFilter,
+    StudyBoardCommentFilter, StudyBoardFilter, SubmissionFilter)
 from .models import (CareerBoard, NoticeBoard, NoticeBoardComment, QnABoard,
-                     QnABoardComment, StudyBoard, StudyBoardComment)
-from .serializers import (CareerBoardSerializer, NoticeBoardCommentSerializer,
+                     QnABoardComment, Session, Submission, StudyBoard, StudyBoardComment)
+from .serializers import (AssignmentSerializer, CareerBoardSerializer,
+                          LectureSerializer, NoticeBoardCommentSerializer,
                           NoticeBoardSerializer, QnABoardCommentSerializer,
-                          QnABoardSerializer, RecommentSerializer,
-                          StudyBoardCommentSerializer, StudyBoardSerializer)
+                          QnABoardSerializer, RecommentSerializer, ScoreSerializer,
+                          StudyBoardCommentSerializer, StudyBoardSerializer,
+                          SubmissionSerializer)
 
 
 # 스터디 게시판 viewset
@@ -63,6 +65,40 @@ def like_content(self, request, cat, *args, **kwargs):
     return Response({"board_contents": serializer.data})
 
 
+class SessionViewSet(viewsets.ModelViewSet):
+    queryset = Session.objects.all().order_by('pub_date')
+    serializer_class = LectureSerializer
+    action_serializer_classes = {"add_assignment": AssignmentSerializer}
+    filter_class = SessionFilter
+
+    def get_serializer_class(self):
+        return self.action_serializer_classes.get(self.action, self.serializer_class)
+
+    @action(detail=False, methods=['POST'])
+    def user_like(self, request, *args, **kwargs):
+        cat = "session"
+        return like_content(self, request, cat, *args, **kwargs)
+
+    @action(detail=True, methods=['GET', 'POST'])
+    def like(self, request, *args, **kwargs):
+        return like_status(self, request, *args, **kwargs)
+
+    @action(detail=True, methods=['POST'])
+    def add_assignment(self, request, *args, **kwargs):
+        session = self.get_object()
+        assignment = session.add_assignment(**request.data)
+
+        serializer = self.get_serializer(data=assignment)
+        if session.session_type == session.ASSIGNMENT:
+            raise serializer.ValidationError(
+                "ASSIGNMENT Type Session must not have assignment")
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
 class StudyViewSet(viewsets.ModelViewSet):
     queryset = StudyBoard.objects.all().order_by('pub_date')
     serializer_class = StudyBoardSerializer
@@ -80,9 +116,8 @@ class StudyViewSet(viewsets.ModelViewSet):
     def like(self, request, *args, **kwargs):
         return like_status(self, request, *args, **kwargs)
 
+
 # 공지 게시판 viewset
-
-
 class NoticeViewSet(viewsets.ModelViewSet):
     queryset = NoticeBoard.objects.all().order_by('pub_date')
 
@@ -154,8 +189,9 @@ class QnACommentViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         query = super().get_queryset()
-        qs = query.filter(is_child = False)
+        qs = query.filter(is_child=False)
         return qs
+
     def get_object(self):
         queryset = QnABoardComment.objects.all().order_by('pub_date')
         # Perform the lookup filtering.
@@ -175,15 +211,15 @@ class QnACommentViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         print(request.data)
-        if not request.data['parent_id']:    
+        if not request.data['parent_id']:
             serializer = self.get_serializer(data=request.data)
-            print("1번으로 들어와야 정상",serializer)
+            print("1번으로 들어와야 정상", serializer)
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
-          
+
         else:
-            
-            serializer = RecommentSerializer(data =request.data)
+
+            serializer = RecommentSerializer(data=request.data)
             print("얘로 들어오면 안돼")
             serializer.is_valid(raise_exception=True)
             check = serializer.validated_data
