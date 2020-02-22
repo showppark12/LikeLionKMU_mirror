@@ -2,14 +2,15 @@ from rest_framework import viewsets,status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .filters import (NoticeBoardCommentFilter, NoticeFilter,
+from .filters import (CareerFilter, NoticeBoardCommentFilter, NoticeFilter,
                       QnABoardCommentFilter, QnAFilter,
                       StudyBoardCommentFilter, StudyFilter)
-from .models import (NoticeBoard, NoticeBoardComment, QnABoard,
+from .models import (CareerBoard, NoticeBoard, NoticeBoardComment, QnABoard,
                      QnABoardComment, StudyBoard, StudyBoardComment)
-from .serializers import (NoticeBoardCommentSerializer, NoticeBoardSerializer,
-                          QnABoardCommentSerializer, QnABoardSerializer,
-                          StudyBoardCommentSerializer, StudyBoardSerializer,RecommentSerializer)
+from .serializers import (CareerBoardSerializer, NoticeBoardCommentSerializer,
+                          NoticeBoardSerializer, QnABoardCommentSerializer,
+                          QnABoardSerializer, StudyBoardCommentSerializer,
+                          StudyBoardSerializer)
 
 
 # 스터디 게시판 viewset
@@ -23,11 +24,13 @@ def like_status(self, request, *args, **kwargs):
         if board.like.filter(username=self.request.user.username).exists():
 
             board.like.remove(self.request.user.id)
-            print("user removed(false) : ", board.like.filter(username=self.request.user.username).exists())
+            print("user removed(false) : ", board.like.filter(
+                username=self.request.user.username).exists())
             status = False
         else:
             board.like.add(self.request.user.id)
-            print("user added(true) : ", board.like.filter(username=self.request.user.username).exists())
+            print("user added(true) : ", board.like.filter(
+                username=self.request.user.username).exists())
             status = True
 
         return Response({"state": status})
@@ -105,6 +108,21 @@ class QnAViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['POST'])
     def user_like(self, request, *args, **kwargs):
         cat = "qna"
+        return like_content(self, request, cat, *args, **kwargs)
+
+    @action(detail=True, methods=['GET', 'POST'])
+    def like(self, request, *args, **kwargs):
+        return like_status(self, request, *args, **kwargs)
+
+
+class CareerViewSet(viewsets.ModelViewSet):
+    queryset = CareerBoard.objects.all().order_by('pub_date')
+    serializer_class = CareerBoardSerializer
+    filter_class = CareerFilter
+
+    @action(detail=False, methods=['POST'])
+    def user_like(self, request, *args, **kwargs):
+        cat = "career"
         return like_content(self, request, cat, *args, **kwargs)
 
     @action(detail=True, methods=['GET', 'POST'])

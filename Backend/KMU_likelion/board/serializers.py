@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import (NoticeBoard, NoticeBoardComment, QnABoard,
+from .models import (CareerBoard, NoticeBoard, NoticeBoardComment, QnABoard,
                      QnABoardComment, StudyBoard, StudyBoardComment)
 
 
@@ -35,24 +35,34 @@ class QnABoardSerializer(serializers.ModelSerializer):
                   'subject', 'pub_date', 'update_date', 'like', 'total_likes']
 
 
+class CareerBoardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CareerBoard
+        fields = '__all__'
+
+
 # 스터디 댓글 Serializer
 class StudyBoardCommentSerializer(serializers.ModelSerializer):
     author_name = serializers.ReadOnlyField(source='user_id.username')
-    user_img = serializers.ImageField(source='user_id.img', read_only=True, use_url=True)
+    user_img = serializers.ImageField(
+        source='user_id.img', read_only=True, use_url=True)
 
     class Meta:
         model = StudyBoardComment
-        fields = ['id', 'author_name', 'body', 'user_id', 'board', 'pub_date', 'update_date', 'user_img']
+        fields = ['id', 'author_name', 'body', 'user_id',
+                  'board', 'pub_date', 'update_date', 'user_img']
 
 
 # 공지 댓글 Serializer
 class NoticeBoardCommentSerializer(serializers.ModelSerializer):
     author_name = serializers.ReadOnlyField(source='user_id.username')
-    user_img = serializers.ImageField(source='user_id.img', read_only=True, use_url=True)
+    user_img = serializers.ImageField(
+        source='user_id.img', read_only=True, use_url=True)
 
     class Meta:
         model = NoticeBoardComment
-        fields = ['id', 'author_name', 'body', 'user_id', 'board', 'pub_date', 'update_date', 'user_img']
+        fields = ['id', 'author_name', 'body', 'user_id',
+                  'board', 'pub_date', 'update_date', 'user_img']
 
 
 # QnA 댓글 Serializer
