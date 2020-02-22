@@ -94,9 +94,51 @@ class SessionViewSet(viewsets.ModelViewSet):
                 "ASSIGNMENT Type Session must not have assignment")
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-
+        """
+        TODO
+        SESSION의 score_types를 split해서 assignment를 만들 때
+        Score 객체들을 add 한 상태로 만들어주기.
+        """
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class SubmissionViewSet(viewsets.ModelViewSet):
+    queryset = Submission.objects.all().order_by('pub_date')
+    serializer_class = SubmissionSerializer
+    action_serializer_classes = {"scores": ScoreSerializer}
+    filter_class = SubmissionFilter
+
+    def get_serializer_class(self):
+        return self.action_serializer_classes.get(self.action, self.serializer_class)
+
+    @action(detail=False, methods=['POST'])
+    def user_like(self, request, *args, **kwargs):
+        cat = "session"
+        return like_content(self, request, cat, *args, **kwargs)
+
+    @action(detail=True, methods=['GET', 'POST'])
+    def like(self, request, *args, **kwargs):
+        return like_status(self, request, *args, **kwargs)
+
+    @action(detail=True, methods=['GET', 'POST', 'PUT'])
+    def scores(self, request, *args, **kwargs):
+        submission = self.get_object()
+        if request.method == 'POST':
+            """
+            TODO
+            점수를 dictionary로 받아서 넣어주는거
+            """
+            serializer = self.get_serializer(many=True)
+            serializer.is_valid()
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        else:
+            serializer = self.get_serializer(
+                data=submission.scores.all(), many=True)
+            serializer.is_valid()
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
 
 
 class StudyViewSet(viewsets.ModelViewSet):

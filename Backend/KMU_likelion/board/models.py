@@ -30,6 +30,8 @@ class Session(AbstractBaseBoard):
     )
     session_type = models.CharField(max_length=1, choices=TYPE)
     deadline = models.DateTimeField(blank=True, null=True)  # 과제 기한
+    score_types = models.CharField(max_length=255)
+
     lecture = models.ForeignKey(
         'self', blank=True, null=True, on_delete=models.PROTECT, related_name='assignments')
 
@@ -40,18 +42,16 @@ class Session(AbstractBaseBoard):
         return get_queryset().filter(session_type=self.ASSIGNMENT)
 
     def add_assignment(self, **kwargs):
-        print(kwargs)
         for key, value in kwargs.items():
             kwargs[key] = value[0]
         kwargs['lecture'] = self.id
         kwargs['session_type'] = self.ASSIGNMENT
-        print(kwargs)
         return kwargs
 
 
 class Score(models.Model):
     score_type = models.CharField(max_length=10)
-    score = models.PositiveIntegerField()
+    score = models.PositiveIntegerField(null=True, blank=True)
 
     def set_score(request, score_num):
         score = score_num
@@ -61,6 +61,13 @@ class Submission(AbstractBaseBoard):
     lecture = models.ForeignKey(Session, on_delete=models.CASCADE)
     scores = models.ManyToManyField(
         Score, blank=True, related_name="+", symmetrical=False)
+
+    def add_scores_by_types(self, type_list):
+        self.scores.set([Score(score_type=t) for t in type_list])
+
+    def set_scores_by_types(self, type_score_dict):
+        self.scores.set([Score(score_type=t, score=s)
+                         for t, s in type_score_dict.items()])
 
     @property
     def total_score(self):
