@@ -9,7 +9,7 @@ router = DefaultRouter()
 router.register('user', views.UserViewSet)
 router.register('studygroup', views.StudyGroupViewSet)
 router.register('portfolio', views.PortfolioViewSet)
-router.register('GroupUser', views.GroupUserViewSet)
+router.register('groupuser', views.GroupUserViewSet)
 router.register('mentoring', views.MentoringViewSet)
 
 urlpatterns = [
