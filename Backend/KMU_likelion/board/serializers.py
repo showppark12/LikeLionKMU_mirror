@@ -1,17 +1,8 @@
 from rest_framework import serializers
 
 from .models import (CareerBoard, NoticeBoard, NoticeBoardComment, QnABoard,
-                     QnABoardComment, Session, Submission, Score, StudyBoard, StudyBoardComment)
-
-
-# Session type=LECTURE Serializer
-class LectureSerializer(serializers.ModelSerializer):
-    author_name = serializers.ReadOnlyField(source='user_id.username')
-
-    class Meta:
-        model = Session
-        fields = ['id', 'author_name', 'title', 'body', 'user_id',
-                  'pub_date', 'update_date', 'session_type', 'assignments']
+                     QnABoardComment, Score, Session, StudyBoard,
+                     StudyBoardComment, Submission)
 
 
 # Session type=ASSIGNMENT Serializer
@@ -25,15 +16,25 @@ class AssignmentSerializer(serializers.ModelSerializer):
                   'pub_date', 'update_date', 'session_type', 'lecture']
 
 
+# Session type=LECTURE Serializer
+class LectureSerializer(serializers.ModelSerializer):
+    author_name = serializers.ReadOnlyField(source='user_id.username')
+    assignments = AssignmentSerializer(many=True)
+
+    class Meta:
+        model = Session
+        fields = ['id', 'author_name', 'title', 'body', 'user_id',
+                  'pub_date', 'update_date', 'session_type', 'assignments']
+
+
 class ScoreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Score
         fields = '__all__'
 
+
 # 과제 제출 Serializer
-
-
 class SubmissionSerializer(serializers.ModelSerializer):
     author_name = serializers.ReadOnlyField(source='user_id.username')
     scores = ScoreSerializer(many=True, read_only=True)
@@ -44,13 +45,19 @@ class SubmissionSerializer(serializers.ModelSerializer):
         fields = ['id', 'author_name', 'title', 'user_id', 'body', 'pub_date',
                   'update_date', 'lecture', 'scores', 'total_score']
 
+    def create(self, validated_data):
+        submission = super(SubmissionSerializer, self).create(validated_data)
+        if not submission.add_scores_by_types():
+            serializers.ValidationError(
+                "Score_types field of submission's session object is null or blank")
+        return submission
+
     def total_score(self):
         submission = self.get_object()
         return submission.total_score()
 
+
 # 스터디 게시판 Serializer
-
-
 class StudyBoardSerializer(serializers.ModelSerializer):
     author_name = serializers.ReadOnlyField(source='user_id.username')
     group_name = serializers.ReadOnlyField(source='group_id.name')

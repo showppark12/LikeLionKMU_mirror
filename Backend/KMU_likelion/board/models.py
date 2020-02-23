@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import Sum
@@ -30,7 +32,7 @@ class Session(AbstractBaseBoard):
     )
     session_type = models.CharField(max_length=1, choices=TYPE)
     deadline = models.DateTimeField(blank=True, null=True)  # 과제 기한
-    score_types = models.CharField(max_length=255)
+    score_types = models.CharField(max_length=255, blank=True, null=True)
 
     lecture = models.ForeignKey(
         'self', blank=True, null=True, on_delete=models.PROTECT, related_name='assignments')
@@ -51,7 +53,7 @@ class Session(AbstractBaseBoard):
 
 class Score(models.Model):
     score_type = models.CharField(max_length=10)
-    score = models.PositiveIntegerField(null=True, blank=True)
+    score = models.PositiveIntegerField(default=0)
 
     def set_score(request, score_num):
         score = score_num
@@ -62,16 +64,25 @@ class Submission(AbstractBaseBoard):
     scores = models.ManyToManyField(
         Score, blank=True, related_name="+", symmetrical=False)
 
-    def add_scores_by_types(self, type_list):
-        self.scores.set([Score(score_type=t) for t in type_list])
-
+    def add_scores_by_types(self):
+        if self.lecture.score_types:
+            score_type_list = re.split('\W+', self.lecture.score_types)
+            score_obj_list = [Score.objects.create(score_type=t) for t in score_type_list]
+            print(score_obj_list)
+            self.scores.set(score_obj_list, clear=True)
+            print(self.scores.all())
+            return True
+        return False
+        
     def set_scores_by_types(self, type_score_dict):
-        self.scores.set([Score(score_type=t, score=s)
-                         for t, s in type_score_dict.items()])
+        """
+        TODO : 딕셔너리에 맞게 type: score 를 지정해주도록 
+        """
+        pass
 
     @property
     def total_score(self):
-        self.scores.aggregate(Sum('score')) or 0
+        return self.scores.aggregate(Sum('score')) or 0
 
 
 class StudyBoard(AbstractBaseBoard):

@@ -8,13 +8,14 @@ from .filters import (
     QnABoardCommentFilter, QnABoardFilter, SessionFilter,
     StudyBoardCommentFilter, StudyBoardFilter, SubmissionFilter)
 from .models import (CareerBoard, NoticeBoard, NoticeBoardComment, QnABoard,
-                     QnABoardComment, Session, Submission, StudyBoard, StudyBoardComment)
+                     QnABoardComment, Score, Session, StudyBoard,
+                     StudyBoardComment, Submission)
 from .serializers import (AssignmentSerializer, CareerBoardSerializer,
                           LectureSerializer, NoticeBoardCommentSerializer,
                           NoticeBoardSerializer, QnABoardCommentSerializer,
-                          QnABoardSerializer, RecommentSerializer, ScoreSerializer,
-                          StudyBoardCommentSerializer, StudyBoardSerializer,
-                          SubmissionSerializer)
+                          QnABoardSerializer, RecommentSerializer,
+                          ScoreSerializer, StudyBoardCommentSerializer,
+                          StudyBoardSerializer, SubmissionSerializer)
 
 
 # 스터디 게시판 viewset
@@ -66,7 +67,7 @@ def like_content(self, request, cat, *args, **kwargs):
 
 
 class SessionViewSet(viewsets.ModelViewSet):
-    queryset = Session.objects.all().order_by('pub_date')
+    queryset = Session.objects.filter(session_type=Session.LECTURE).order_by('pub_date')
     serializer_class = LectureSerializer
     action_serializer_classes = {"add_assignment": AssignmentSerializer}
     filter_class = SessionFilter
@@ -94,11 +95,7 @@ class SessionViewSet(viewsets.ModelViewSet):
                 "ASSIGNMENT Type Session must not have assignment")
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        """
-        TODO
-        SESSION의 score_types를 split해서 assignment를 만들 때
-        Score 객체들을 add 한 상태로 만들어주기.
-        """
+
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
