@@ -1,19 +1,17 @@
 from django.contrib import admin
 
-from .models import (CareerBoard, Session, NoticeBoard, Submission,
-                     NoticeBoardComment, QnABoard, QnABoardComment, Score,
-                     StudyBoard, StudyBoardComment)
+from . import models
 
 # boards
-admin.site.register(Score)
-admin.site.register(Submission)
-admin.site.register(Session)
-admin.site.register(StudyBoard)
-admin.site.register(NoticeBoard)
-admin.site.register(QnABoard)
-admin.site.register(CareerBoard)
+admin.site.register(models.Score)
+admin.site.register(models.Submission)
+admin.site.register(models.Session)
+admin.site.register(models.StudyBoard)
+admin.site.register(models.NoticeBoard)
+admin.site.register(models.QnABoard)
+admin.site.register(models.CareerBoard)
 
 # comments
-admin.site.register(StudyBoardComment)
-admin.site.register(NoticeBoardComment)
-admin.site.register(QnABoardComment)
+admin.site.register(models.StudyBoardComment)
+admin.site.register(models.NoticeBoardComment)
+admin.site.register(models.QnABoardComment)

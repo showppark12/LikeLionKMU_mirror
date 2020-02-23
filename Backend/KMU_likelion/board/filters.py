@@ -1,15 +1,14 @@
 import django_filters
 from django_filters import filters
 
-from .models import (CareerBoard, NoticeBoard, NoticeBoardComment, QnABoard,
-                     QnABoardComment, Session, Submission,  StudyBoard, StudyBoardComment)
+from . import models
 
 
 class SessionFilter(django_filters.rest_framework.FilterSet):
     user_id = filters.NumberFilter(field_name="user_id__id")
 
     class Meta:
-        model = Session
+        model = models.Session
         fields = '__all__'
 
 
@@ -17,7 +16,7 @@ class SubmissionFilter(django_filters.rest_framework.FilterSet):
     user_id = filters.NumberFilter(field_name="user_id__id")
 
     class Meta:
-        model = Submission
+        model = models.Submission
         fields = '__all__'
 
 
@@ -26,7 +25,7 @@ class StudyBoardFilter(django_filters.rest_framework.FilterSet):
     user_id = filters.NumberFilter(field_name="user_id__id")
 
     class Meta:
-        model = StudyBoard
+        model = models.StudyBoard
         fields = '__all__'
 
 
@@ -34,7 +33,7 @@ class NoticeBoardFilter(django_filters.rest_framework.FilterSet):
     user_id = filters.NumberFilter(field_name="user_id__id")
 
     class Meta:
-        model = NoticeBoard
+        model = models.NoticeBoard
         fields = '__all__'
 
 
@@ -42,7 +41,7 @@ class QnABoardFilter(django_filters.rest_framework.FilterSet):
     user_id = filters.NumberFilter(field_name="user_id__id")
 
     class Meta:
-        model = QnABoard
+        model = models.QnABoard
         fields = '__all__'
 
 
@@ -50,7 +49,7 @@ class CareerBoardFilter(django_filters.rest_framework.FilterSet):
     user_id = filters.NumberFilter(field_name="user_id__id")
 
     class Meta:
-        model = CareerBoard
+        model = models.CareerBoard
         fields = '__all__'
 
 
@@ -59,7 +58,7 @@ class StudyBoardCommentFilter(django_filters.rest_framework.FilterSet):
     board_id = filters.NumberFilter(field_name="board__id")
 
     class Meta:
-        model = StudyBoardComment
+        model = models.StudyBoardComment
         fields = '__all__'
 
 
@@ -68,7 +67,7 @@ class NoticeBoardCommentFilter(django_filters.rest_framework.FilterSet):
     board_id = filters.NumberFilter(field_name="board__id")
 
     class Meta:
-        model = NoticeBoardComment
+        model = models.NoticeBoardComment
         fields = '__all__'
 
 
@@ -77,5 +76,5 @@ class QnABoardCommentFilter(django_filters.rest_framework.FilterSet):
     board_id = filters.NumberFilter(field_name="board__id")
 
     class Meta:
-        model = QnABoardComment
+        model = models.QnABoardComment
         fields = '__all__'
