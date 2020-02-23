@@ -37,7 +37,7 @@ class Answer(models.Model):
     
 
 class Evaluation(models.Model):
-    applicationform_id = models.ForeignKey(Application, on_delete=models.CASCADE,
+    application_id = models.ForeignKey(Application, on_delete=models.CASCADE,
                                            related_name="application_evaluation", default=None)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_evaluation", default=None)
     body = models.TextField()

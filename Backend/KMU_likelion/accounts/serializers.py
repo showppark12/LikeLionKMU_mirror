@@ -20,7 +20,8 @@ class CreateUserSerializer(serializers.ModelSerializer):
         extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data):
-        user = User.objects.create_user(validated_data["email"], None, validated_data["password"])
+        user = User.objects.create_user(
+            validated_data["email"], None, validated_data["password"])
         return user
 
 
@@ -37,14 +38,17 @@ class UserActivitySerializer(serializers.ModelSerializer):
     noticeboard = NoticeBoardSerializer(many=True, source="noticeboard_set")
     qnaboard = QnABoardSerializer(many=True, source="qnaboard_set")
 
-    StudyBoardComments = StudyBoardCommentSerializer(many=True, source="StudyBoardComments_set")
-    NoticeBoardComments = NoticeBoardCommentSerializer(many=True, source="NoticeBoardComments_set")
-    QnABoardComments = QnABoardCommentSerializer(many=True, source="QnABoardComments_set")
+    StudyBoardComments = StudyBoardCommentSerializer(
+        many=True, source="StudyBoardComments_set")
+    NoticeBoardComments = NoticeBoardCommentSerializer(
+        many=True, source="NoticeBoardComments_set")
+    QnABoardComments = QnABoardCommentSerializer(
+        many=True, source="QnABoardComments_set")
 
     class Meta:
         model = User
-        fields = ["studyboard", "noticeboard", "qnaboard", "recruitboard",
-                  "StudyBoardComments", "NoticeBoardComments", "QnABoardComments", "recruitcomments"]
+        fields = ["studyboard", "noticeboard", "qnaboard",
+                  "StudyBoardComments", "NoticeBoardComments", "QnABoardComments"]
 
 
 # 로그인
@@ -56,7 +60,8 @@ class LoginUserSerializer(serializers.Serializer):
         user = authenticate(**data)
         if user and user.is_active:
             return user
-        raise serializers.ValidationError("Unable to log in with provided credentials.")
+        raise serializers.ValidationError(
+            "Unable to log in with provided credentials.")
 
 
 class StudyGroupSerializer(serializers.ModelSerializer):
@@ -91,7 +96,8 @@ class MentoringSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Mentoring
-        fields = ['id', 'pub_date', 'mentor', 'mentee', 'mentor_name', 'mentee_name']
+        fields = ['id', 'pub_date', 'mentor',
+                  'mentee', 'mentor_name', 'mentee_name']
 
 
 class MentorSerializer(serializers.ModelSerializer):
