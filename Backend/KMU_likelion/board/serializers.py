@@ -19,7 +19,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
 # Session type=LECTURE Serializer
 class LectureSerializer(serializers.ModelSerializer):
     author_name = serializers.ReadOnlyField(source='user_id.username')
-    assignments = AssignmentSerializer(many=True)
+    assignments = AssignmentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Session
