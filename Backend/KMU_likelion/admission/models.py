@@ -5,13 +5,13 @@ from accounts.models import User
 
 class Application(models.Model):
     REVIWING = "R"
-    PASS = "P"
     FAIL = "F"
-    STATUS = {
+    PASS = "P"
+    STATUS = (
         (REVIWING, "심사중"),
         (FAIL, "불합격"),
         (PASS, "합격"),
-    }
+    )
 
     name = models.CharField(max_length=30)
     phone_number = models.CharField(max_length=50, unique=True)
