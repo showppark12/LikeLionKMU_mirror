@@ -71,7 +71,15 @@ class PortfolioSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class GroupUserCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GroupUser
+        fields = '__all__'
+
+
 class GroupUserSerializer(serializers.ModelSerializer):
+    user = UserSerializer(source='user_id', read_only=True)
+
     class Meta:
         model = GroupUser
         fields = '__all__'

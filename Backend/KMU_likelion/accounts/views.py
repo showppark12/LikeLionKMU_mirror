@@ -8,11 +8,12 @@ from rest_framework.response import Response
 from .filters import (GroupUserFilter, MentoringFilter, PortfolioFilter,
                       StudyGroupFilter, UserFilter)
 from .models import GroupUser, Mentoring, Portfolio, StudyGroup
-from .serializers import (CreateUserSerializer, GroupUserSerializer,
-                          LoginUserSerializer, MenteeSerializer,
-                          MentoringSerializer, MentorSerializer,
-                          PortfolioSerializer, StudyGroupSerializer,
-                          UserActivitySerializer, UserSerializer)
+from .serializers import (CreateUserSerializer, GroupUserCreateSerializer,
+                          GroupUserSerializer, LoginUserSerializer,
+                          MenteeSerializer, MentoringSerializer,
+                          MentorSerializer, PortfolioSerializer,
+                          StudyGroupSerializer, UserActivitySerializer,
+                          UserSerializer)
 
 User = get_user_model()
 
@@ -56,19 +57,18 @@ class UserViewSet(viewsets.ModelViewSet):
         user = self.get_object()
         serializer = self.get_serializer(user)
         return Response(serializer.data)
-    
-    
+
     @action(detail=True, methods=["GET"])
     def get_mymentees(self, request, *args, **kwargs):
         mentor = self.get_object()
-        mentees = Mentoring.objects.filter(mentor = mentor.id)
+        mentees = Mentoring.objects.filter(mentor=mentor.id)
         serializer = MenteeSerializer(mentees, many=True)
         return Response(serializer.data)
-    
+
     @action(detail=True, methods=["GET"])
     def get_mymentors(self, request, *args, **kwargs):
         mentee = self.get_object()
-        mentors = Mentoring.objects.filter(mentee = mentee.id)
+        mentors = Mentoring.objects.filter(mentee=mentee.id)
         serializer = MentorSerializer(mentors, many=True)
         return Response(serializer.data)
 
@@ -77,6 +77,13 @@ class StudyGroupViewSet(viewsets.ModelViewSet):
     queryset = StudyGroup.objects.all().order_by('pub_date')
     serializer_class = StudyGroupSerializer
     filter_class = StudyGroupFilter
+
+    @action(detail=True, methods=["GET"])
+    def group_users(self, request, *args, **kwargs):
+        group = self.get_object()
+        group_users = group.groupuser_set.all()
+        serializer = GroupUserSerializer(group_users, many=True)
+        return Response(serializer.data)
 
 
 class PortfolioViewSet(viewsets.ModelViewSet):
@@ -87,7 +94,7 @@ class PortfolioViewSet(viewsets.ModelViewSet):
 
 class GroupUserViewSet(viewsets.ModelViewSet):
     queryset = GroupUser.objects.all()
-    serializer_class = GroupUserSerializer
+    serializer_class = GroupUserCreateSerializer
     filter_class = GroupUserFilter
 
 

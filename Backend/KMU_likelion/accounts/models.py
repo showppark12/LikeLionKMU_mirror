@@ -35,3 +35,7 @@ class GroupUser(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     group_id = models.ForeignKey(StudyGroup, on_delete=models.CASCADE, null=True)
     is_captain = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ("user_id", "group_id", )
+        ordering = ("group_id", )
