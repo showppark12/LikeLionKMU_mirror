@@ -248,21 +248,14 @@ class QnACommentViewSet(viewsets.ModelViewSet):
 
         return obj
 
-    def create(self, request, *args, **kwargs):
-        print(request.data)
-        if not request.data['parent_id']:
-            serializer = self.get_serializer(data=request.data)
-            print("1번으로 들어와야 정상", serializer)
-            serializer.is_valid(raise_exception=True)
-            self.perform_create(serializer)
+    @action(detail=True, methods=['POST'])
+    def re_comment(self, request, *args, **kwargs):
+        comment = self.get_object()
+        new_comment_dict = comment.re_comment(**request.data)
 
-        else:
-
-            serializer = RecommentSerializer(data=request.data)
-            print("얘로 들어오면 안돼")
-            serializer.is_valid(raise_exception=True)
-            check = serializer.validated_data
-            check['is_child'] = True
-            self.perform_create(serializer)
+        serializer = self.get_serializer(data=new_comment_dict)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
