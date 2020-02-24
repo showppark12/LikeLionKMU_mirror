@@ -16,7 +16,7 @@ from .serializers import (CreateUserSerializer, GroupUserCreateSerializer,
                           UserSerializer)
 
 User = get_user_model()
-
+import json
 
 class RegistrationAPI(generics.GenericAPIView):
     serializer_class = CreateUserSerializer
@@ -71,6 +71,20 @@ class UserViewSet(viewsets.ModelViewSet):
         mentors = Mentoring.objects.filter(mentee=mentee.id)
         serializer = MentorSerializer(mentors, many=True)
         return Response(serializer.data)
+    
+    @action(detail = False, methods=["POST"])
+    def delete_mentoing(self, request, *args, **kwargs):
+        json_mentoring = request.body
+        mentoring = json.loads(json_mentoring)
+        mentor = mentoring['mentor_id']
+        mentee = mentoring['mentee_id']
+        try:
+            obj_mentoring = Mentoring.objects.get(mentor=mentor,mentee = mentee)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        obj_mentoring.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 
 class StudyGroupViewSet(viewsets.ModelViewSet):
