@@ -67,13 +67,14 @@ class Submission(AbstractBaseBoard):
     def add_scores_by_types(self):
         if self.lecture.score_types:
             score_type_list = re.split('\W+', self.lecture.score_types)
-            score_obj_list = [Score.objects.create(score_type=t) for t in score_type_list]
+            score_obj_list = [Score.objects.create(
+                score_type=t) for t in score_type_list]
             print(score_obj_list)
             self.scores.set(score_obj_list, clear=True)
             print(self.scores.all())
             return True
         return False
-        
+
     def set_scores_by_types(self, type_score_dict):
         """
         TODO : 딕셔너리에 맞게 type: score 를 지정해주도록 
@@ -134,6 +135,16 @@ class AbstractBaseComment(models.Model):
         abstract = True
 
 
+class SessionComment(AbstractBaseComment):
+    board = models.ForeignKey(
+        Session, on_delete=models.CASCADE, related_name="session_comments")
+
+
+class SubmissionComment(AbstractBaseComment):
+    board = models.ForeignKey(
+        Submission, on_delete=models.CASCADE, related_name="session_comments")
+
+
 class StudyBoardComment(AbstractBaseComment):
     board = models.ForeignKey(
         StudyBoard, on_delete=models.CASCADE, related_name="study_comments")
@@ -145,9 +156,12 @@ class NoticeBoardComment(AbstractBaseComment):
 
 
 class QnABoardComment(AbstractBaseComment):
-    board = models.ForeignKey(QnABoard, on_delete=models.CASCADE, related_name="QnA_comments")
-    parent_id = models.ForeignKey("self", on_delete = models.CASCADE, null = True, blank = True,related_name= "recomment")
-    is_child = models.BooleanField(default = False) #false는 부모 댓글 true는 대댓글, 대대댓글은 안할꼬얌
+    board = models.ForeignKey(
+        QnABoard, on_delete=models.CASCADE, related_name="QnA_comments")
+    parent_id = models.ForeignKey(
+        "self", on_delete=models.CASCADE, null=True, blank=True, related_name="recomment")
+    # false는 부모 댓글 true는 대댓글, 대대댓글은 안할꼬얌
+    is_child = models.BooleanField(default=False)
 
     def re_comment(self, **kwargs):
         for key, value in kwargs.items():

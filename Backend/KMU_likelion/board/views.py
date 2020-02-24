@@ -9,13 +9,14 @@ from .filters import (
     StudyBoardCommentFilter, StudyBoardFilter, SubmissionFilter)
 from .models import (CareerBoard, NoticeBoard, NoticeBoardComment, QnABoard,
                      QnABoardComment, Score, Session, StudyBoard,
-                     StudyBoardComment, Submission)
+                     StudyBoardComment, Submission, SubmissionComment, SessionComment)
 from .serializers import (AssignmentSerializer, CareerBoardSerializer,
                           LectureSerializer, NoticeBoardCommentSerializer,
                           NoticeBoardSerializer, QnABoardCommentSerializer,
                           QnABoardSerializer, RecommentSerializer,
                           ScoreSerializer, StudyBoardCommentSerializer,
-                          StudyBoardSerializer, SubmissionSerializer)
+                          StudyBoardSerializer, SubmissionSerializer,
+                          SessionCommentSerializer, SubmissionCommentSerializer)
 
 
 # 스터디 게시판 viewset
@@ -67,9 +68,10 @@ def like_content(self, request, cat, *args, **kwargs):
 
 
 class SessionViewSet(viewsets.ModelViewSet):
-    queryset = Session.objects.filter(session_type=Session.LECTURE).order_by('pub_date')
+    queryset = Session.objects.all().order_by('pub_date')
     serializer_class = LectureSerializer
-    action_serializer_classes = {"add_assignment": AssignmentSerializer}
+    action_serializer_classes = {
+        "assignments": AssignmentSerializer, "add_assignment": AssignmentSerializer}
     filter_class = SessionFilter
 
     def get_serializer_class(self):
@@ -83,6 +85,14 @@ class SessionViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['GET', 'POST'])
     def like(self, request, *args, **kwargs):
         return like_status(self, request, *args, **kwargs)
+
+    @action(detail=True, methods=['GET'])
+    def assignments(self, request, *args, **kwargs):
+        session = self.get_object()
+        queryset = session.assignments.all()
+        serializer = self.get_serializer(data=queryset, many=True)
+        serializer.is_valid()
+        return Response(serializer.data)
 
     @action(detail=True, methods=['POST'])
     def add_assignment(self, request, *args, **kwargs):
@@ -206,6 +216,16 @@ class CareerViewSet(viewsets.ModelViewSet):
         return like_status(self, request, *args, **kwargs)
 
 
+class SessionCommentViewSet(viewsets.ModelViewSet):
+    queryset = SessionComment.objects.all().order_by('pub_date')
+    serializer_class = SessionCommentSerializer
+
+
+class SubmissionCommentViewSet(viewsets.ModelViewSet):
+    queryset = SubmissionComment.objects.all().order_by('pub_date')
+    serializer_class = SubmissionCommentSerializer
+
+
 # 스터디 댓글 viewset
 class StudyCommentViewSet(viewsets.ModelViewSet):
     queryset = StudyBoardComment.objects.all().order_by('pub_date')
@@ -256,6 +276,6 @@ class QnACommentViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=new_comment_dict)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        
+
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

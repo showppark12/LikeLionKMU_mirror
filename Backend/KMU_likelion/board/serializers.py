@@ -1,8 +1,6 @@
 from rest_framework import serializers
 
-from .models import (CareerBoard, NoticeBoard, NoticeBoardComment, QnABoard,
-                     QnABoardComment, Score, Session, StudyBoard,
-                     StudyBoardComment, Submission)
+from . import models
 
 
 # Session type=ASSIGNMENT Serializer
@@ -11,7 +9,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
     session_type = serializers.HiddenField(default='A')
 
     class Meta:
-        model = Session
+        model = models.Session
         fields = ['id', 'author_name', 'title', 'user_id', 'body', 'score_types',
                   'pub_date', 'update_date', 'session_type', 'lecture', 'deadline']
 
@@ -22,7 +20,7 @@ class LectureSerializer(serializers.ModelSerializer):
     assignments = AssignmentSerializer(many=True, read_only=True)
 
     class Meta:
-        model = Session
+        model = models.Session
         fields = ['id', 'author_name', 'title', 'body', 'user_id',
                   'pub_date', 'update_date', 'session_type', 'assignments']
 
@@ -30,7 +28,7 @@ class LectureSerializer(serializers.ModelSerializer):
 class ScoreSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Score
+        model = models.Score
         fields = '__all__'
 
 
@@ -41,7 +39,7 @@ class SubmissionSerializer(serializers.ModelSerializer):
     total_score = serializers.SerializerMethodField()
 
     class Meta:
-        model = Submission
+        model = models.Submission
         fields = ['id', 'author_name', 'title', 'user_id', 'body', 'pub_date',
                   'update_date', 'lecture', 'scores', 'total_score']
 
@@ -63,7 +61,7 @@ class StudyBoardSerializer(serializers.ModelSerializer):
     group_name = serializers.ReadOnlyField(source='group_id.name')
 
     class Meta:
-        model = StudyBoard
+        model = models.StudyBoard
         fields = ['id', 'author_name', 'body', 'user_id', 'title', 'pub_date', 'update_date',
                   'like', 'total_likes', 'study_type', 'personnel', 'group_name', 'group_id']
 
@@ -73,7 +71,7 @@ class NoticeBoardSerializer(serializers.ModelSerializer):
     author_name = serializers.ReadOnlyField(source='user_id.username')
 
     class Meta:
-        model = NoticeBoard
+        model = models.NoticeBoard
         fields = ['id', 'author_name', 'body', 'user_id', 'title', 'pub_date',
                   'update_date', 'like', 'total_likes', 'notice_date', 'is_recorded', 'event_name']
 
@@ -83,15 +81,37 @@ class QnABoardSerializer(serializers.ModelSerializer):
     author_name = serializers.ReadOnlyField(source='user_id.username')
 
     class Meta:
-        model = QnABoard
+        model = models.QnABoard
         fields = ['id', 'author_name', 'body', 'user_id', 'title',
                   'subject', 'pub_date', 'update_date', 'like', 'total_likes']
 
 
 class CareerBoardSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CareerBoard
+        model = models.CareerBoard
         fields = '__all__'
+
+
+class SessionCommentSerializer(serializers.ModelSerializer):
+    author_name = serializers.ReadOnlyField(source='user_id.username')
+    user_img = serializers.ImageField(
+        source='user_id.img', read_only=True, use_url=True)
+
+    class Meta:
+        model = models.SessionComment
+        fields = ['id', 'author_name', 'body', 'user_id',
+                  'board', 'pub_date', 'update_date', 'user_img']
+
+
+class SubmissionCommentSerializer(serializers.ModelSerializer):
+    author_name = serializers.ReadOnlyField(source='user_id.username')
+    user_img = serializers.ImageField(
+        source='user_id.img', read_only=True, use_url=True)
+
+    class Meta:
+        model = models.SubmissionComment
+        fields = ['id', 'author_name', 'body', 'user_id',
+                  'board', 'pub_date', 'update_date', 'user_img']
 
 
 # 스터디 댓글 Serializer
@@ -101,7 +121,7 @@ class StudyBoardCommentSerializer(serializers.ModelSerializer):
         source='user_id.img', read_only=True, use_url=True)
 
     class Meta:
-        model = StudyBoardComment
+        model = models.StudyBoardComment
         fields = ['id', 'author_name', 'body', 'user_id',
                   'board', 'pub_date', 'update_date', 'user_img']
 
@@ -113,7 +133,7 @@ class NoticeBoardCommentSerializer(serializers.ModelSerializer):
         source='user_id.img', read_only=True, use_url=True)
 
     class Meta:
-        model = NoticeBoardComment
+        model = models.NoticeBoardComment
         fields = ['id', 'author_name', 'body', 'user_id',
                   'board', 'pub_date', 'update_date', 'user_img']
 
@@ -125,7 +145,7 @@ class RecommentSerializer(serializers.ModelSerializer):
         source='user_id.img', read_only=True, use_url=True)
 
     class Meta:
-        model = QnABoardComment
+        model = models.QnABoardComment
         fields = ['id', 'author_name', 'body', 'user_id', 'board',
                   'pub_date', 'update_date', 'user_img', 'parent_id', 'is_child']
 
@@ -138,6 +158,6 @@ class QnABoardCommentSerializer(serializers.ModelSerializer):
         many=True, source='recomment', read_only=True)
 
     class Meta:
-        model = QnABoardComment
+        model = models.QnABoardComment
         fields = ['id', 'author_name', 'body', 'user_id', 'board', 'pub_date',
                   'update_date', 'user_img', 'parent_id', 'is_child', 'recomments']
