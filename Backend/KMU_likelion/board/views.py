@@ -3,20 +3,11 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .filters import (
-    CareerBoardFilter, NoticeBoardCommentFilter, NoticeBoardFilter,
-    QnABoardCommentFilter, QnABoardFilter, SessionFilter,
-    StudyBoardCommentFilter, StudyBoardFilter, SubmissionFilter)
+from . import filters
 from .models import (CareerBoard, NoticeBoard, NoticeBoardComment, QnABoard,
                      QnABoardComment, Score, Session, StudyBoard,
                      StudyBoardComment, Submission, SubmissionComment, SessionComment)
-from .serializers import (AssignmentSerializer, CareerBoardSerializer,
-                          LectureSerializer, NoticeBoardCommentSerializer,
-                          NoticeBoardSerializer, QnABoardCommentSerializer,
-                          QnABoardSerializer, RecommentSerializer,
-                          ScoreSerializer, StudyBoardCommentSerializer,
-                          StudyBoardSerializer, SubmissionSerializer,
-                          SessionCommentSerializer, SubmissionCommentSerializer)
+from . import serializers
 
 
 class BaseBoardViewSet(viewsets.ModelViewSet):
@@ -65,10 +56,10 @@ class BaseBoardViewSet(viewsets.ModelViewSet):
 
 class SessionViewSet(BaseBoardViewSet):
     queryset = Session.objects.all()
-    serializer_class = LectureSerializer
+    serializer_class = serializers.LectureSerializer
     action_serializer_classes = {
-        "assignments": AssignmentSerializer, "add_assignment": AssignmentSerializer}
-    filter_class = SessionFilter
+        "assignments": serializers.AssignmentSerializer, "add_assignment": serializers.AssignmentSerializer}
+    filter_class = filters.SessionFilter
     category = "session"
 
     @action(detail=True, methods=['GET'])
@@ -98,9 +89,9 @@ class SessionViewSet(BaseBoardViewSet):
 
 class SubmissionViewSet(BaseBoardViewSet):
     queryset = Submission.objects.all()
-    serializer_class = SubmissionSerializer
-    action_serializer_classes = {"scores": ScoreSerializer}
-    filter_class = SubmissionFilter
+    serializer_class = serializers.SubmissionSerializer
+    action_serializer_classes = {"scores": serializers.ScoreSerializer}
+    filter_class = filters.SubmissionFilter
     category = "submission"
     
     @action(detail=True, methods=['GET', 'POST', 'PUT'])
@@ -125,85 +116,68 @@ class SubmissionViewSet(BaseBoardViewSet):
 
 class StudyViewSet(BaseBoardViewSet):
     queryset = StudyBoard.objects.all()
-    serializer_class = StudyBoardSerializer
-    filter_class = StudyBoardFilter
+    serializer_class = serializers.StudyBoardSerializer
+    filter_class = filters.StudyBoardFilter
     category = "study"
 
 
 # 공지 게시판 viewset
 class NoticeViewSet(BaseBoardViewSet):
     queryset = NoticeBoard.objects.all()
-    serializer_class = NoticeBoardSerializer
-    filter_class = NoticeBoardFilter
+    serializer_class = serializers.NoticeBoardSerializer
+    filter_class = filters.NoticeBoardFilter
     category = "notice"
 
 
 # QnA 게시판 viewset
 class QnAViewSet(BaseBoardViewSet):
     queryset = QnABoard.objects.all()
-    serializer_class = QnABoardSerializer
-    filter_class = QnABoardFilter
+    serializer_class = serializers.QnABoardSerializer
+    filter_class = filters.QnABoardFilter
     category = "qna"
 
 
 class CareerViewSet(BaseBoardViewSet):
     queryset = CareerBoard.objects.all()
-    serializer_class = CareerBoardSerializer
-    filter_class = CareerBoardFilter
+    serializer_class = serializers.CareerBoardSerializer
+    filter_class = filters.CareerBoardFilter
     category = "career"
 
 
 class SessionCommentViewSet(viewsets.ModelViewSet):
     queryset = SessionComment.objects.all()
-    serializer_class = SessionCommentSerializer
+    serializer_class = serializers.SessionCommentSerializer
 
 
 class SubmissionCommentViewSet(viewsets.ModelViewSet):
     queryset = SubmissionComment.objects.all()
-    serializer_class = SubmissionCommentSerializer
+    serializer_class = serializers.SubmissionCommentSerializer
 
 
 # 스터디 댓글 viewset
 class StudyCommentViewSet(viewsets.ModelViewSet):
     queryset = StudyBoardComment.objects.all()
-    serializer_class = StudyBoardCommentSerializer
-    filter_class = StudyBoardCommentFilter
+    serializer_class = serializers.StudyBoardCommentSerializer
+    filter_class = filters.StudyBoardCommentFilter
 
 
 # 공지 댓글 viewset
 class NoticeCommentViewSet(viewsets.ModelViewSet):
     queryset = NoticeBoardComment.objects.all()
-    serializer_class = NoticeBoardCommentSerializer
-    filter_class = NoticeBoardCommentFilter
+    serializer_class = serializers.NoticeBoardCommentSerializer
+    filter_class = filters.NoticeBoardCommentFilter
 
 
 # QnA 댓글 viewset
 class QnACommentViewSet(viewsets.ModelViewSet):
     queryset = QnABoardComment.objects.all()
-    serializer_class = QnABoardCommentSerializer
-    filter_class = QnABoardCommentFilter
+    serializer_class = serializers.QnABoardCommentSerializer
+    filter_class = filters.QnABoardCommentFilter
 
     def get_queryset(self):
         query = super().get_queryset()
-        qs = query.filter(is_child=False)
-        return qs
-
-    def get_object(self):
-        queryset = QnABoardComment.objects.all()
-        # Perform the lookup filtering.
-        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
-
-        assert lookup_url_kwarg in self.kwargs, (
-            'Expected view %s to be called with a URL keyword argument '
-            'named "%s". Fix your URL conf, or set the `.lookup_field` '
-            'attribute on the view correctly.' %
-            (self.__class__.__name__, lookup_url_kwarg)
-        )
-        filter_kwargs = {self.lookup_field: self.kwargs[lookup_url_kwarg]}
-        obj = get_object_or_404(queryset, **filter_kwargs)
-        self.check_object_permissions(self.request, obj)
-
-        return obj
+        query = query.filter(is_child=False)
+        return query
 
     @action(detail=True, methods=['POST'])
     def re_comment(self, request, *args, **kwargs):

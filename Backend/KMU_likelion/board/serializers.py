@@ -12,7 +12,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Session
         fields = ['id', 'author_name', 'title', 'user_id', 'body', 'score_types',
-                  'pub_date', 'update_date', 'session_type', 'lecture', 'deadline'] #'deadline'
+                  'pub_date', 'update_date', 'session_type', 'lecture', 'deadline']  # 'deadline'
 
 
 # Session type=LECTURE Serializer
@@ -151,12 +151,17 @@ class RecommentSerializer(serializers.ModelSerializer):
                   'pub_date', 'update_date', 'user_img', 'parent_id', 'is_child']
 
 
+class RecursiveSerializer(serializers.Serializer):
+    def to_representation(self, value):
+        serializer = self.parent.parent.__class__(value, context=self.context)
+        return serializer.data
+
+
 class QnABoardCommentSerializer(serializers.ModelSerializer):
     author_name = serializers.ReadOnlyField(source='user_id.username')
     user_img = serializers.ImageField(
         source='user_id.img', read_only=True, use_url=True)
-    recomments = RecommentSerializer(
-        many=True, source='recomment', read_only=True)
+    recomments = RecursiveSerializer(many=True, read_only=True)
 
     class Meta:
         model = models.QnABoardComment
