@@ -1,12 +1,7 @@
 from django.contrib.auth import authenticate, get_user_model
 from rest_framework import serializers
 
-from board.serializers import (NoticeBoardCommentSerializer,
-                               NoticeBoardSerializer,
-                               QnABoardCommentSerializer, QnABoardSerializer,
-                               StudyBoardCommentSerializer,
-                               StudyBoardSerializer)
-
+from board import serializers as board_serializers
 from .models import GroupUser, Mentoring, Portfolio, StudyGroup
 
 User = get_user_model()
@@ -34,21 +29,32 @@ class UserSerializer(serializers.ModelSerializer):
 
 # 유저의 활동 내역(글, 댓글)을 포함
 class UserActivitySerializer(serializers.ModelSerializer):
-    studyboard = StudyBoardSerializer(many=True, source="studyboard_set")
-    noticeboard = NoticeBoardSerializer(many=True, source="noticeboard_set")
-    qnaboard = QnABoardSerializer(many=True, source="qnaboard_set")
+    studyboard = board_serializers.StudyBoardSerializer(
+        many=True, source="studyboard_set")
+    noticeboard = board_serializers.NoticeBoardSerializer(
+        many=True, source="noticeboard_set")
+    qnaboard = board_serializers.QnABoardSerializer(
+        many=True, source="qnaboard_set")
+    assignments = board_serializers.AssignmentSerializer(
+        many=True, source="session_set")
+    submission = board_serializers.SubmissionSerializer(
+        many=True, source="submission_set")
 
-    StudyBoardComments = StudyBoardCommentSerializer(
-        many=True, source="StudyBoardComments_set")
-    NoticeBoardComments = NoticeBoardCommentSerializer(
-        many=True, source="NoticeBoardComments_set")
-    QnABoardComments = QnABoardCommentSerializer(
-        many=True, source="QnABoardComments_set")
+    studyboard_comments = board_serializers.StudyBoardCommentSerializer(
+        many=True, source="studyboardcomment_set")
+    noticeboard_comments = board_serializers.NoticeBoardCommentSerializer(
+        many=True, source="noticeboardcomment_set")
+    qnaboard_comments = board_serializers.QnABoardCommentSerializer(
+        many=True, source="qnaboardcomment_set")
+    sessionboard_comments = board_serializers.SessionCommentSerializer(
+        many=True, source="sessioncomment_set")
+    submissionboard_comments = board_serializers.SubmissionCommentSerializer(
+        many=True, source="submissioncomment_set")
 
     class Meta:
         model = User
-        fields = ["studyboard", "noticeboard", "qnaboard",
-                  "StudyBoardComments", "NoticeBoardComments", "QnABoardComments"]
+        fields = ["studyboard", "noticeboard", "qnaboard", "assignments", "submission", "studyboard_comments",
+                  "noticeboard_comments", "qnaboard_comments", "sessionboard_comments", "submissionboard_comments", ]
 
 
 # 로그인
