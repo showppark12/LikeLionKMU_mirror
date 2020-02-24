@@ -19,55 +19,48 @@ from .serializers import (AssignmentSerializer, CareerBoardSerializer,
                           SessionCommentSerializer, SubmissionCommentSerializer)
 
 
-# 스터디 게시판 viewset
-def like_status(self, request, *args, **kwargs):
-    board = self.get_object()
-    status = None
-
-    if request.method == 'POST':
-        # print("fdff",request.body) #react에서 request 요청을 받을때
-
-        if board.like.filter(username=self.request.user.username).exists():
-
-            board.like.remove(self.request.user.id)
-            print("user removed(false) : ", board.like.filter(
-                username=self.request.user.username).exists())
-            status = False
-        else:
-            board.like.add(self.request.user.id)
-            print("user added(true) : ", board.like.filter(
-                username=self.request.user.username).exists())
-            status = True
-
-        return Response({"state": status})
-    else:
-
-        if board.like.filter(username=self.request.user.username).exists():
-
-            status = True
-        else:
-            status = False
-
-        return Response({"state": status})
-
-
-def like_content(self, request, cat, *args, **kwargs):
-    board_list = None
-    serializer = None
-    if cat == "study":
-        board_list = self.request.user.study_like.all()
-        serializer = StudyBoardSerializer(board_list, many=True)
-    elif cat == "notice":
-        board_list = self.request.user.notice_like.all()
-        serializer = NoticeBoardSerializer(board_list, many=True)
-    elif cat == "qna":
-        board_list = self.request.user.qna_like.all()
-        serializer = QnABoardSerializer(board_list, many=True)
-
-    return Response({"board_contents": serializer.data})
-
 class BaseBoardViewSet(viewsets.ModelViewSet):
-    pass
+    action_serializer_classes = {}
+    
+    def get_serializer_class(self):
+        return self.action_serializer_classes.get(self.action, self.serializer_class)
+
+    @action(detail=False, methods=['POST'])
+    def user_like(self, request, *args, **kwargs):
+        board_list = None
+        if self.category == "study":
+            board_list = request.user.study_like.all()
+        elif self.category == "notice":
+            board_list = request.user.notice_like.all()
+        elif self.category == "qna":
+            board_list = request.user.qna_like.all()
+        elif self.category == "career":
+            board_list = request.user.career_like.all()
+        elif self.category == "session":
+            board_list = request.user.session_like.all()
+        elif self.category == "submission":
+            board_list = request.user.submission_like.all()
+
+        serializer = self.get_serializer(board_list, many=True)
+        return Response({"board_contents": serializer.data})
+
+    @action(detail=True, methods=['GET', 'POST'])
+    def like(self, request, *args, **kwargs):
+        board = self.get_object()
+        status = None
+        alread_liked = board.like.filter(username=request.user.username).exists()
+
+        if request.method == 'POST':
+            status = not alread_liked
+            if alread_liked:
+                board.like.remove(request.user.id)
+                print("user removed(false) : ", alread_liked)
+            else:
+                board.like.add(request.user.id)
+                print("user added(true) : ", alread_liked)
+        else:
+            status = alread_liked
+        return Response({"state": status})
 
 
 class SessionViewSet(BaseBoardViewSet):
@@ -76,18 +69,7 @@ class SessionViewSet(BaseBoardViewSet):
     action_serializer_classes = {
         "assignments": AssignmentSerializer, "add_assignment": AssignmentSerializer}
     filter_class = SessionFilter
-
-    def get_serializer_class(self):
-        return self.action_serializer_classes.get(self.action, self.serializer_class)
-
-    @action(detail=False, methods=['POST'])
-    def user_like(self, request, *args, **kwargs):
-        cat = "session"
-        return like_content(self, request, cat, *args, **kwargs)
-
-    @action(detail=True, methods=['GET', 'POST'])
-    def like(self, request, *args, **kwargs):
-        return like_status(self, request, *args, **kwargs)
+    category = "session"
 
     @action(detail=True, methods=['GET'])
     def assignments(self, request, *args, **kwargs):
@@ -119,19 +101,8 @@ class SubmissionViewSet(BaseBoardViewSet):
     serializer_class = SubmissionSerializer
     action_serializer_classes = {"scores": ScoreSerializer}
     filter_class = SubmissionFilter
-
-    def get_serializer_class(self):
-        return self.action_serializer_classes.get(self.action, self.serializer_class)
-
-    @action(detail=False, methods=['POST'])
-    def user_like(self, request, *args, **kwargs):
-        cat = "session"
-        return like_content(self, request, cat, *args, **kwargs)
-
-    @action(detail=True, methods=['GET', 'POST'])
-    def like(self, request, *args, **kwargs):
-        return like_status(self, request, *args, **kwargs)
-
+    category = "submission"
+    
     @action(detail=True, methods=['GET', 'POST', 'PUT'])
     def scores(self, request, *args, **kwargs):
         submission = self.get_object()
@@ -155,39 +126,16 @@ class SubmissionViewSet(BaseBoardViewSet):
 class StudyViewSet(BaseBoardViewSet):
     queryset = StudyBoard.objects.all()
     serializer_class = StudyBoardSerializer
-    # permission_classes = [
-    #     permissions.IsAuthenticated,
-    # ]
     filter_class = StudyBoardFilter
-
-    @action(detail=False, methods=['POST'])
-    def user_like(self, request, *args, **kwargs):
-        cat = "study"
-        return like_content(self, request, cat, *args, **kwargs)
-
-    @action(detail=True, methods=['GET', 'POST'])
-    def like(self, request, *args, **kwargs):
-        return like_status(self, request, *args, **kwargs)
+    category = "study"
 
 
 # 공지 게시판 viewset
 class NoticeViewSet(BaseBoardViewSet):
     queryset = NoticeBoard.objects.all()
-
-    # permission_classes = [
-    #     permissions.IsAuthenticatedOrReadOnly,
-    # ]
-
     serializer_class = NoticeBoardSerializer
     filter_class = NoticeBoardFilter
-    @action(detail=False, methods=['POST'])
-    def user_like(self, request, *args, **kwargs):
-        cat = "notice"
-        return like_content(self, request, cat, *args, **kwargs)
-
-    @action(detail=True, methods=['GET', 'POST'])
-    def like(self, request, *args, **kwargs):
-        return like_status(self, request, *args, **kwargs)
+    category = "notice"
 
 
 # QnA 게시판 viewset
@@ -195,29 +143,14 @@ class QnAViewSet(BaseBoardViewSet):
     queryset = QnABoard.objects.all()
     serializer_class = QnABoardSerializer
     filter_class = QnABoardFilter
-    @action(detail=False, methods=['POST'])
-    def user_like(self, request, *args, **kwargs):
-        cat = "qna"
-        return like_content(self, request, cat, *args, **kwargs)
-
-    @action(detail=True, methods=['GET', 'POST'])
-    def like(self, request, *args, **kwargs):
-        return like_status(self, request, *args, **kwargs)
+    category = "qna"
 
 
 class CareerViewSet(BaseBoardViewSet):
     queryset = CareerBoard.objects.all()
     serializer_class = CareerBoardSerializer
     filter_class = CareerBoardFilter
-
-    @action(detail=False, methods=['POST'])
-    def user_like(self, request, *args, **kwargs):
-        cat = "career"
-        return like_content(self, request, cat, *args, **kwargs)
-
-    @action(detail=True, methods=['GET', 'POST'])
-    def like(self, request, *args, **kwargs):
-        return like_status(self, request, *args, **kwargs)
+    category = "career"
 
 
 class SessionCommentViewSet(viewsets.ModelViewSet):
