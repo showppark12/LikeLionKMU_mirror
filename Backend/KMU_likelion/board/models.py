@@ -18,6 +18,7 @@ class AbstractBaseBoard(models.Model):
 
     class Meta:
         abstract = True
+        ordering = ['-pub_date', ]
 
     def __str__(self):
         return self.title
@@ -67,14 +68,13 @@ class Submission(AbstractBaseBoard):
     def add_scores_by_types(self):
         if self.lecture.score_types:
             score_type_list = re.split('\W+', self.lecture.score_types)
-            score_obj_list = [Score.objects.create(
-                score_type=t) for t in score_type_list]
+            score_obj_list = [Score.objects.create(score_type=t) for t in score_type_list]
             print(score_obj_list)
             self.scores.set(score_obj_list, clear=True)
             print(self.scores.all())
             return True
         return False
-
+        
     def set_scores_by_types(self, type_score_dict):
         """
         TODO : 딕셔너리에 맞게 type: score 를 지정해주도록 
@@ -133,6 +133,7 @@ class AbstractBaseComment(models.Model):
 
     class Meta:
         abstract = True
+        ordering = ['-pub_date', ]
 
 
 class SessionComment(AbstractBaseComment):

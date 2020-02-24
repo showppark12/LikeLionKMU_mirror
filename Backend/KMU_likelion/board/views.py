@@ -66,9 +66,12 @@ def like_content(self, request, cat, *args, **kwargs):
 
     return Response({"board_contents": serializer.data})
 
+class BaseBoardViewSet(viewsets.ModelViewSet):
+    pass
 
-class SessionViewSet(viewsets.ModelViewSet):
-    queryset = Session.objects.all().order_by('pub_date')
+
+class SessionViewSet(BaseBoardViewSet):
+    queryset = Session.objects.all()
     serializer_class = LectureSerializer
     action_serializer_classes = {
         "assignments": AssignmentSerializer, "add_assignment": AssignmentSerializer}
@@ -98,6 +101,7 @@ class SessionViewSet(viewsets.ModelViewSet):
     def add_assignment(self, request, *args, **kwargs):
         session = self.get_object()
         assignment = session.add_assignment(**request.data)
+        print(request.data)
 
         serializer = self.get_serializer(data=assignment)
         if session.session_type == session.ASSIGNMENT:
@@ -110,8 +114,8 @@ class SessionViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class SubmissionViewSet(viewsets.ModelViewSet):
-    queryset = Submission.objects.all().order_by('pub_date')
+class SubmissionViewSet(BaseBoardViewSet):
+    queryset = Submission.objects.all()
     serializer_class = SubmissionSerializer
     action_serializer_classes = {"scores": ScoreSerializer}
     filter_class = SubmissionFilter
@@ -148,8 +152,8 @@ class SubmissionViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
 
 
-class StudyViewSet(viewsets.ModelViewSet):
-    queryset = StudyBoard.objects.all().order_by('pub_date')
+class StudyViewSet(BaseBoardViewSet):
+    queryset = StudyBoard.objects.all()
     serializer_class = StudyBoardSerializer
     # permission_classes = [
     #     permissions.IsAuthenticated,
@@ -167,8 +171,8 @@ class StudyViewSet(viewsets.ModelViewSet):
 
 
 # 공지 게시판 viewset
-class NoticeViewSet(viewsets.ModelViewSet):
-    queryset = NoticeBoard.objects.all().order_by('pub_date')
+class NoticeViewSet(BaseBoardViewSet):
+    queryset = NoticeBoard.objects.all()
 
     # permission_classes = [
     #     permissions.IsAuthenticatedOrReadOnly,
@@ -187,8 +191,8 @@ class NoticeViewSet(viewsets.ModelViewSet):
 
 
 # QnA 게시판 viewset
-class QnAViewSet(viewsets.ModelViewSet):
-    queryset = QnABoard.objects.all().order_by('pub_date')
+class QnAViewSet(BaseBoardViewSet):
+    queryset = QnABoard.objects.all()
     serializer_class = QnABoardSerializer
     filter_class = QnABoardFilter
     @action(detail=False, methods=['POST'])
@@ -201,8 +205,8 @@ class QnAViewSet(viewsets.ModelViewSet):
         return like_status(self, request, *args, **kwargs)
 
 
-class CareerViewSet(viewsets.ModelViewSet):
-    queryset = CareerBoard.objects.all().order_by('pub_date')
+class CareerViewSet(BaseBoardViewSet):
+    queryset = CareerBoard.objects.all()
     serializer_class = CareerBoardSerializer
     filter_class = CareerBoardFilter
 
@@ -217,32 +221,32 @@ class CareerViewSet(viewsets.ModelViewSet):
 
 
 class SessionCommentViewSet(viewsets.ModelViewSet):
-    queryset = SessionComment.objects.all().order_by('pub_date')
+    queryset = SessionComment.objects.all()
     serializer_class = SessionCommentSerializer
 
 
 class SubmissionCommentViewSet(viewsets.ModelViewSet):
-    queryset = SubmissionComment.objects.all().order_by('pub_date')
+    queryset = SubmissionComment.objects.all()
     serializer_class = SubmissionCommentSerializer
 
 
 # 스터디 댓글 viewset
 class StudyCommentViewSet(viewsets.ModelViewSet):
-    queryset = StudyBoardComment.objects.all().order_by('pub_date')
+    queryset = StudyBoardComment.objects.all()
     serializer_class = StudyBoardCommentSerializer
     filter_class = StudyBoardCommentFilter
 
 
 # 공지 댓글 viewset
 class NoticeCommentViewSet(viewsets.ModelViewSet):
-    queryset = NoticeBoardComment.objects.all().order_by('pub_date')
+    queryset = NoticeBoardComment.objects.all()
     serializer_class = NoticeBoardCommentSerializer
     filter_class = NoticeBoardCommentFilter
 
 
 # QnA 댓글 viewset
 class QnACommentViewSet(viewsets.ModelViewSet):
-    queryset = QnABoardComment.objects.all().order_by('pub_date')
+    queryset = QnABoardComment.objects.all()
     serializer_class = QnABoardCommentSerializer
     filter_class = QnABoardCommentFilter
 
@@ -252,7 +256,7 @@ class QnACommentViewSet(viewsets.ModelViewSet):
         return qs
 
     def get_object(self):
-        queryset = QnABoardComment.objects.all().order_by('pub_date')
+        queryset = QnABoardComment.objects.all()
         # Perform the lookup filtering.
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
 
