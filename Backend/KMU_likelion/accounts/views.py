@@ -73,7 +73,7 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
     
     @action(detail = False, methods=["POST"])
-    def delete_mentoing(self, request, *args, **kwargs):
+    def delete_mentoring(self, request, *args, **kwargs):
         json_mentoring = request.body
         mentoring = json.loads(json_mentoring)
         mentor = mentoring['mentor_id']
