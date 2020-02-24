@@ -37,6 +37,7 @@ class Session(AbstractBaseBoard):
 
     lecture = models.ForeignKey(
         'self', blank=True, null=True, on_delete=models.PROTECT, related_name='assignments')
+    like = models.ManyToManyField(User, blank=True, related_name="session_like")
 
     def get_lectures(self):
         return get_queryset().filter(session_type=self.LECTURE)
@@ -64,6 +65,7 @@ class Submission(AbstractBaseBoard):
     lecture = models.ForeignKey(Session, on_delete=models.CASCADE)
     scores = models.ManyToManyField(
         Score, blank=True, related_name="+", symmetrical=False)
+    like = models.ManyToManyField(User, blank=True, related_name="submission_like")
 
     def add_scores_by_types(self):
         if self.lecture.score_types:
@@ -74,7 +76,7 @@ class Submission(AbstractBaseBoard):
             print(self.scores.all())
             return True
         return False
-        
+
     def set_scores_by_types(self, type_score_dict):
         """
         TODO : 딕셔너리에 맞게 type: score 를 지정해주도록 
@@ -100,10 +102,10 @@ class StudyBoard(AbstractBaseBoard):
 
 class NoticeBoard(AbstractBaseBoard):
     notice_date = models.DateField(null=True)
-    like = models.ManyToManyField(User, blank=True, related_name="notice_like")
     is_recorded = models.BooleanField(default=False)  # 달력 기록여부
     event_name = models.CharField(
         max_length=20, blank=True, null=True)  # 달력에 표시될 이벤트의 이름
+    like = models.ManyToManyField(User, blank=True, related_name="notice_like")
 
     @property
     def total_likes(self):
@@ -123,6 +125,7 @@ class CareerBoard(AbstractBaseBoard):
     link = models.URLField(blank=True)
     participants = models.ManyToManyField(
         User, blank=True, related_name="career_user")
+    like = models.ManyToManyField(User, blank=True, related_name="carrer_like")
 
 
 class AbstractBaseComment(models.Model):
