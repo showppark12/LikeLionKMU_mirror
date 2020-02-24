@@ -58,7 +58,7 @@ class PostDetailContainer extends Component {
       .getPost(board_name, this.props.match.params.id)
       .then(res => {
         const data = res.data;
-        console.log(data);
+        console.log("data: ", data);
         this.setState({
           postInfo: data,
           board_name: board_name
@@ -118,7 +118,7 @@ class PostDetailContainer extends Component {
       case "session":
         detailComponent = (
           <SessionDetail
-            postInfo={postInfo}
+            // postInfo={postInfo}
             handlingDelete={this.handlingDelete}
             post_id={this.props.match.params.id}
             board_name={this.props.match.path.split("/")[1]}
