@@ -9,11 +9,12 @@ from .models import (CareerBoard, NoticeBoard, NoticeBoardComment, QnABoard,
 class AssignmentSerializer(serializers.ModelSerializer):
     author_name = serializers.ReadOnlyField(source='user_id.username')
     session_type = serializers.HiddenField(default='A')
+    # lectures = serializers.ReadOnlyField(source='lecture')
 
     class Meta:
         model = Session
         fields = ['id', 'author_name', 'title', 'user_id', 'body', 'score_types',
-                  'pub_date', 'update_date', 'session_type', 'lecture', 'deadline']
+                  'pub_date', 'update_date', 'session_type', 'lecture', 'deadline'] #'deadline'
 
 
 # Session type=LECTURE Serializer
