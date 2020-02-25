@@ -13,7 +13,7 @@ from .serializers import (CreateUserSerializer, GroupUserCreateSerializer,
                           MenteeSerializer, MentoringSerializer,
                           MentorSerializer, PortfolioSerializer,
                           StudyGroupSerializer, UserActivitySerializer,
-                          UserSerializer)
+                          UserSerializer,MyGroupSerializer)
 
 User = get_user_model()
 import json
@@ -84,6 +84,13 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
         obj_mentoring.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail = True, methods = ["GET"])
+    def get_mygroup(self,request, *args, **kwargs):
+        myuser = self.get_object()
+        studygroups =  GroupUser.objects.filter(user_id = myuser)
+        serializer = MyGroupSerializer(studygroups, many = True)
+        return Response(serializer.data)
 
 
 

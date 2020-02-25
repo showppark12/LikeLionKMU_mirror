@@ -7,13 +7,12 @@ from . import models
 class AssignmentSerializer(serializers.ModelSerializer):
     author_name = serializers.ReadOnlyField(source='user_id.username')
     session_type = serializers.HiddenField(default='A')
-    # lectures = serializers.ReadOnlyField(source='lecture')
+    
 
     class Meta:
         model = models.Session
         fields = ['id', 'author_name', 'title', 'user_id', 'body', 'score_types',
                   'pub_date', 'update_date', 'session_type', 'lecture']  # 'deadline'
-
 
 # Session type=LECTURE Serializer
 class LectureSerializer(serializers.ModelSerializer):
@@ -22,7 +21,7 @@ class LectureSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Session
-        fields = ['id', 'author_name', 'title', 'body', 'user_id',
+        fields = ['id', 'author_name', 'full_name','title', 'body', 'user_id',
                   'pub_date', 'update_date', 'session_type', 'assignments']
 
 
@@ -41,7 +40,7 @@ class SubmissionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Submission
-        fields = ['id', 'author_name', 'title', 'user_id', 'body', 'pub_date',
+        fields = ['id', 'author_name', 'full_name','title', 'user_id', 'body', 'pub_date',
                   'update_date', 'lecture', 'scores', 'total_score']
 
     def create(self, validated_data):
@@ -63,7 +62,7 @@ class StudyBoardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.StudyBoard
-        fields = ['id', 'author_name', 'body', 'user_id', 'title', 'pub_date', 'update_date',
+        fields = ['id', 'author_name', 'body', 'user_id','full_name', 'title', 'pub_date', 'update_date',
                   'like', 'total_likes', 'study_type', 'personnel', 'group_name', 'group_id']
 
 
@@ -73,7 +72,7 @@ class NoticeBoardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.NoticeBoard
-        fields = ['id', 'author_name', 'body', 'user_id', 'title', 'pub_date',
+        fields = ['id', 'author_name','full_name', 'body', 'user_id', 'title', 'pub_date',
                   'update_date', 'like', 'total_likes', 'notice_date', 'is_recorded', 'event_name']
 
 
@@ -83,7 +82,7 @@ class QnABoardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.QnABoard
-        fields = ['id', 'author_name', 'body', 'user_id', 'title',
+        fields = ['id', 'author_name','full_name', 'body', 'user_id', 'title',
                   'subject', 'pub_date', 'update_date', 'like', 'total_likes']
 
 
@@ -100,7 +99,7 @@ class SessionCommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.SessionComment
-        fields = ['id', 'author_name', 'body', 'user_id',
+        fields = ['id', 'author_name','full_name', 'body', 'user_id',
                   'board', 'pub_date', 'update_date', 'user_img']
 
 
@@ -111,7 +110,7 @@ class SubmissionCommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.SubmissionComment
-        fields = ['id', 'author_name', 'body', 'user_id',
+        fields = ['id', 'author_name','full_name', 'body', 'user_id',
                   'board', 'pub_date', 'update_date', 'user_img']
 
 
@@ -123,7 +122,7 @@ class StudyBoardCommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.StudyBoardComment
-        fields = ['id', 'author_name', 'body', 'user_id',
+        fields = ['id', 'author_name','full_name', 'body', 'user_id',
                   'board', 'pub_date', 'update_date', 'user_img']
 
 
@@ -135,7 +134,7 @@ class NoticeBoardCommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.NoticeBoardComment
-        fields = ['id', 'author_name', 'body', 'user_id',
+        fields = ['id', 'author_name','full_name', 'body', 'user_id',
                   'board', 'pub_date', 'update_date', 'user_img']
 
 
@@ -147,7 +146,7 @@ class RecommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.QnABoardComment
-        fields = ['id', 'author_name', 'body', 'user_id', 'board',
+        fields = ['id', 'author_name','full_name', 'body', 'user_id', 'board',
                   'pub_date', 'update_date', 'user_img', 'parent_id', 'is_child']
 
 
@@ -165,5 +164,5 @@ class QnABoardCommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.QnABoardComment
-        fields = ['id', 'author_name', 'body', 'user_id', 'board', 'pub_date',
+        fields = ['id', 'author_name','full_name', 'body', 'user_id', 'board', 'pub_date',
                   'update_date', 'user_img', 'parent_id', 'is_child', 'recomments']

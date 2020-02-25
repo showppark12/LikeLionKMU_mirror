@@ -46,8 +46,8 @@ class UserSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ["username","first_name","last_name","img","id","studyboard", "noticeboard", "qnaboard", "assignments", "submission", "studyboard_comments",
-                  "noticeboard_comments", "qnaboard_comments", "sessionboard_comments", "submissionboard_comments", ]
+        fields = ["username","first_name","last_name","full_name" ,"img","id","studyboard", "noticeboard", "qnaboard", "assignments", "submission", "studyboard_comments",
+                  "noticeboard_comments", "qnaboard_comments", "sessionboard_comments", "submissionboard_comments",]
 
 
 # 유저의 활동 내역(글, 댓글)을 포함
@@ -74,10 +74,12 @@ class UserActivitySerializer(serializers.ModelSerializer):
     submissionboard_comments = board_serializers.SubmissionCommentSerializer(
         many=True, source="submissioncomment_set")
 
+
+
     class Meta:
         model = User
         fields = ["studyboard", "noticeboard", "qnaboard", "assignments", "submission", "studyboard_comments",
-                  "noticeboard_comments", "qnaboard_comments", "sessionboard_comments", "submissionboard_comments", ]
+                  "noticeboard_comments", "qnaboard_comments", "sessionboard_comments", "submissionboard_comments"]
 
 
 # 로그인
@@ -143,3 +145,10 @@ class MenteeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mentoring
         fields = ['user']
+
+class MyGroupSerializer(serializers.ModelSerializer):
+    studygroup = StudyGroupSerializer(source = 'group_id')
+
+    class Meta:
+        model = GroupUser
+        fields = ['studygroup','is_captain']

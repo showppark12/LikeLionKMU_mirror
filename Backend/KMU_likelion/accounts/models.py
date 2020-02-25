@@ -10,6 +10,9 @@ class User(AbstractUser):
     sns_id = models.CharField(max_length=200, null=True)
     img = models.ImageField(upload_to='images/', default='../static/images/default_profile_img.png')
 
+    def full_name(self):
+        return self.get_full_name()
+
 
 class Mentoring(models.Model):
     pub_date = models.DateField(auto_now_add=True)
