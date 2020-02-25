@@ -11,9 +11,8 @@ class AssignmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Session
-        fields = ['id', 'author_name','full_name','title', 'user_id','body', 'score_types',
-                  'pub_date', 'update_date', 'session_type', 'lecture', 'deadline']  # 'deadline'
-
+        fields = ['id', 'author_name', 'title', 'user_id', 'body', 'score_types',
+                  'pub_date', 'update_date', 'session_type', 'lecture']  # 'deadline'
 
 # Session type=LECTURE Serializer
 class LectureSerializer(serializers.ModelSerializer):
