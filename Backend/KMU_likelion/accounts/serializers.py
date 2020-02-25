@@ -143,3 +143,10 @@ class MenteeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mentoring
         fields = ['user']
+
+class MyGroupSerializer(serializers.ModelSerializer):
+    studygroup = StudyGroupSerializer(source = 'group_id')
+
+    class Meta:
+        model = GroupUser
+        fields = ['studygroup','is_captain']
