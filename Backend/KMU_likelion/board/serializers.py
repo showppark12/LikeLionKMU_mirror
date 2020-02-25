@@ -7,12 +7,12 @@ from . import models
 class AssignmentSerializer(serializers.ModelSerializer):
     author_name = serializers.ReadOnlyField(source='user_id.username')
     session_type = serializers.HiddenField(default='A')
-    
+    deadline = serializers.DateTimeField(required=False)
 
     class Meta:
         model = models.Session
         fields = ['id', 'author_name', 'title', 'user_id', 'body', 'score_types',
-                  'pub_date', 'update_date', 'session_type', 'lecture']  # 'deadline'
+                  'pub_date', 'update_date', 'session_type', 'lecture', 'deadline']  # 'deadline'
 # Session type=LECTURE Serializer
 class LectureSerializer(serializers.ModelSerializer):
     author_name = serializers.ReadOnlyField(source='user_id.username')

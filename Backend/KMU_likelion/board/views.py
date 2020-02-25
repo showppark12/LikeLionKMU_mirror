@@ -1,4 +1,6 @@
 from django.shortcuts import get_object_or_404
+
+import rest_framework
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -78,7 +80,8 @@ class SessionViewSet(BaseBoardViewSet):
 
         serializer = self.get_serializer(data=assignment)
         if session.session_type == session.ASSIGNMENT:
-            raise serializer.ValidationError(
+            print(session.session_type)
+            raise rest_framework.serializers.ValidationError(
                 "ASSIGNMENT Type Session must not have assignment")
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)

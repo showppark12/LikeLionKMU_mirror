@@ -42,14 +42,12 @@ class Session(AbstractBaseBoard):
     like = models.ManyToManyField(User, blank=True, related_name="session_like")
 
     def get_lectures(self):
-        return get_queryset().filter(session_type=self.LECTURE)
-
+        return Session.objects.filter(session_type=self.LECTURE)
+    
     def get_assignments(self):
-        return get_queryset().filter(session_type=self.ASSIGNMENT)
+        return Session.objects.filter(session_type=self.ASSIGNMENT)
 
     def add_assignment(self, **kwargs):
-        for key, value in kwargs.items():
-            kwargs[key] = value[0]
         kwargs['lecture'] = self.id
         kwargs['session_type'] = self.ASSIGNMENT
         return kwargs
