@@ -43,3 +43,6 @@ class Evaluation(models.Model):
     body = models.TextField()
     score = models.FloatField(default=0.0)
     pub_date = models.DateTimeField(auto_now_add=True)
+    
+    def full_name(self):
+        return self.user_id.get_full_name()
