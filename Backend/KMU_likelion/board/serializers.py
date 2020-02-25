@@ -12,7 +12,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Session
         fields = ['id', 'author_name', 'title', 'user_id', 'body', 'score_types',
-                  'pub_date', 'update_date', 'session_type', 'lecture', 'deadline']  # 'deadline'
+                  'pub_date', 'update_date', 'session_type', 'lecture']  # 'deadline'
 
 
 # Session type=LECTURE Serializer
