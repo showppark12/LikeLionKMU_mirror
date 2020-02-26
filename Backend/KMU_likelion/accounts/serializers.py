@@ -22,32 +22,11 @@ class CreateUserSerializer(serializers.ModelSerializer):
 
 # 접속 유지중인지 확인
 class UserSerializer(serializers.ModelSerializer):
-    studyboard = board_serializers.StudyBoardSerializer(
-        many=True, source="studyboard_set")
-    noticeboard = board_serializers.NoticeBoardSerializer(
-        many=True, source="noticeboard_set")
-    qnaboard = board_serializers.QnABoardSerializer(
-        many=True, source="qnaboard_set")
-    assignments = board_serializers.AssignmentSerializer(
-        many=True, source="session_set")
-    submission = board_serializers.SubmissionSerializer(
-        many=True, source="submission_set")
 
-    studyboard_comments = board_serializers.StudyBoardCommentSerializer(
-        many=True, source="studyboardcomment_set")
-    noticeboard_comments = board_serializers.NoticeBoardCommentSerializer(
-        many=True, source="noticeboardcomment_set")
-    qnaboard_comments = board_serializers.QnABoardCommentSerializer(
-        many=True, source="qnaboardcomment_set")
-    sessionboard_comments = board_serializers.SessionCommentSerializer(
-        many=True, source="sessioncomment_set")
-    submissionboard_comments = board_serializers.SubmissionCommentSerializer(
-        many=True, source="submissioncomment_set")
-    
     class Meta:
         model = User
-        fields = ["username","first_name","last_name","full_name" ,"img","id","studyboard", "noticeboard", "qnaboard", "assignments", "submission", "studyboard_comments",
-                  "noticeboard_comments", "qnaboard_comments", "sessionboard_comments", "submissionboard_comments",]
+        fields = ["username", "first_name",
+                  "last_name", "full_name", "img", "id", ]
 
 
 # 유저의 활동 내역(글, 댓글)을 포함
@@ -73,8 +52,6 @@ class UserActivitySerializer(serializers.ModelSerializer):
         many=True, source="sessioncomment_set")
     submissionboard_comments = board_serializers.SubmissionCommentSerializer(
         many=True, source="submissioncomment_set")
-
-
 
     class Meta:
         model = User
@@ -115,7 +92,7 @@ class GroupUserCreateSerializer(serializers.ModelSerializer):
 
 class GroupUserSerializer(serializers.ModelSerializer):
     user = UserSerializer(source='user_id', read_only=True)
-    
+
     class Meta:
         model = GroupUser
         fields = '__all__'
@@ -146,9 +123,10 @@ class MenteeSerializer(serializers.ModelSerializer):
         model = Mentoring
         fields = ['user']
 
+
 class MyGroupSerializer(serializers.ModelSerializer):
-    studygroup = StudyGroupSerializer(source = 'group_id')
+    studygroup = StudyGroupSerializer(source='group_id')
 
     class Meta:
         model = GroupUser
-        fields = ['studygroup','is_captain']
+        fields = ['studygroup', 'is_captain']
