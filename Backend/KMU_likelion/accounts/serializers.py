@@ -15,10 +15,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
         fields = "__all__"
         extra_kwargs = {"password": {"write_only": True}}
 
-    def create(self, validated_data):
-        user = User.objects.create_user(
-            validated_data["username"], None, validated_data["password"])
-        return user
+  
 
 
 # 접속 유지중인지 확인
@@ -28,6 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ["username", "first_name",
                   "last_name", "full_name", "img", "id", ]
+        
 
 
 # 유저의 활동 내역(글, 댓글)을 포함
