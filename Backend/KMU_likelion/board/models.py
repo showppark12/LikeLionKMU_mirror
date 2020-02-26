@@ -66,7 +66,7 @@ class Submission(AbstractBaseBoard):
     scores = models.ManyToManyField(
         Score, blank=True, related_name="+", symmetrical=False)
     like = models.ManyToManyField(User, blank=True, related_name="submission_like")
-
+    url=models.URLField(max_length = 200) 
     def add_scores_by_types(self):
         if self.lecture.score_types:
             score_type_list = re.split('\W+', self.lecture.score_types)

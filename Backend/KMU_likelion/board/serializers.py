@@ -40,7 +40,7 @@ class SubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Submission
         fields = ['id', 'author_name', 'full_name','title', 'user_id', 'body', 'pub_date',
-                  'update_date', 'lecture', 'scores', 'total_score']
+                  'update_date', 'lecture', 'scores', 'total_score','url']
 
     def create(self, validated_data):
         submission = super(SubmissionSerializer, self).create(validated_data)
