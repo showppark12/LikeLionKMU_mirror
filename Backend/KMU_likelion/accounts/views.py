@@ -17,7 +17,7 @@ from .serializers import (CreateUserSerializer, GroupUserCreateSerializer,
                           MentorSerializer, PortfolioSerializer,
                           StudyGroupSerializer, UserActivitySerializer,
                           UserSerializer,MyGroupSerializer,CaptainSerializer)
-
+import json
 User = get_user_model()
 
 class RegistrationAPI(generics.GenericAPIView):
