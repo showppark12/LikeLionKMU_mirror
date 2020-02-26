@@ -5,11 +5,12 @@ export default {
   /* Admission api */
 
   createJoinForm(data) {
-    console.log("submitJoinForm 실행.");
+    console.log("submitJoinForm 실행.", data);
     // console.log(data);
     return axios.post("admission/application/", data);
   },
 
+  //parameter : email, password
   getJoinData(data) {
     console.log("getJoinData 실행.");
     return axios.post(`admission/application/get_application/`, data);
@@ -25,6 +26,11 @@ export default {
     return axios.get("admission/application/");
   },
 
+  updateJoinData(id, data) {
+    console.log("update JoinData 실행.", data);
+    return axios.put(`admission/application/${id}/`, data);
+  },
+
   getAllQuestions() {
     console.log("getAllQuestions 실행");
     return axios.get("admission/question/");
@@ -36,18 +42,22 @@ export default {
   },
 
   updateQuestion(id, data) {
-    console.log("createQuestion 실행.");
+    console.log("updateQuestion 실행.");
     return axios.put(`admission/question/${id}/`, data);
   },
 
   deleteQuestion(id) {
-    console.log("createQuestion 실행.");
+    console.log("deleteQuestion 실행.");
     return axios.delete(`admission/question/${id}/`);
   },
 
   createAnswer(data) {
     console.log("createAnswer 실행.");
     return axios.post("admission/answer/", data);
+  },
+  updateAnswer(id, data) {
+    console.log("updateAnswer 실행.", data);
+    return axios.put(`admission/answer/${id}/`, data);
   },
   createAnswers(data) {
     console.log("createAnswers 실행.");
