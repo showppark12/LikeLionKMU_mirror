@@ -152,3 +152,10 @@ class MyGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = GroupUser
         fields = ['studygroup','is_captain']
+
+class CaptainSerializer(serializers.ModelSerializer):
+    user_img = serializers.ImageField(source='user_id.img', read_only=True, use_url=True)
+    captain_username = serializers.ReadOnlyField(source='user_id.username')
+    class Meta:
+        model = GroupUser
+        fields =  ['user_img', 'captain_username', 'user_id','full_name']

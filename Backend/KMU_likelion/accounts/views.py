@@ -13,7 +13,7 @@ from .serializers import (CreateUserSerializer, GroupUserCreateSerializer,
                           MenteeSerializer, MentoringSerializer,
                           MentorSerializer, PortfolioSerializer,
                           StudyGroupSerializer, UserActivitySerializer,
-                          UserSerializer,MyGroupSerializer)
+                          UserSerializer,MyGroupSerializer,CaptainSerializer)
 
 User = get_user_model()
 import json
@@ -105,6 +105,15 @@ class StudyGroupViewSet(viewsets.ModelViewSet):
         group_users = group.groupuser_set.all()
         serializer = GroupUserSerializer(group_users, many=True)
         return Response(serializer.data)
+    @action(detail=True, methods=["GET"])
+    def get_captain(self, request, *args, **kwargs):
+        group = self.get_object()
+        groupuser = GroupUser.objects.filter(group_id = group)
+        for checkuser in groupuser:
+            if checkuser.is_captain == True:
+                serializer = CaptainSerializer(checkuser)
+                return Response(serializer.data)
+
 
 
 class PortfolioViewSet(viewsets.ModelViewSet):
