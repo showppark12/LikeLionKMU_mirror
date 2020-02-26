@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import api from "../../api/AdmissionAPI";
+import api from "../../../api/AdmissionAPI";
 //@material-ui
 import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
@@ -19,7 +19,7 @@ const useStyles = theme => ({
   }
 });
 
-class CheckAnswerForm extends Component {
+class ConfirmAnswerForm extends Component {
   state = {
     id: "",
     body: "",
@@ -117,4 +117,4 @@ class CheckAnswerForm extends Component {
   }
 }
 
-export default withStyles(useStyles)(CheckAnswerForm);
+export default withStyles(useStyles)(ConfirmAnswerForm);

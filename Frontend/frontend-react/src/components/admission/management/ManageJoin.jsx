@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
-import api from "../../api/AdmissionAPI";
+import api from "../../../api/AdmissionAPI";
 import { Link } from "react-router-dom";
 
 import Input from "@material-ui/core/Input";
@@ -39,7 +39,7 @@ class CheckJoin extends Component {
     await api.getAllJoinData().then(res => {
       console.log(res);
       this.setState({
-        joindata: res.data.results
+        joindata: res.data
       });
     });
   };
@@ -48,7 +48,7 @@ class CheckJoin extends Component {
     await api.getAllQuestions().then(res => {
       console.log(res);
       this.setState({
-        questions: res.data.results
+        questions: res.data
       });
     });
   };

@@ -14,7 +14,7 @@ import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 
 export default function Header(props) {
   const store = useContext(Store);
-  const id = window.sessionStorage.getItem("id");
+  const username = window.sessionStorage.getItem("username");
   // const user_img = window.sessionStorage.getItem("user_img");
 
   const DropItem = ({ children, to }) => (
@@ -84,7 +84,7 @@ export default function Header(props) {
                           </DropItem>
                         </MenuItem>
                         <MenuItem onClick={popupState.close}>
-                          <DropItem to={`/Mypage/${id}`}>마이페이지</DropItem>
+                          <DropItem to={`/Mypage/${username}`}>마이페이지</DropItem>
                         </MenuItem>
                       </Menu>
                     </>
@@ -95,10 +95,10 @@ export default function Header(props) {
           ) : (
             <Nav>
               <NavDropdown title="지원하기" id="collasible-nav-dropdown">
-                <NavDropdown.Item as={Link} to="/admission/join">
+                <NavDropdown.Item as={Link} to="/admission/apply">
                   입부신청
                 </NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/admission/checkjoin">
+                <NavDropdown.Item as={Link} to="/admission/confirmApply">
                   지원내역
                 </NavDropdown.Item>
               </NavDropdown>
