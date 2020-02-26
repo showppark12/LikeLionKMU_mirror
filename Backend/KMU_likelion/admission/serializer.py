@@ -3,22 +3,23 @@ from rest_framework import serializers
 from .models import Answer, Application, Evaluation, Question
 
 
-class ApplicationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Application
-        fields = '__all__'
-
 
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = '__all__'
 
-
 class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
         fields = '__all__'
+
+
+class ApplicationSerializer(serializers.ModelSerializer):
+    answer = AnswerSerializer(source= "application_answer", many = True)
+    class Meta:
+        model = Application
+        fields =  ['id', 'name', 'student_id','phone_number','birth', 'sex', 'major', 'email', 'pw','status','pub_date','update_date','answer']
 
 
 class EvaluationSerializer(serializers.ModelSerializer):
