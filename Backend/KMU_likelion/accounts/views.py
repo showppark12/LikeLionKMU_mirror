@@ -11,6 +11,12 @@ from . import serializers
 from .filters import (GroupUserFilter, MentoringFilter, PortfolioFilter,
                       StudyGroupFilter, UserFilter)
 from .models import GroupUser, Mentoring, Portfolio, StudyGroup
+from .serializers import (CreateUserSerializer, GroupUserCreateSerializer,
+                          GroupUserSerializer, LoginUserSerializer,
+                          MenteeSerializer, MentoringSerializer,
+                          MentorSerializer, PortfolioSerializer,
+                          StudyGroupSerializer, UserActivitySerializer,
+                          UserSerializer,MyGroupSerializer,CaptainSerializer)
 
 User = get_user_model()
 
@@ -101,6 +107,15 @@ class StudyGroupViewSet(viewsets.ModelViewSet):
         group_users = group.groupuser_set.all()
         serializer = serializers.GroupUserSerializer(group_users, many=True)
         return Response(serializer.data)
+    @action(detail=True, methods=["GET"])
+    def get_captain(self, request, *args, **kwargs):
+        group = self.get_object()
+        groupuser = GroupUser.objects.filter(group_id = group)
+        for checkuser in groupuser:
+            if checkuser.is_captain == True:
+                serializer = CaptainSerializer(checkuser)
+                return Response(serializer.data)
+
 
 
 class PortfolioViewSet(viewsets.ModelViewSet):
