@@ -42,14 +42,12 @@ class Session(AbstractBaseBoard):
     like = models.ManyToManyField(User, blank=True, related_name="session_like")
 
     def get_lectures(self):
-        return get_queryset().filter(session_type=self.LECTURE)
-
+        return Session.objects.filter(session_type=self.LECTURE)
+    
     def get_assignments(self):
-        return get_queryset().filter(session_type=self.ASSIGNMENT)
+        return Session.objects.filter(session_type=self.ASSIGNMENT)
 
     def add_assignment(self, **kwargs):
-        for key, value in kwargs.items():
-            kwargs[key] = value[0]
         kwargs['lecture'] = self.id
         kwargs['session_type'] = self.ASSIGNMENT
         return kwargs
@@ -68,7 +66,7 @@ class Submission(AbstractBaseBoard):
     scores = models.ManyToManyField(
         Score, blank=True, related_name="+", symmetrical=False)
     like = models.ManyToManyField(User, blank=True, related_name="submission_like")
-
+    url=models.URLField(max_length = 200,null=True) 
     def add_scores_by_types(self):
         if self.lecture.score_types:
             score_type_list = re.split('\W+', self.lecture.score_types)

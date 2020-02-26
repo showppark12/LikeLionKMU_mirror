@@ -2,17 +2,28 @@ import React from "react";
 import { Link } from "react-router-dom";
 import api from "../../../api/GroupAPI";
 import PostView from "../container/PostView";
-
+import { getAllUser } from "../../../api/AuthAPI";
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-
+import CancelIcon from '@material-ui/icons/Cancel';
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 // import { FixedSizeList } from "react-window";
 import List from "@material-ui/core/List";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import IconButton from "@material-ui/core/IconButton";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
+import Avatar from "@material-ui/core/Avatar";
 
 class GroupDetail extends React.Component {
   constructor(props) {
@@ -25,12 +36,28 @@ class GroupDetail extends React.Component {
       group_captain: {},
       group_members: [],
       noticePosts: [],
-      studyPosts: []
+      studyPosts: [],
+      visit_id:"",
+      allUser:[],
+      selected_user: "",
+      userOpen: false,
+      userId:"",
+
     };
   }
 
   componentDidMount() {
     this.getGroup();
+    this.getAllUser();
+  }
+
+  getAllUser = async () => {
+    await getAllUser().then(res => {
+      console.log("모든 유저 받아옴", res.data);
+      this.setState({
+        allUser: res.data
+      });
+    });
   }
 
   //그룹데이터 가져옴
@@ -40,21 +67,53 @@ class GroupDetail extends React.Component {
       .getGroupWithName(group_name)
       .then(res => {
         // console.log("결과 : ", res.data);
-        const group_info = res.data.results[0];
+        const group_info = res.data;
         console.log("결과 : ", group_info);
         this.setState({
-          group_name: group_info.name,
-          group_id: group_info.id,
-          group_body: group_info.introduction,
-          group_img: group_info.img
+          group_name: group_info[0].name,
+          group_id: group_info[0].id,
+          group_body: group_info[0].introduction,
+          group_img: group_info[0].img
         });
         this.getGroupPost();
         this.getGroupMember();
+        this.getGroupCaptain();
         // this.getGroupCaptain();
       })
       .catch(err => {
         console.log(err);
       });
+  };
+  addGroupUser = async event => {
+    event.preventDefault();
+    console.log("유저아이디",this.state.selected_user);
+    await api
+      .addGroupUser({
+        "is_captain": false,
+        "user_id": this.state.selected_user,
+        "group_id": this.state.group_id
+    })
+      .then(res => {
+        this.getGroupMember();
+        
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+  deleteGroupUser = async (event,id) => {
+    event.preventDefault();
+    await api
+      .deleteGroupUser(id)
+      .then(res=>{
+        this.getGroupMember();
+      })
+      .catch(err=>{
+        console.log(err);
+      });
+  }
+  handlingChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
   };
 
   //해당 그룹의 게시물들을 가져옴
@@ -66,7 +125,7 @@ class GroupDetail extends React.Component {
         console.log("그룹의 posts 가져오기 성공.", res.data);
         let notice = [];
         let study = [];
-        res.data.results.map(post => {
+        res.data.map(post => {
           if (post.study_type === 0) {
             notice.push(post);
           } else {
@@ -85,7 +144,7 @@ class GroupDetail extends React.Component {
     await api
       .getMemberWithGroupId(this.state.group_id)
       .then(res => {
-        console.log(res.data);
+        console.log("그룹멤버",res.data);
 
         this.setState({
           group_members: res.data
@@ -94,17 +153,18 @@ class GroupDetail extends React.Component {
       .catch(err => console.log(err));
   };
 
-  // getGroupCaptain = async () => {
-  //   await api
-  //     .getCaptainWithGroupId(this.state.group_id)
-  //     .then(res => {
-  //       console.log("후 이즈 캡틴?", res.data.results);
-  //       this.setState({
-  //         group_captain: res.data.results[0]
-  //       });
-  //     })
-  //     .catch(err => console.log(err));
-  // };
+  getGroupCaptain = async () => {
+    await api
+      .getCaptainWithGroupId(this.state.group_id)
+      .then(res => {
+        console.log("후 이즈 캡틴?", res.data);
+        this.setState({
+          group_captain: res.data[0]
+        });
+        
+      })
+      .catch(err => console.log(err));
+  };
 
   //그룹 삭제
   groupDelete = async () => {
@@ -112,6 +172,9 @@ class GroupDetail extends React.Component {
     console.log("delete post 성공.");
     document.location.href = "/study";
   };
+
+  
+ 
 
   render() {
     return (
@@ -152,7 +215,12 @@ class GroupDetail extends React.Component {
                     <li key={`li-${member.id}`}>
                       <ul className={"mentoring-ul"}>
                         <ListItem button key={member.id}>
-                          <ListItemText primary={member.user.username} />
+                          <ListItemAvatar>
+                            <IconButton component={Link} to={`/Mypage/${member.user.username}`}>
+                              <Avatar alt="Recomment-writer" src={member.user.img} />
+                            </IconButton>
+                          </ListItemAvatar>
+                          <ListItemText primary={member.user.username} /><CancelIcon className="Cancle" onClick={event => this.deleteGroupUser(event,member.id)}/>
                         </ListItem>
                       </ul>
                     </li>
@@ -166,6 +234,62 @@ class GroupDetail extends React.Component {
               sm={12}
               style={{ alignItems: "center", textAlign: "right" }}
             >
+              <div>
+                {
+                  String(this.state.group_captain.user_id) === window.sessionStorage.getItem("id") 
+                    ? (
+                      <Table>
+                        <TableBody>
+                        <TableRow className="alluser">
+                              <TableCell colSpan={2}>
+                                <form
+                                  onSubmit={event => this.addGroupUser(event)}
+                                  className={"mentoring-form"}
+                                >
+                                  <Select
+                                    className={"mentoring-select"}
+                                    open={this.state.userOpen}
+                                    onClose={e => this.setState({ userOpen: false })}
+                                    name="selected_user"
+                                    onOpen={e => this.setState({ userOpen: true })}
+                                    value={this.state.selected_user}
+                                    onChange={e =>
+                                      this.setState({ selected_user: e.target.value })
+                                    }
+                                    
+                                    displayEmpty
+                                  >
+                                    <MenuItem value="">
+                                      <small>All User</small>
+                                    </MenuItem>
+                                    {this.state.allUser.map(user => (
+                                      <MenuItem value={user.id}>{user.username}</MenuItem>
+                                    ))}
+
+                                  </Select>
+
+                                  <Button type="submit">ADD</Button>
+                                </form>
+                              </TableCell>
+                            </TableRow>
+                        </TableBody>
+                      </Table>
+                    )
+                    : (
+                      <></>
+                    )
+                }
+                </div>
+
+              <Link to={`/study/${this.state.group_name}/update`}>
+              <Button
+                color="secondary"
+                size="small"
+              >
+                그룹수정
+              </Button>
+              </Link>
+
               <Button
                 color="secondary"
                 size="small"

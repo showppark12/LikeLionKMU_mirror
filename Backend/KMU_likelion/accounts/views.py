@@ -1,10 +1,13 @@
 # api/views.py
+import json
+
 from django.contrib.auth import get_user_model
 from knox.models import AuthToken
 from rest_framework import generics, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from . import serializers
 from .filters import (GroupUserFilter, MentoringFilter, PortfolioFilter,
                       StudyGroupFilter, UserFilter)
 from .models import GroupUser, Mentoring, Portfolio, StudyGroup
@@ -16,37 +19,36 @@ from .serializers import (CreateUserSerializer, GroupUserCreateSerializer,
                           UserSerializer,MyGroupSerializer,CaptainSerializer)
 
 User = get_user_model()
-import json
 
 class RegistrationAPI(generics.GenericAPIView):
-    serializer_class = CreateUserSerializer
+    serializer_class = serializers.CreateUserSerializer
 
     def post(self, request, *args, **kwargs):
-        if len(request.data["email"]) < 6 or len(request.data["password"]) < 4:
+        if len(request.data["username"]) < 4 or len(request.data["password"]) < 6:
             body = {"message": "short field"}
             return Response(body, status=status.HTTP_400_BAD_REQUEST)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        return Response({"user": UserSerializer(user, context=self.get_serializer_context()).data,
+        return Response({"user": serializers.UserSerializer(user, context=self.get_serializer_context()).data,
                          "token": AuthToken.objects.create(user)[1], })
 
 
 class LoginAPI(generics.GenericAPIView):
-    serializer_class = LoginUserSerializer
+    serializer_class = serializers.LoginUserSerializer
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
-        return Response({"user": UserSerializer(user, context=self.get_serializer_context()).data,
+        return Response({"user": serializers.UserSerializer(user, context=self.get_serializer_context()).data,
                          "token": AuthToken.objects.create(user)[1], })
 
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
-    action_serializer_classes = {"activity": UserActivitySerializer}
+    serializer_class = serializers.UserSerializer
+    action_serializer_classes = {"activity": serializers.UserActivitySerializer}
     filter_class = UserFilter
 
     def get_serializer_class(self):
@@ -62,14 +64,14 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_mymentees(self, request, *args, **kwargs):
         mentor = self.get_object()
         mentees = Mentoring.objects.filter(mentor=mentor.id)
-        serializer = MenteeSerializer(mentees, many=True)
+        serializer = serializers.MenteeSerializer(mentees, many=True)
         return Response(serializer.data)
 
     @action(detail=True, methods=["GET"])
     def get_mymentors(self, request, *args, **kwargs):
         mentee = self.get_object()
         mentors = Mentoring.objects.filter(mentee=mentee.id)
-        serializer = MentorSerializer(mentors, many=True)
+        serializer = serializers.MentorSerializer(mentors, many=True)
         return Response(serializer.data)
     
     @action(detail = False, methods=["POST"])
@@ -89,21 +91,21 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_mygroup(self,request, *args, **kwargs):
         myuser = self.get_object()
         studygroups =  GroupUser.objects.filter(user_id = myuser)
-        serializer = MyGroupSerializer(studygroups, many = True)
+        serializer = serializers.MyGroupSerializer(studygroups, many = True)
         return Response(serializer.data)
 
 
 
 class StudyGroupViewSet(viewsets.ModelViewSet):
     queryset = StudyGroup.objects.all().order_by('pub_date')
-    serializer_class = StudyGroupSerializer
+    serializer_class = serializers.StudyGroupSerializer
     filter_class = StudyGroupFilter
 
     @action(detail=True, methods=["GET"])
     def group_users(self, request, *args, **kwargs):
         group = self.get_object()
         group_users = group.groupuser_set.all()
-        serializer = GroupUserSerializer(group_users, many=True)
+        serializer = serializers.GroupUserSerializer(group_users, many=True)
         return Response(serializer.data)
     @action(detail=True, methods=["GET"])
     def get_captain(self, request, *args, **kwargs):
@@ -118,19 +120,19 @@ class StudyGroupViewSet(viewsets.ModelViewSet):
 
 class PortfolioViewSet(viewsets.ModelViewSet):
     queryset = Portfolio.objects.all()
-    serializer_class = PortfolioSerializer
+    serializer_class = serializers.PortfolioSerializer
     filter_class = PortfolioFilter
 
 
 class GroupUserViewSet(viewsets.ModelViewSet):
     queryset = GroupUser.objects.all()
-    serializer_class = GroupUserCreateSerializer
+    serializer_class = serializers.GroupUserCreateSerializer
     filter_class = GroupUserFilter
 
 
 class MentoringViewSet(viewsets.ModelViewSet):
     queryset = Mentoring.objects.all()
-    serializer_class = MentoringSerializer
+    serializer_class = serializers.MentoringSerializer
     filter_class = MentoringFilter
 
     @action(detail=False, methods=["GET"])
@@ -150,7 +152,7 @@ class MentoringViewSet(viewsets.ModelViewSet):
             if not flags:
                 querylist.append(qs)
 
-        serializer = MentorSerializer(querylist, many=True)
+        serializer = serializers.MentorSerializer(querylist, many=True)
         return Response(serializer.data)
 
     @action(detail=False, methods=["GET"])
@@ -170,7 +172,7 @@ class MentoringViewSet(viewsets.ModelViewSet):
             if not flags:
                 querylist.append(qs)
 
-        serializer = MenteeSerializer(querylist, many=True)
+        serializer = serializers.MenteeSerializer(querylist, many=True)
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
