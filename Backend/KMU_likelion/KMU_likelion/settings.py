@@ -45,9 +45,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'django_filters',
 
-    # 글쓰기 지원
-    'ckeditor',
-    'ckeditor_uploader',
+    'generic_relations',
     'crispy_forms',
 
     # 사용자 앱
@@ -56,8 +54,6 @@ INSTALLED_APPS = [
     'admission',
     'main',
 ]
-
-CKEDITOR_UPLOAD_PATH = "uploads/"
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',

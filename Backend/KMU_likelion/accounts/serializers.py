@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, get_user_model
 from rest_framework import serializers
 
 from board import serializers as board_serializers
+
 from .models import GroupUser, Mentoring, Portfolio, StudyGroup
 
 User = get_user_model()
