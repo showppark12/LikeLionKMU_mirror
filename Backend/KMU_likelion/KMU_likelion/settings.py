@@ -101,13 +101,9 @@ WSGI_APPLICATION = 'KMU_likelion.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Lion_web',
-        'USER': 'root',
-        'PASSWORD': 'hjkhjk66',
-        'HOST': 'localhost',
-        'PORT': '3306',
         'OPTIONS': {
-            'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
+            #mysql.py의 경로
+            'read_default_file':"/Users/jwl/Desktop/web/KMU-LIKELION/Backend/KMU_likelion/KMU_likelion/mysql.cnf "
         }
     }
 }
