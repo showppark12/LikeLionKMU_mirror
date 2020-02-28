@@ -105,7 +105,7 @@ class StudyGroupViewSet(viewsets.ModelViewSet):
         groupuser = GroupUser.objects.filter(group_id = group)
         for checkuser in groupuser:
             if checkuser.is_captain == True:
-                serializer = CaptainSerializer(checkuser)
+                serializer = serializers.CaptainSerializer(checkuser)
                 return Response(serializer.data)
 
 
