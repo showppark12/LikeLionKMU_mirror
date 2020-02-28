@@ -26,8 +26,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["username", "first_name",
-                  "last_name", "full_name", "img", "id"]
+        fields =  ["username", "first_name", "img", "id","email","major","student_id","user_type","start_number","sns_id" ]
 
 
 # 유저의 활동 내역(글, 댓글)을 포함
