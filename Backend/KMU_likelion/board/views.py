@@ -63,6 +63,24 @@ class SessionViewSet(BaseBoardViewSet):
         "assignments": serializers.AssignmentSerializer, "add_assignment": serializers.AssignmentSerializer}
     filter_class = filters.SessionFilter
     category = "session"
+    def get_queryset(self):
+        query = super().get_queryset()
+        query = query.filter(session_type = 'L')
+        return query
+    def get_object(self):
+        queryset = Session.objects.all()
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+        assert lookup_url_kwarg in self.kwargs, (
+            'Expected view %s to be called with a URL keyword argument '
+            'named "%s". Fix your URL conf, or set the `.lookup_field` '
+            'attribute on the view correctly.' %
+            (self.__class__.__name__, lookup_url_kwarg)
+        )
+        filter_kwargs = {self.lookup_field: self.kwargs[lookup_url_kwarg]}
+        obj = get_object_or_404(queryset, **filter_kwargs)
+        self.check_object_permissions(self.request, obj)
+        return obj
+
 
     @action(detail=True, methods=['GET'])
     def assignments(self, request, *args, **kwargs):
@@ -181,6 +199,20 @@ class QnACommentViewSet(viewsets.ModelViewSet):
         query = super().get_queryset()
         query = query.filter(is_child=False)
         return query
+    
+    def get_object(self):
+        queryset = QnABoardComment.objects.all()
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+        assert lookup_url_kwarg in self.kwargs, (
+            'Expected view %s to be called with a URL keyword argument '
+            'named "%s". Fix your URL conf, or set the `.lookup_field` '
+            'attribute on the view correctly.' %
+            (self.__class__.__name__, lookup_url_kwarg)
+        )
+        filter_kwargs = {self.lookup_field: self.kwargs[lookup_url_kwarg]}
+        obj = get_object_or_404(queryset, **filter_kwargs)
+        self.check_object_permissions(self.request, obj)
+        return obj
 
     @action(detail=True, methods=['POST'])
     def re_comment(self, request, *args, **kwargs):
