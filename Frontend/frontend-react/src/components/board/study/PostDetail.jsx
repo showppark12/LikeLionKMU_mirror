@@ -54,9 +54,9 @@ class PostDetail extends Component {
     await api
       .getComments(`${board_name}_comment`, this.props.match.params.id)
       .then(res => {
-        console.log("게시물 댓글 : ", res.data.results);
+        console.log("게시물 댓글 : ", res.data);
         this.setState({
-          comments: res.data.results
+          comments: res.data
         });
       })
       .catch(err => console.log(err));
@@ -106,10 +106,7 @@ class PostDetail extends Component {
 
             <TableRow>
               <TableCell>
-                <LikeView
-                  board_id={this.props.match.params.id}
-                  board_name="study"
-                />
+                <LikeView post_id={post_id} board_name="study" />
                 <Button
                   color="primary"
                   size="small"

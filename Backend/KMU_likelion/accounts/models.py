@@ -42,3 +42,5 @@ class GroupUser(models.Model):
     class Meta:
         unique_together = ("user_id", "group_id", )
         ordering = ("group_id", )
+    def full_name(self):
+        return self.user_id.get_full_name()

@@ -18,7 +18,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import ManageQuestionForm from "./ManageQuestionForm";
 
-class CheckJoin extends Component {
+class ManageJoin extends Component {
   state = {
     joindata: [],
     questions: [],
@@ -39,7 +39,7 @@ class CheckJoin extends Component {
     await api.getAllJoinData().then(res => {
       console.log(res);
       this.setState({
-        joindata: res.data.results
+        joindata: res.data
       });
     });
   };
@@ -48,7 +48,7 @@ class CheckJoin extends Component {
     await api.getAllQuestions().then(res => {
       console.log(res);
       this.setState({
-        questions: res.data.results
+        questions: res.data
       });
     });
   };
@@ -182,4 +182,4 @@ class CheckJoin extends Component {
   }
 }
 
-export default CheckJoin;
+export default ManageJoin;

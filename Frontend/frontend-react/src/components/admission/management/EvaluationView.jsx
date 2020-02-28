@@ -1,23 +1,28 @@
 import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
-
-import api from "../../../api/CommentAPI";
+// import CardActions from '@material-ui/core/CardActions';
+import api from "../../../api/AdmissionAPI";
 import TextField from "@material-ui/core/TextField";
 import { Link } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
+import Paper from "@material-ui/core/Paper";
 
+import Typography from "@material-ui/core/Typography";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import IconButton from "@material-ui/core/IconButton";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import Divider from "@material-ui/core/Divider";
+import Rating from "@material-ui/lab/Rating";
 
 export default class CommentView extends Component {
   state = {
     is_update: false,
     update_body: "",
+    update_score: "",
     request_user: ""
   };
 
@@ -33,25 +38,29 @@ export default class CommentView extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
-  handlingUpdate = async (event, url, board_id, user_id, comment_id) => {
+  handlingUpdate = async (event, application_id, user_id, comment_id) => {
     event.preventDefault();
     await api
-      .updateComment(url, comment_id, {
-        body: this.state.update_body,
+      .updateEvaluation(comment_id, {
         user_id: user_id,
-        board: board_id
+        application_id: application_id,
+        body: this.state.update_body,
+        score: this.state.update_score
       })
       .then(res => {
-        console.log(res);
-        this.setState({ is_update: false });
-        this.props.getComments();
-      });
+        console.log("정상적으로 수정되었습니다. ", res.data);
+        this.setState({
+          is_update: false
+        });
+        this.props.getEvaluations();
+      })
+      .catch(err => console.log(err));
   };
 
-  handlingDelete = async (target, id) => {
+  handlingDelete = async id => {
     if (window.confirm("댓글을 삭제하시겠습니까?") === true) {
-      await api.deleteComment(target, id);
-      this.props.getComments();
+      await api.deleteEvaluation(id);
+      this.props.getEvaluations();
     }
   };
 
@@ -61,8 +70,8 @@ export default class CommentView extends Component {
       author_name,
       body,
       comment_id,
-      board_id,
-      url,
+      score,
+      application_id,
       user_img
     } = this.props;
 
@@ -72,9 +81,8 @@ export default class CommentView extends Component {
           <List>
             <form
               onSubmit={event => {
-                this.handlingUpdate(event, url, board_id, user_id, comment_id);
+                this.handlingUpdate(event, application_id, user_id, comment_id);
               }}
-              className="commentForm"
               style={{ width: "auto" }}
             >
               <ListItem
@@ -84,16 +92,27 @@ export default class CommentView extends Component {
                 <ListItemAvatar>
                   <Avatar alt="comment-writer" src={user_img} />
                 </ListItemAvatar>
+                <ListItemSecondaryAction>
+                  <Rating
+                    name="update_score"
+                    defaultValue={score}
+                    value={this.state.update_score}
+                    onChange={this.handlingChange}
+                    size="large"
+                  />
+                </ListItemSecondaryAction>
+              </ListItem>
+              <ListItem alignItems="middle" style={{ verticalAlign: "middle" }}>
                 <ListItemText
                   primary={
-                    <TextField
-                      id="outlined-name"
-                      label="comment"
+                    <TextareaAutosize
                       name="update_body"
+                      rowsMin={3}
+                      rowsMax={7}
+                      placeholder="comment"
                       value={this.state.update_body}
                       onChange={this.handlingChange}
-                      margin="normal"
-                      style={{ width: "70%" }}
+                      style={{ width: "100%" }}
                       required
                     />
                   }
@@ -117,18 +136,36 @@ export default class CommentView extends Component {
       return (
         <List component="nav" aria-label="contacts">
           <ListItem>
-            <ListItemAvatar>
-              <IconButton component={Link} to={`/Mypage/${author_name}`}>
-                <Avatar alt="Recomment-writer" src={user_img} />
+            <ListItemAvatar
+              style={{
+                display: "flex",
+                marginRight: 25,
+                verticalAlign: "middle"
+              }}
+            >
+              <IconButton
+                component={Link}
+                to={`/Mypage/${author_name}`}
+                style={{ marginRight: 10 }}
+              >
+                <Avatar alt="comment-writer" src={user_img} />
               </IconButton>
+              <Typography variant="h6" style={{ paddingTop: 15 }}>
+                {author_name}
+              </Typography>
             </ListItemAvatar>
-            <ListItemText primary={body} secondary={author_name} />
+
+            <Rating name="read-only" value={score} readOnly />
             <ListItemSecondaryAction>
               <Button
                 color="primary"
                 size="small"
                 onClick={event =>
-                  this.setState({ is_update: true, update_body: body })
+                  this.setState({
+                    is_update: true,
+                    update_body: body,
+                    update_score: score
+                  })
                 }
               >
                 Update
@@ -136,14 +173,33 @@ export default class CommentView extends Component {
               <Button
                 color="secondary"
                 size="small"
-                onClick={event => this.handlingDelete(url, comment_id)}
+                onClick={event => this.handlingDelete(comment_id)}
               >
                 Delete
               </Button>
               {/* <small>{pubDate}</small> */}
             </ListItemSecondaryAction>
           </ListItem>
-          <Divider variant="inset" />
+
+          <ListItem
+            alignItems="middle"
+            style={{ verticalAlign: "middle", alignItems: "center" }}
+          >
+            <Paper
+              elevation={0}
+              style={{
+                padding: 30,
+                textAlign: "center",
+                width: "80%"
+              }}
+            >
+              <ListItemText
+                primary={<Typography component="pre">{body}</Typography>}
+              />
+            </Paper>
+          </ListItem>
+          <br />
+          <Divider />
         </List>
       );
     }

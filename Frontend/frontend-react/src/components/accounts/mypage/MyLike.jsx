@@ -12,11 +12,11 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 const useStyles = theme => ({
   root: {
     width: '100%',
-    maxWidth: 360,
+    maxWidth: 750,
     backgroundColor: theme.palette.background.paper,
     position: 'relative',
     overflow: 'auto',
-    maxHeight: 300,
+    maxHeight: 500,
 
   },
   listSection: {
@@ -35,18 +35,22 @@ class MyLike extends React.Component {
     likeNotice: [],
     likeQnA: [],
     likeStudy: [],
+    likeSession:[],
+    likeCareer:[],
   };
   componentDidMount() {
     this.getLikePosts("notice");
     this.getLikePosts("qna");
     this.getLikePosts("study");
+    this.getLikePosts("session");
+    this.getLikePosts("career");
   }
 
   async getLikePosts(target) {
     await api
       .getUserLikePost(target)
       .then(likePosts => {
-        console.log(likePosts);
+        console.log("음",likePosts);
         var posts = likePosts.data.board_contents;
         switch (target) {
           case "notice":
@@ -57,6 +61,12 @@ class MyLike extends React.Component {
             break;
           case "study":
             this.setState({ likeStudy: posts });
+            break;
+          case "session":
+            this.setState({ likeSession: posts });
+            break;
+          case "career":
+            this.setState({ likeCareer: posts });
             break;
           default:
             break;
@@ -82,6 +92,14 @@ class MyLike extends React.Component {
         LikeList = this.state.likeStudy;
         board_type = "study";
         break;
+      case "Session Board":
+        LikeList = this.state.likeSession;
+        board_type = "session";
+        break;
+      case "Career Board":
+        LikeList = this.state.likeCareer;
+        board_type = "career";
+        break;
       default:
         LikeList=[];
         board_type = "";
@@ -98,12 +116,10 @@ class MyLike extends React.Component {
                 >
                   <ListItemText primary={`${item.title}`} />
                 </Link>
-            
           </ListItem>
         ))
       )
     }
-    
     return(
       LikeList.map(item => (
         <ListItem>
@@ -113,14 +129,10 @@ class MyLike extends React.Component {
               >
                 <ListItemText primary={`${item.title}`} />
               </Link>
-          
         </ListItem>
       ))
     )
-    
   }
-
-  
 
   render() {
     const { classes } = this.props;
@@ -134,7 +146,7 @@ class MyLike extends React.Component {
           <hr/>
           <br/>
           <List className={classes.root} subheader={<li />}>
-            {["Notice Board", "QnA Board", "Study Board"].map(sectionId => (
+            {["Notice Board", "QnA Board", "Study Board", "Session Board", "Career Board"].map(sectionId => (
               <li key={`section-${sectionId}`} className={classes.listSection}>
                 <ul className={classes.ul}>
                   <ListSubheader><h3>{`${sectionId}`}</h3></ListSubheader>

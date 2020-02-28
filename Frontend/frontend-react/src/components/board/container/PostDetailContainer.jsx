@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import api from "../../../api/BoardAPI";
+import comment_api from "../../../api/CommentAPI";
 
 import CommentNew from "../comment/CommentNew";
 import CommentView from "../comment/CommentView";
-import AnswerView from "./AnswerView";
-import NoticeDetail from "./NoticeDetail";
-import QnADetail from "./QnADetail";
-import CareerDetail from "./CareerDetail";
-import SessionDetail from "./SessionDetail";
+import AnswerView from "../qna/AnswerView";
+import NoticeDetail from "../notice/NoticeDetail";
+import QnADetail from "../qna/QnADetail";
+import CareerDetail from "../career/CareerDetail";
+import SessionDetail from "../session/SessionDetail";
 
 // @material-ui
 import Container from "@material-ui/core/Container";
@@ -35,13 +36,13 @@ class PostDetailContainer extends Component {
   }
 
   async getComments(board_name) {
-    await api
+    await comment_api
       .getComments(`${board_name}_comment`, this.props.match.params.id)
       .then(res => {
         const _data = res.data;
         console.log("가져온 댓글 : ", _data.results);
         this.setState({
-          comments: _data.results,
+          comments: _data,
           board_name: board_name
         });
       })

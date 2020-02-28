@@ -91,9 +91,9 @@ class Submission(AbstractBaseBoard):
     lecture = models.ForeignKey(Session, on_delete=models.CASCADE)
     scores = models.ManyToManyField(
         Score, blank=True, related_name="+", symmetrical=False)
-    like = models.ManyToManyField(
-        User, blank=True, related_name="submission_like")
-
+    like = models.ManyToManyField(User, blank=True, related_name="submission_like")
+    url=models.URLField(max_length = 200,null=True) 
+    
     def add_scores_by_types(self):
         if self.lecture.score_types:
             score_type_list = re.split('\W+', self.lecture.score_types)
@@ -153,7 +153,7 @@ class CareerBoard(AbstractBaseBoard):
     link = models.URLField(blank=True)
     participants = models.ManyToManyField(
         User, blank=True, related_name="career_user")
-    like = models.ManyToManyField(User, blank=True, related_name="carrer_like")
+    like = models.ManyToManyField(User, blank=True, related_name="career_like")
 
 
 class AbstractBaseComment(models.Model):
@@ -164,7 +164,7 @@ class AbstractBaseComment(models.Model):
 
     class Meta:
         abstract = True
-        ordering = ['-pub_date', ]
+        # ordering = ['-pub_date', ]
 
     def full_name(self):
         return self.user_id.get_full_name()
@@ -199,8 +199,8 @@ class QnABoardComment(AbstractBaseComment):
     is_child = models.BooleanField(default=False)
 
     def re_comment(self, **kwargs):
-        for key, value in kwargs.items():
-            kwargs[key] = value[0]
+        # for key, value in kwargs.items():
+        #     kwargs[key] = value[0]
         kwargs['parent_id'] = self.id
         kwargs['is_child'] = True
         return kwargs

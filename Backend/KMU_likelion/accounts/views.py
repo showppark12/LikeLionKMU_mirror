@@ -12,13 +12,14 @@ from .filters import (GroupUserFilter, MentoringFilter, PortfolioFilter,
                       StudyGroupFilter, UserFilter)
 from .models import GroupUser, Mentoring, Portfolio, StudyGroup
 
+
 User = get_user_model()
 
 class RegistrationAPI(generics.GenericAPIView):
     serializer_class = serializers.CreateUserSerializer
 
     def post(self, request, *args, **kwargs):
-        if len(request.data["email"]) < 6 or len(request.data["password"]) < 4:
+        if len(request.data["username"]) < 4 or len(request.data["password"]) < 6:
             body = {"message": "short field"}
             return Response(body, status=status.HTTP_400_BAD_REQUEST)
         serializer = self.get_serializer(data=request.data)
@@ -101,6 +102,15 @@ class StudyGroupViewSet(viewsets.ModelViewSet):
         group_users = group.groupuser_set.all()
         serializer = serializers.GroupUserSerializer(group_users, many=True)
         return Response(serializer.data)
+    @action(detail=True, methods=["GET"])
+    def get_captain(self, request, *args, **kwargs):
+        group = self.get_object()
+        groupuser = GroupUser.objects.filter(group_id = group)
+        for checkuser in groupuser:
+            if checkuser.is_captain == True:
+                serializer = CaptainSerializer(checkuser)
+                return Response(serializer.data)
+
 
 
 class PortfolioViewSet(viewsets.ModelViewSet):
