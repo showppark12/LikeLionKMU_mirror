@@ -218,6 +218,8 @@ class QnACommentViewSet(viewsets.ModelViewSet):
     def re_comment(self, request, *args, **kwargs):
         comment = self.get_object()
         new_comment_dict = comment.re_comment(**request.data)
+        print("데이터:   ", request.data)
+        print("new_comment_dict:  ", new_comment_dict)
 
         serializer = self.get_serializer(data=new_comment_dict)
         serializer.is_valid(raise_exception=True)
