@@ -136,7 +136,7 @@ class AbstractBaseComment(models.Model):
 
     class Meta:
         abstract = True
-        ordering = ['-pub_date', ]
+        # ordering = ['-pub_date', ]
 
     def full_name(self):
         return self.user_id.get_full_name()
@@ -171,8 +171,8 @@ class QnABoardComment(AbstractBaseComment):
     is_child = models.BooleanField(default=False)
 
     def re_comment(self, **kwargs):
-        for key, value in kwargs.items():
-            kwargs[key] = value[0]
+        # for key, value in kwargs.items():
+        #     kwargs[key] = value[0]
         kwargs['parent_id'] = self.id
         kwargs['is_child'] = True
         return kwargs
