@@ -20,16 +20,18 @@ class ApplicationViewSet(viewsets.ModelViewSet):
     @action(detail=True)
     def count_score(self, request, *args, **kwargs):
         application = self.get_object()
-        evaluations = application.join_evaluation.all()
+        evaluations = application.application_evaluation.all()
         total_score = 0.0
         count = 0.0
-        for evaluation in evaluations:
-            total_score = total_score + evaluation.score
-            count += 1
+        if not evaluations:
+            return Response({'total_score': 0, 'average_score': 0})
 
-        average_score = total_score / count
-
-        return Response({'total_score': total_score, 'average_score': average_score})
+        else:
+            for evaluation in evaluations:
+               total_score = total_score + evaluation.score
+               count += 1
+               average_score = total_score / count
+            return Response({'total_score': total_score, 'average_score': average_score})
 
     @action(detail=False, methods=['POST'])
     def get_application(self, request, *args, **kwargs):

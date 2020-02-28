@@ -23,10 +23,11 @@ class CreateUserSerializer(serializers.ModelSerializer):
 
 # 접속 유지중인지 확인
 class UserSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = User
-        fields = ["username","first_name","last_name","full_name" ,"img","id"]
+        fields = ["username", "first_name",
+                  "last_name", "full_name", "img", "id"]
 
 
 # 유저의 활동 내역(글, 댓글)을 포함
@@ -130,3 +131,13 @@ class MyGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = GroupUser
         fields = ['studygroup', 'is_captain']
+
+
+class CaptainSerializer(serializers.ModelSerializer):
+    user_img = serializers.ImageField(
+        source='user_id.img', read_only=True, use_url=True)
+    captain_username = serializers.ReadOnlyField(source='user_id.username')
+
+    class Meta:
+        model = GroupUser
+        fields = ['user_img', 'captain_username', 'user_id', 'full_name']

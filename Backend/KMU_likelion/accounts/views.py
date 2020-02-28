@@ -88,8 +88,6 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = serializers.MyGroupSerializer(studygroups, many = True)
         return Response(serializer.data)
 
-
-
 class StudyGroupViewSet(viewsets.ModelViewSet):
     queryset = StudyGroup.objects.all().order_by('pub_date')
     serializer_class = serializers.StudyGroupSerializer
