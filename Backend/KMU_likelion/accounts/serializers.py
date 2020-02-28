@@ -10,6 +10,7 @@ User = get_user_model()
 
 # 회원가입
 class CreateUserSerializer(serializers.ModelSerializer):
+    full_nam= serializers.ReadOnlyField(source='full_name')
     class Meta:
         model = User
         fields = "__all__"
@@ -41,6 +42,7 @@ class UserActivitySerializer(serializers.ModelSerializer):
     submission = board_serializers.SubmissionSerializer(
         many=True, source="submission_set")
 
+
     studyboard_comments = board_serializers.StudyBoardCommentSerializer(
         many=True, source="studyboardcomment_set")
     noticeboard_comments = board_serializers.NoticeBoardCommentSerializer(
@@ -51,6 +53,7 @@ class UserActivitySerializer(serializers.ModelSerializer):
         many=True, source="sessioncomment_set")
     submissionboard_comments = board_serializers.SubmissionCommentSerializer(
         many=True, source="submissioncomment_set")
+
 
     class Meta:
         model = User
