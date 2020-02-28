@@ -10,6 +10,7 @@ class SessionFilter(django_filters.rest_framework.FilterSet):
     class Meta:
         model = models.Session
         fields = '__all__'
+        exclude = ['session_file']
 
 
 class SubmissionFilter(django_filters.rest_framework.FilterSet):

@@ -1,6 +1,11 @@
+import os
 import re
+import uuid
 
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.fields import (GenericForeignKey,
+                                                GenericRelation)
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import Sum
 
@@ -9,12 +14,29 @@ from accounts.models import StudyGroup
 User = get_user_model()
 
 
+def get_file_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (uuid.uuid4(), ext)
+    return os.path.join('user_{0}/%Y/%m/%d/{1}', filename)
+
+
+class GenericImage(models.Model):
+    image = models.ImageField(upload_to=get_file_path)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+
+    def __str__(self):
+        return self.image.url
+
+
 class AbstractBaseBoard(models.Model):
     title = models.CharField(max_length=200)
     body = models.TextField()
     pub_date = models.DateTimeField(auto_now_add=True)  # 게시물 등록 시간 생성
     update_date = models.DateTimeField(auto_now=True)  # 업데이트 될 때만 정보 바뀔때 마다
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+    images = GenericRelation(GenericImage)
 
     class Meta:
         abstract = True
@@ -22,6 +44,7 @@ class AbstractBaseBoard(models.Model):
 
     def __str__(self):
         return self.title
+
     def full_name(self):
         return self.user_id.get_full_name()
 
@@ -36,16 +59,19 @@ class Session(AbstractBaseBoard):
     session_type = models.CharField(max_length=1, choices=TYPE)
     deadline = models.DateTimeField(blank=True, null=True)  # 과제 기한
     score_types = models.CharField(max_length=255, blank=True, null=True)
+    session_file = models.FileField(
+        blank=True, null=True, upload_to=get_file_path)
 
     lecture = models.ForeignKey(
         'self', blank=True, null=True, on_delete=models.PROTECT, related_name='assignments')
-    like = models.ManyToManyField(User, blank=True, related_name="session_like")
+    like = models.ManyToManyField(
+        User, blank=True, related_name="session_like")
 
     def get_lectures(self):
-        return Session.objects.filter(session_type=self.LECTURE)
-    
+        return self.objects.filter(session_type=self.LECTURE)
+
     def get_assignments(self):
-        return Session.objects.filter(session_type=self.ASSIGNMENT)
+        return self.objects.filter(session_type=self.ASSIGNMENT)
 
     def add_assignment(self, **kwargs):
         kwargs['lecture'] = self.id
@@ -65,12 +91,14 @@ class Submission(AbstractBaseBoard):
     lecture = models.ForeignKey(Session, on_delete=models.CASCADE)
     scores = models.ManyToManyField(
         Score, blank=True, related_name="+", symmetrical=False)
-    like = models.ManyToManyField(User, blank=True, related_name="submission_like")
+    like = models.ManyToManyField(
+        User, blank=True, related_name="submission_like")
 
     def add_scores_by_types(self):
         if self.lecture.score_types:
             score_type_list = re.split('\W+', self.lecture.score_types)
-            score_obj_list = [Score.objects.create(score_type=t) for t in score_type_list]
+            score_obj_list = [Score.objects.create(
+                score_type=t) for t in score_type_list]
             print(score_obj_list)
             self.scores.set(score_obj_list, clear=True)
             print(self.scores.all())
