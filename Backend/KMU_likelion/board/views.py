@@ -1,20 +1,21 @@
-from django.shortcuts import get_object_or_404
-
 import rest_framework
-from rest_framework import status, viewsets
+from django.shortcuts import get_object_or_404
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from . import filters
-from .models import (CareerBoard, NoticeBoard, NoticeBoardComment, QnABoard,
-                     QnABoardComment, Score, Session, StudyBoard,
-                     StudyBoardComment, Submission, SubmissionComment, SessionComment)
-from . import serializers
+from . import filters, models, serializers
+
+
+class ImageViewSet(viewsets.ModelViewSet):
+    """ Board의 이미지 업로드 """
+    queryset = models.Image.objects.all()
+    serializer_class = serializers.ImageSerializer
 
 
 class BaseBoardViewSet(viewsets.ModelViewSet):
     action_serializer_classes = {}
-    
+
     def get_serializer_class(self):
         return self.action_serializer_classes.get(self.action, self.serializer_class)
 
@@ -41,7 +42,8 @@ class BaseBoardViewSet(viewsets.ModelViewSet):
     def like(self, request, *args, **kwargs):
         board = self.get_object()
         status = None
-        alread_liked = board.like.filter(username=request.user.username).exists()
+        alread_liked = board.like.filter(
+            username=request.user.username).exists()
 
         if request.method == 'POST':
             status = not alread_liked
@@ -57,16 +59,18 @@ class BaseBoardViewSet(viewsets.ModelViewSet):
 
 
 class SessionViewSet(BaseBoardViewSet):
-    queryset = Session.objects.all()
+    queryset = models.Session.objects.all()
     serializer_class = serializers.LectureSerializer
     action_serializer_classes = {
         "assignments": serializers.AssignmentSerializer, "add_assignment": serializers.AssignmentSerializer}
     filter_class = filters.SessionFilter
     category = "session"
+
     def get_queryset(self):
         query = super().get_queryset()
-        query = query.filter(session_type = 'L')
+        query = query.filter(session_type='L')
         return query
+
     def get_object(self):
         queryset = models.Session.objects.all()
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
@@ -80,7 +84,6 @@ class SessionViewSet(BaseBoardViewSet):
         obj = get_object_or_404(queryset, **filter_kwargs)
         self.check_object_permissions(self.request, obj)
         return obj
-
 
     @action(detail=True, methods=['GET'])
     def assignments(self, request, *args, **kwargs):
@@ -109,12 +112,12 @@ class SessionViewSet(BaseBoardViewSet):
 
 
 class SubmissionViewSet(BaseBoardViewSet):
-    queryset = Submission.objects.all()
+    queryset = models.Submission.objects.all()
     serializer_class = serializers.SubmissionSerializer
     action_serializer_classes = {"scores": serializers.ScoreSerializer}
     filter_class = filters.SubmissionFilter
     category = "submission"
-    
+
     @action(detail=True, methods=['GET', 'POST', 'PUT'])
     def scores(self, request, *args, **kwargs):
         submission = self.get_object()
@@ -136,7 +139,7 @@ class SubmissionViewSet(BaseBoardViewSet):
 
 
 class StudyViewSet(BaseBoardViewSet):
-    queryset = StudyBoard.objects.all()
+    queryset = models.StudyBoard.objects.all()
     serializer_class = serializers.StudyBoardSerializer
     filter_class = filters.StudyBoardFilter
     category = "study"
@@ -144,7 +147,7 @@ class StudyViewSet(BaseBoardViewSet):
 
 # 공지 게시판 viewset
 class NoticeViewSet(BaseBoardViewSet):
-    queryset = NoticeBoard.objects.all()
+    queryset = models.NoticeBoard.objects.all()
     serializer_class = serializers.NoticeBoardSerializer
     filter_class = filters.NoticeBoardFilter
     category = "notice"
@@ -152,46 +155,46 @@ class NoticeViewSet(BaseBoardViewSet):
 
 # QnA 게시판 viewset
 class QnAViewSet(BaseBoardViewSet):
-    queryset = QnABoard.objects.all()
+    queryset = models.QnABoard.objects.all()
     serializer_class = serializers.QnABoardSerializer
     filter_class = filters.QnABoardFilter
     category = "qna"
 
 
 class CareerViewSet(BaseBoardViewSet):
-    queryset = CareerBoard.objects.all()
+    queryset = models.CareerBoard.objects.all()
     serializer_class = serializers.CareerBoardSerializer
     filter_class = filters.CareerBoardFilter
     category = "career"
 
 
 class SessionCommentViewSet(viewsets.ModelViewSet):
-    queryset = SessionComment.objects.all()
+    queryset = models.SessionComment.objects.all()
     serializer_class = serializers.SessionCommentSerializer
 
 
 class SubmissionCommentViewSet(viewsets.ModelViewSet):
-    queryset = SubmissionComment.objects.all()
+    queryset = models.SubmissionComment.objects.all()
     serializer_class = serializers.SubmissionCommentSerializer
 
 
 # 스터디 댓글 viewset
 class StudyCommentViewSet(viewsets.ModelViewSet):
-    queryset = StudyBoardComment.objects.all()
+    queryset = models.StudyBoardComment.objects.all()
     serializer_class = serializers.StudyBoardCommentSerializer
     filter_class = filters.StudyBoardCommentFilter
 
 
 # 공지 댓글 viewset
 class NoticeCommentViewSet(viewsets.ModelViewSet):
-    queryset = NoticeBoardComment.objects.all()
+    queryset = models.NoticeBoardComment.objects.all()
     serializer_class = serializers.NoticeBoardCommentSerializer
     filter_class = filters.NoticeBoardCommentFilter
 
 
 # QnA 댓글 viewset
 class QnACommentViewSet(viewsets.ModelViewSet):
-    queryset = QnABoardComment.objects.all()
+    queryset = models.QnABoardComment.objects.all()
     serializer_class = serializers.QnABoardCommentSerializer
     filter_class = filters.QnABoardCommentFilter
 
@@ -199,7 +202,7 @@ class QnACommentViewSet(viewsets.ModelViewSet):
         query = super().get_queryset()
         query = query.filter(is_child=False)
         return query
-    
+
     def get_object(self):
         queryset = models.QnABoardComment.objects.all()
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field

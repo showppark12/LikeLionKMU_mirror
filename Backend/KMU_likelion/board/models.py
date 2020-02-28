@@ -1,12 +1,23 @@
+import os
 import re
+import uuid
 
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import Sum
+from django.utils import timezone
 
 from accounts.models import StudyGroup
+from utils import get_file_path
 
 User = get_user_model()
+
+
+class Image(models.Model):
+    image = models.ImageField(upload_to=get_file_path)
+    
+    def __str__(self):
+        return self.image.url
 
 
 class AbstractBaseBoard(models.Model):
@@ -15,13 +26,14 @@ class AbstractBaseBoard(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)  # 게시물 등록 시간 생성
     update_date = models.DateTimeField(auto_now=True)  # 업데이트 될 때만 정보 바뀔때 마다
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
-
+    
     class Meta:
         abstract = True
         ordering = ['-pub_date', ]
 
     def __str__(self):
         return self.title
+
     def full_name(self):
         return self.user_id.get_full_name()
 
@@ -36,16 +48,19 @@ class Session(AbstractBaseBoard):
     session_type = models.CharField(max_length=1, choices=TYPE)
     deadline = models.DateTimeField(blank=True, null=True)  # 과제 기한
     score_types = models.CharField(max_length=255, blank=True, null=True)
+    session_file = models.FileField(
+        blank=True, null=True, upload_to=get_file_path)
 
     lecture = models.ForeignKey(
         'self', blank=True, null=True, on_delete=models.PROTECT, related_name='assignments')
-    like = models.ManyToManyField(User, blank=True, related_name="session_like")
+    like = models.ManyToManyField(
+        User, blank=True, related_name="session_like")
 
     def get_lectures(self):
-        return Session.objects.filter(session_type=self.LECTURE)
-    
+        return self.objects.filter(session_type=self.LECTURE)
+
     def get_assignments(self):
-        return Session.objects.filter(session_type=self.ASSIGNMENT)
+        return self.objects.filter(session_type=self.ASSIGNMENT)
 
     def add_assignment(self, **kwargs):
         kwargs['lecture'] = self.id
@@ -67,10 +82,12 @@ class Submission(AbstractBaseBoard):
         Score, blank=True, related_name="+", symmetrical=False)
     like = models.ManyToManyField(User, blank=True, related_name="submission_like")
     url=models.URLField(max_length = 200,null=True) 
+    
     def add_scores_by_types(self):
         if self.lecture.score_types:
             score_type_list = re.split('\W+', self.lecture.score_types)
-            score_obj_list = [Score.objects.create(score_type=t) for t in score_type_list]
+            score_obj_list = [Score.objects.create(
+                score_type=t) for t in score_type_list]
             print(score_obj_list)
             self.scores.set(score_obj_list, clear=True)
             print(self.scores.all())

@@ -11,13 +11,7 @@ from . import serializers
 from .filters import (GroupUserFilter, MentoringFilter, PortfolioFilter,
                       StudyGroupFilter, UserFilter)
 from .models import GroupUser, Mentoring, Portfolio, StudyGroup
-from .serializers import (CreateUserSerializer, GroupUserCreateSerializer,
-                          GroupUserSerializer, LoginUserSerializer,
-                          MenteeSerializer, MentoringSerializer,
-                          MentorSerializer, PortfolioSerializer,
-                          StudyGroupSerializer, UserActivitySerializer,
-                          UserSerializer,MyGroupSerializer,CaptainSerializer)
-import json
+
 User = get_user_model()
 
 class RegistrationAPI(generics.GenericAPIView):

@@ -10,13 +10,15 @@ User = get_user_model()
 
 # 회원가입
 class CreateUserSerializer(serializers.ModelSerializer):
-    full_nam= serializers.ReadOnlyField(source='full_name')
     class Meta:
         model = User
-        fields = "__all__"
+        fields = ("id", "email", "password")
         extra_kwargs = {"password": {"write_only": True}}
 
-  
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            validated_data["email"], None, validated_data["password"])
+        return user
 
 
 # 접속 유지중인지 확인
@@ -24,8 +26,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["username", "first_name", "img", "id","email","major","student_id","user_type","start_number","sns_id" ]
-        
+        fields = ["username", "first_name",
+                  "last_name", "full_name", "img", "id"]
 
 
 # 유저의 활동 내역(글, 댓글)을 포함
@@ -41,7 +43,6 @@ class UserActivitySerializer(serializers.ModelSerializer):
     submission = board_serializers.SubmissionSerializer(
         many=True, source="submission_set")
 
-
     studyboard_comments = board_serializers.StudyBoardCommentSerializer(
         many=True, source="studyboardcomment_set")
     noticeboard_comments = board_serializers.NoticeBoardCommentSerializer(
@@ -52,7 +53,6 @@ class UserActivitySerializer(serializers.ModelSerializer):
         many=True, source="sessioncomment_set")
     submissionboard_comments = board_serializers.SubmissionCommentSerializer(
         many=True, source="submissioncomment_set")
-
 
     class Meta:
         model = User
@@ -130,11 +130,14 @@ class MyGroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GroupUser
-        fields = ['studygroup','is_captain']
+        fields = ['studygroup', 'is_captain']
+
 
 class CaptainSerializer(serializers.ModelSerializer):
-    user_img = serializers.ImageField(source='user_id.img', read_only=True, use_url=True)
+    user_img = serializers.ImageField(
+        source='user_id.img', read_only=True, use_url=True)
     captain_username = serializers.ReadOnlyField(source='user_id.username')
+
     class Meta:
         model = GroupUser
-        fields =  ['user_img', 'captain_username', 'user_id','full_name']
+        fields = ['user_img', 'captain_username', 'user_id', 'full_name']

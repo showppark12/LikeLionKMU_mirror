@@ -4,6 +4,8 @@ from rest_framework.routers import DefaultRouter
 from . import views
 
 router = DefaultRouter()
+router.register('images', views.ImageViewSet)
+
 router.register('session', views.SessionViewSet)
 router.register('submission', views.SubmissionViewSet)
 router.register('study', views.StudyViewSet)
