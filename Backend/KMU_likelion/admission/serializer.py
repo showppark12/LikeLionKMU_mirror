@@ -32,4 +32,3 @@ class EvaluationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Evaluation
         fields = ['id', 'user_name', 'user_id','full_name','application_name', 'application_id', 'body', 'score', 'pub_date','user_img']
-

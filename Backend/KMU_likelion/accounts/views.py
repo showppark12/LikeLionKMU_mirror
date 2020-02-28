@@ -12,7 +12,6 @@ from .filters import (GroupUserFilter, MentoringFilter, PortfolioFilter,
                       StudyGroupFilter, UserFilter)
 from .models import GroupUser, Mentoring, Portfolio, StudyGroup
 
-
 User = get_user_model()
 
 class RegistrationAPI(generics.GenericAPIView):
