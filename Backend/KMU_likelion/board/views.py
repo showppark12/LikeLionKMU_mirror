@@ -68,7 +68,7 @@ class SessionViewSet(BaseBoardViewSet):
         query = query.filter(session_type = 'L')
         return query
     def get_object(self):
-        queryset = Session.objects.all()
+        queryset = models.Session.objects.all()
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
         assert lookup_url_kwarg in self.kwargs, (
             'Expected view %s to be called with a URL keyword argument '
@@ -201,7 +201,7 @@ class QnACommentViewSet(viewsets.ModelViewSet):
         return query
     
     def get_object(self):
-        queryset = QnABoardComment.objects.all()
+        queryset = models.QnABoardComment.objects.all()
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
         assert lookup_url_kwarg in self.kwargs, (
             'Expected view %s to be called with a URL keyword argument '
