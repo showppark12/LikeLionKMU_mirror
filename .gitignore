@@ -320,3 +320,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .vscode
+
+#DB conf
+/conf
+mysql.cnf
