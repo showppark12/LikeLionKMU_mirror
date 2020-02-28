@@ -138,4 +138,3 @@ class CaptainSerializer(serializers.ModelSerializer):
     class Meta:
         model = GroupUser
         fields =  ['user_img', 'captain_username', 'user_id','full_name']
-
