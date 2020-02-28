@@ -269,6 +269,11 @@ body {
 .nav-item {
   color: black;
 }
+
 .Cancle {
   color: rgb(167, 167, 167);
+}
+
+.image-fixer img {
+  max-width: 100%;
 }
