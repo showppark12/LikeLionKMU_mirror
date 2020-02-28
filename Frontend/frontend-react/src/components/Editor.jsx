@@ -50,13 +50,15 @@ const Editor = memo(({ handlingChange, value }) => {
   };
 
   return (
-    <MdEditor
-      name="body"
-      value={value || ""}
-      renderHTML={renderHTML}
-      onChange={handlingChange}
-      onImageUpload={handleImageUpload}
-    />
+    <div class="image-fixer">
+      <MdEditor
+        name="body"
+        value={value || ""}
+        renderHTML={renderHTML}
+        onChange={handlingChange}
+        onImageUpload={handleImageUpload}
+      />
+    </div>
   );
 });
 
