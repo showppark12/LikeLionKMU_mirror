@@ -1,8 +1,13 @@
-from generic_relations.relations import GenericRelatedField
 from rest_framework import serializers
 
 from . import models
 
+
+class ImageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Image
+        fields = ['image']
 
 # Session type=ASSIGNMENT Serializer
 class AssignmentSerializer(serializers.ModelSerializer):
@@ -92,40 +97,6 @@ class CareerBoardSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CareerBoard
         fields = '__all__'
-
-
-class GenericImageSerializer(serializers.ModelSerializer):
-    """ Board의 이미지들을 관리 """
-    content_object = GenericRelatedField({
-        models.Session: serializers.HyperlinkedRelatedField(
-            queryset = models.Session.objects.all(),
-            view_name = 'session-detail'
-        ),
-        models.Submission: serializers.HyperlinkedRelatedField(
-            queryset = models.Submission.objects.all(),
-            view_name = 'submission-detail'
-        ),
-        models.StudyBoard: serializers.HyperlinkedRelatedField(
-            queryset = models.StudyBoard.objects.all(),
-            view_name = 'studyboard-detail'
-        ),
-        models.NoticeBoard: serializers.HyperlinkedRelatedField(
-            queryset = models.NoticeBoard.objects.all(),
-            view_name = 'noticeboard-detail'
-        ),
-        models.QnABoard: serializers.HyperlinkedRelatedField(
-            queryset = models.QnABoard.objects.all(),
-            view_name = 'qnaboard-detail'
-        ),
-        models.CareerBoard: serializers.HyperlinkedRelatedField(
-            queryset = models.CareerBoard.objects.all(),
-            view_name = 'careerboard-detail'
-        ),
-    })
-
-    class Meta:
-        model = models.GenericImage
-        fields = ['image', 'content_object']
 
 
 class SessionCommentSerializer(serializers.ModelSerializer):

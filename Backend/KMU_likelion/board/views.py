@@ -7,20 +7,14 @@ from rest_framework.response import Response
 from . import filters, models, serializers
 
 
-class GenericImageViewset(viewsets.ModelViewSet):
-    """ Board의 이미지들을 관리 """
-    queryset = models.GenericImage.objects.all()
-    serializer_class = serializers.GenericImageSerializer
+class ImageViewset(viewsets.ModelViewSet):
+    """ Board의 이미지 업로드 """
+    queryset = models.Image.objects.all()
+    serializer_class = serializers.ImageSerializer
 
     def create(self, request, *args, **kwargs):
-        data = request.data
-        del data['csrfmiddlewaretoken']
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid()
-        self.perform_create(serializer)
-
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        print(request.data)
+        return super(ImageViewSet, self).create(self, request, *args, **kwargs)
 
 
 class BaseBoardViewSet(viewsets.ModelViewSet):

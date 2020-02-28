@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'drf_yasg',
     'django_filters',
 
-    'generic_relations',
     'crispy_forms',
 
     # 사용자 앱

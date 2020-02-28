@@ -3,11 +3,9 @@ import re
 import uuid
 
 from django.contrib.auth import get_user_model
-from django.contrib.contenttypes.fields import (GenericForeignKey,
-                                                GenericRelation)
-from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import Sum
+from django.utils import timezone
 
 from accounts.models import StudyGroup
 
@@ -15,17 +13,15 @@ User = get_user_model()
 
 
 def get_file_path(instance, filename):
+    time_path = timezone.now().strftime('%Y/%m/%d') 
     ext = filename.split('.')[-1]
     filename = "%s.%s" % (uuid.uuid4(), ext)
-    return os.path.join('user_{0}/%Y/%m/%d/{1}', filename)
+    return os.path.join(time_path, filename)
 
 
-class GenericImage(models.Model):
+class Image(models.Model):
     image = models.ImageField(upload_to=get_file_path)
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey('content_type', 'object_id')
-
+    
     def __str__(self):
         return self.image.url
 
@@ -36,8 +32,7 @@ class AbstractBaseBoard(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)  # 게시물 등록 시간 생성
     update_date = models.DateTimeField(auto_now=True)  # 업데이트 될 때만 정보 바뀔때 마다
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
-    images = GenericRelation(GenericImage)
-
+    
     class Meta:
         abstract = True
         ordering = ['-pub_date', ]
