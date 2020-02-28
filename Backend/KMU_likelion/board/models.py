@@ -125,7 +125,7 @@ class CareerBoard(AbstractBaseBoard):
     link = models.URLField(blank=True)
     participants = models.ManyToManyField(
         User, blank=True, related_name="career_user")
-    like = models.ManyToManyField(User, blank=True, related_name="carrer_like")
+    like = models.ManyToManyField(User, blank=True, related_name="career_like")
 
 
 class AbstractBaseComment(models.Model):
