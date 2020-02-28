@@ -1,20 +1,16 @@
 import rest_framework
 from django.shortcuts import get_object_or_404
-from rest_framework import status, viewsets, mixins
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from . import filters, models, serializers
 
 
-class ImageViewset(viewsets.ModelViewSet):
+class ImageViewSet(viewsets.ModelViewSet):
     """ Board의 이미지 업로드 """
     queryset = models.Image.objects.all()
     serializer_class = serializers.ImageSerializer
-
-    def create(self, request, *args, **kwargs):
-        print(request.data)
-        return super(ImageViewSet, self).create(self, request, *args, **kwargs)
 
 
 class BaseBoardViewSet(viewsets.ModelViewSet):
@@ -69,10 +65,12 @@ class SessionViewSet(BaseBoardViewSet):
         "assignments": serializers.AssignmentSerializer, "add_assignment": serializers.AssignmentSerializer}
     filter_class = filters.SessionFilter
     category = "session"
+
     def get_queryset(self):
         query = super().get_queryset()
-        query = query.filter(session_type = 'L')
+        query = query.filter(session_type='L')
         return query
+
     def get_object(self):
         queryset = models.Session.objects.all()
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
@@ -86,7 +84,6 @@ class SessionViewSet(BaseBoardViewSet):
         obj = get_object_or_404(queryset, **filter_kwargs)
         self.check_object_permissions(self.request, obj)
         return obj
-
 
     @action(detail=True, methods=['GET'])
     def assignments(self, request, *args, **kwargs):
@@ -205,7 +202,7 @@ class QnACommentViewSet(viewsets.ModelViewSet):
         query = super().get_queryset()
         query = query.filter(is_child=False)
         return query
-    
+
     def get_object(self):
         queryset = models.QnABoardComment.objects.all()
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field

@@ -1,13 +1,15 @@
 from rest_framework import serializers
 
-from . import models
+from . import models, serializer_fields
 
 
 class ImageSerializer(serializers.ModelSerializer):
-
+    image = serializer_fields.Base64ImageField()
+    
     class Meta:
         model = models.Image
         fields = ['image']
+
 
 # Session type=ASSIGNMENT Serializer
 class AssignmentSerializer(serializers.ModelSerializer):
@@ -47,8 +49,8 @@ class SubmissionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Submission
-        fields = ['id', 'author_name', 'full_name','title', 'user_id', 'body', 'pub_date',
-                  'update_date', 'lecture', 'scores', 'total_score','url']
+        fields = ['id', 'author_name', 'full_name', 'title', 'user_id', 'body', 'pub_date',
+                  'update_date', 'lecture', 'scores', 'total_score', 'url']
 
     def create(self, validated_data):
         submission = super(SubmissionSerializer, self).create(validated_data)
@@ -157,17 +159,12 @@ class RecommentSerializer(serializers.ModelSerializer):
                   'pub_date', 'update_date', 'user_img', 'parent_id', 'is_child']
 
 
-class RecursiveSerializer(serializers.Serializer):
-    def to_representation(self, value):
-        serializer = self.parent.parent.__class__(value, context=self.context)
-        return serializer.data
-
-
 class QnABoardCommentSerializer(serializers.ModelSerializer):
     author_name = serializers.ReadOnlyField(source='user_id.username')
     user_img = serializers.ImageField(
         source='user_id.img', read_only=True, use_url=True)
-    recomments = RecursiveSerializer(many=True, read_only=True)
+    recomments = serializer_fields.RecursiveSerializer(
+        many=True, read_only=True)
 
     class Meta:
         model = models.QnABoardComment
