@@ -31,7 +31,7 @@ class LectureSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Session
         fields = ['id', 'author_name', 'full_name', 'title', 'body', 'user_id',
-                  'pub_date', 'update_date', 'session_type', 'assignments']
+                  'pub_date', 'update_date', 'session_type', 'assignments','start_number']
 
 
 class ScoreSerializer(serializers.ModelSerializer):
