@@ -125,31 +125,31 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
                    if int(user_split[0]) > int(session_split[0]) : #년도 비교
-                       return  Response({'status': 'LATE'}, status=status.HTTP_404_NOT_FOUND)
+                       return  Response({'status': 'LATE'})
                    else:
                        if int(user_split[1]) > int(session_split[1]): # 달 비교
-                           return  Response({'status': 'LATE'}, status=status.HTTP_404_NOT_FOUND)
+                           return  Response({'status': 'LATE'})
                        else:
                            if int(user_split[1]) == int(session_split[1]) and int(user_split[2]) > int(session_split[2]): # 일 비교
-                               return  Response({'status': 'LATE'}, status=status.HTTP_404_NOT_FOUND)
+                               return  Response({'status': 'LATE'})
                            
                            else:
                                if int(user_split[2]) == int(session_split[2]) and int(user_split2[0]) > int(session_split2[0]):
-                                   return  Response({'status': 'LATE'}, status=status.HTTP_404_NOT_FOUND)
+                                   return  Response({'status': 'LATE'})
                                else:
                                    if int(user_split2[0]) == int(session_split2[0]):
-                                       return  Response({'status': 'LATE'}, status=status.HTTP_404_NOT_FOUND)
+                                       return  Response({'status': 'LATE'})
                                     
                                    else:
                                          return  Response({'status': 'COMPLETE'})
 
                except Submission.DoesNotExist:
-                   return Response({'status': 'NOT_SUBMIT'}, status=status.HTTP_404_NOT_FOUND)
+                   return Response({'status': 'NOT_SUBMIT'})
            else:
-               return Response({'status': 'UNQUALIFIED' }, status=status.HTTP_404_NOT_FOUND)
+               return Response({'status': 'UNQUALIFIED' })
 
         except:
-            return Response({'status': 'NONE'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'status': 'NONE'})
 
 
 class StudyGroupViewSet(viewsets.ModelViewSet):
