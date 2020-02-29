@@ -11,7 +11,7 @@ from . import serializers
 from .filters import (GroupUserFilter, MentoringFilter, PortfolioFilter,
                       StudyGroupFilter, UserFilter)
 from .models import GroupUser, Mentoring, Portfolio, StudyGroup
-
+from board.models import Session,Submission
 User = get_user_model()
 
 class RegistrationAPI(generics.GenericAPIView):
@@ -87,6 +87,70 @@ class UserViewSet(viewsets.ModelViewSet):
         studygroups =  GroupUser.objects.filter(user_id = myuser)
         serializer = serializers.MyGroupSerializer(studygroups, many = True)
         return Response(serializer.data)
+    
+    @action(detail = True, methods = ["POST"])
+    def get_submit_status(self,request, *args, **kwargs):
+        get_user = self.get_object()
+        json_assignment = request.body
+        assignment = json.loads(json_assignment)
+        assignment_id = assignment['session_id']
+        try:
+           get_assignment = Session.objects.get(id = assignment_id)
+           get_session =  Session.objects.get(id = get_assignment.lecture.id) #해당 lecture 객체 가져오기
+           print("유저 기수 :",get_user.start_number)
+           print("세션 기수 :",get_session.start_number)
+           if get_user.start_number == get_session.start_number: # 해당 기수 멤버의 세션인지 확인 작업
+               try:
+                   user_submit =  Submission.objects.get(user_id = get_user, lecture = assignment_id)
+                   
+                   # datefield string으로 형변환(datetimefield 어디 비교 하는거 없나....? 개빡치네)
+                   str_user_update = str(user_submit.update_date)
+                   str_dead_line = str(get_assignment.deadline) 
+                   
+                   
+                   # 스트링 자르기
+                   print("스트링 업데이트 타임:",str_user_update)
+                   print("스트링 데드라인:", str_dead_line)
+                   user_month = str_user_update.split()
+                   session_month = str_dead_line.split()
+                   print("스트링 업데이트 타임 스플릿:",user_month)
+                   print("스트링 데드라인 스플릿:", session_month)
+                   user_split = user_month[0].split('-')
+                   user_split2 = user_month[1].split(':')
+                   print("스트링 업데이트 타임 스플릿 그 두번째:",user_split, user_split2)
+                   session_split = session_month[0].split('-')
+                   session_split2 = session_month[1].split(':')
+                   print("스트링 데드라인 스플릿:",session_split, session_split2)
+                   # 스트링 자르기
+
+
+                   if int(user_split[0]) > int(session_split[0]) : #년도 비교
+                       return  Response({'status': 'LATE'}, status=status.HTTP_404_NOT_FOUND)
+                   else:
+                       if int(user_split[1]) > int(session_split[1]): # 달 비교
+                           return  Response({'status': 'LATE'}, status=status.HTTP_404_NOT_FOUND)
+                       else:
+                           if int(user_split[1]) == int(session_split[1]) and int(user_split[2]) > int(session_split[2]): # 일 비교
+                               return  Response({'status': 'LATE'}, status=status.HTTP_404_NOT_FOUND)
+                           
+                           else:
+                               if int(user_split[2]) == int(session_split[2]) and int(user_split2[0]) > int(session_split2[0]):
+                                   return  Response({'status': 'LATE'}, status=status.HTTP_404_NOT_FOUND)
+                               else:
+                                   if int(user_split2[0]) == int(session_split2[0]):
+                                       return  Response({'status': 'LATE'}, status=status.HTTP_404_NOT_FOUND)
+                                    
+                                   else:
+                                         return  Response({'status': 'COMPLETE'})
+
+               except Submission.DoesNotExist:
+                   return Response({'status': 'NOT_SUBMIT'}, status=status.HTTP_404_NOT_FOUND)
+           else:
+               return Response({'status': 'UNQUALIFIED' }, status=status.HTTP_404_NOT_FOUND)
+
+        except:
+            return Response({'status': 'NONE'}, status=status.HTTP_404_NOT_FOUND)
+
 
 class StudyGroupViewSet(viewsets.ModelViewSet):
     queryset = StudyGroup.objects.all().order_by('pub_date')

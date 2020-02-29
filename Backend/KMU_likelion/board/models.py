@@ -46,6 +46,7 @@ class Session(AbstractBaseBoard):
         (ASSIGNMENT, '과제')
     )
     session_type = models.CharField(max_length=1, choices=TYPE)
+    start_number = models.CharField(max_length=200, null=True)
     deadline = models.DateTimeField(blank=True, null=True)  # 과제 기한
     score_types = models.CharField(max_length=255, blank=True, null=True)
     session_file = models.FileField(
@@ -82,6 +83,11 @@ class Submission(AbstractBaseBoard):
         Score, blank=True, related_name="+", symmetrical=False)
     like = models.ManyToManyField(User, blank=True, related_name="submission_like")
     url=models.URLField(max_length = 200,null=True) 
+    
+    def add_assignment(self, **kwargs):
+        kwargs['lecture'] = self.id
+        kwargs['session_type'] = self.ASSIGNMENT
+        return kwargs
     
     def add_scores_by_types(self):
         if self.lecture.score_types:
