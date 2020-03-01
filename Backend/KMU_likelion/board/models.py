@@ -46,6 +46,7 @@ class Session(AbstractBaseBoard):
         (ASSIGNMENT, '과제')
     )
     session_type = models.CharField(max_length=1, choices=TYPE)
+    start_number = models.CharField(max_length=200, null=True)
     deadline = models.DateTimeField(blank=True, null=True)  # 과제 기한
     score_types = models.CharField(max_length=255, blank=True, null=True)
     session_file = models.FileField(
@@ -56,6 +57,9 @@ class Session(AbstractBaseBoard):
     like = models.ManyToManyField(
         User, blank=True, related_name="session_like")
 
+    def __str__(self):
+        return  f'[{self.get_session_type_display()}] {self.title}'
+
     def get_lectures(self):
         return self.objects.filter(session_type=self.LECTURE)
 
@@ -63,6 +67,9 @@ class Session(AbstractBaseBoard):
         return self.objects.filter(session_type=self.ASSIGNMENT)
 
     def add_assignment(self, **kwargs):
+        for key, value in kwargs.items():
+            if type(value) is type(list()):
+                kwargs[key] = value[0]
         kwargs['lecture'] = self.id
         kwargs['session_type'] = self.ASSIGNMENT
         return kwargs
@@ -72,8 +79,10 @@ class Score(models.Model):
     score_type = models.CharField(max_length=10)
     score = models.PositiveIntegerField(default=0)
 
-    def set_score(request, score_num):
-        score = score_num
+    def set_score(self, score_num):
+        self.score = score_num
+        print(self.score)
+        self.save()
 
 
 class Submission(AbstractBaseBoard):
@@ -94,11 +103,13 @@ class Submission(AbstractBaseBoard):
             return True
         return False
 
-    def set_scores_by_types(self, type_score_dict):
-        """
-        TODO : 딕셔너리에 맞게 type: score 를 지정해주도록 
-        """
-        pass
+    def set_scores_by_types(self, score_dict_list):
+        print(score_dict_list)
+        scores = self.scores.all()
+        for score_dict in score_dict_list:
+            score_obj = scores.get(score_type=score_dict.get("score_type"))
+            score_obj.set_score(int(score_dict.get("score")))
+
 
     @property
     def total_score(self):
@@ -188,8 +199,9 @@ class QnABoardComment(AbstractBaseComment):
     is_child = models.BooleanField(default=False)
 
     def re_comment(self, **kwargs):
-        # for key, value in kwargs.items():
-        #     kwargs[key] = value[0]
+        for key, value in kwargs.items():
+            if type(value) is type(list()):
+                kwargs[key] = value[0]
         kwargs['parent_id'] = self.id
         kwargs['is_child'] = True
         return kwargs

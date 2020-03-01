@@ -62,13 +62,13 @@ class SessionViewSet(BaseBoardViewSet):
     queryset = models.Session.objects.all()
     serializer_class = serializers.LectureSerializer
     action_serializer_classes = {
-        "assignments": serializers.AssignmentSerializer, "add_assignment": serializers.AssignmentSerializer}
+        "assignment": serializers.AssignmentSerializer, "add_assignment": serializers.AssignmentSerializer}
     filter_class = filters.SessionFilter
     category = "session"
 
-    def get_queryset(self):
+    def get_queryset(self, session_type=models.Session.LECTURE):
         query = super().get_queryset()
-        query = query.filter(session_type='L')
+        query = query.filter(session_type=session_type)
         return query
 
     def get_object(self):
@@ -85,11 +85,11 @@ class SessionViewSet(BaseBoardViewSet):
         self.check_object_permissions(self.request, obj)
         return obj
 
-    @action(detail=True, methods=['GET'])
-    def assignments(self, request, *args, **kwargs):
-        session = self.get_object()
-        queryset = session.assignments.all()
-        serializer = self.get_serializer(data=queryset, many=True)
+    @action(detail=False, methods=['GET'], url_path='assignment/(?P<assignment_id>[^/.]+)')
+    def assignment(self, request, assignment_id, *args, **kwargs):
+        queryset = self.get_queryset(models.Session.ASSIGNMENT)
+        queryset = get_object_or_404(queryset, pk=assignment_id) 
+        serializer = self.get_serializer(data=[queryset], many=True)
         serializer.is_valid()
         return Response(serializer.data)
 
@@ -97,7 +97,6 @@ class SessionViewSet(BaseBoardViewSet):
     def add_assignment(self, request, *args, **kwargs):
         session = self.get_object()
         assignment = session.add_assignment(**request.data)
-        print(request.data)
 
         serializer = self.get_serializer(data=assignment)
         if session.session_type == session.ASSIGNMENT:
@@ -118,18 +117,17 @@ class SubmissionViewSet(BaseBoardViewSet):
     filter_class = filters.SubmissionFilter
     category = "submission"
 
-    @action(detail=True, methods=['GET', 'POST', 'PUT'])
+    @action(detail=True, methods=['GET', 'POST'])
     def scores(self, request, *args, **kwargs):
         submission = self.get_object()
         if request.method == 'POST':
-            """
-            TODO
-            점수를 dictionary로 받아서 넣어주는거
-            """
-            serializer = self.get_serializer(many=True)
+            score_dict_list = request.data.get("score_dict_list")
+            submission.set_scores_by_types(score_dict_list) 
+            serializer = self.get_serializer(
+                data=submission.scores.all(), many=True)
             serializer.is_valid()
             headers = self.get_success_headers(serializer.data)
-            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+            return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
         else:
             serializer = self.get_serializer(
                 data=submission.scores.all(), many=True)
