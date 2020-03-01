@@ -3,8 +3,9 @@ from django.shortcuts import get_object_or_404
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-
+from .permission import IsAuthorOrReadonly
 from . import filters, models, serializers
+from rest_framework.permissions import AllowAny
 
 
 class ImageViewSet(viewsets.ModelViewSet):
@@ -149,6 +150,7 @@ class NoticeViewSet(BaseBoardViewSet):
     serializer_class = serializers.NoticeBoardSerializer
     filter_class = filters.NoticeBoardFilter
     category = "notice"
+    
 
 
 # QnA 게시판 viewset
@@ -157,6 +159,15 @@ class QnAViewSet(BaseBoardViewSet):
     serializer_class = serializers.QnABoardSerializer
     filter_class = filters.QnABoardFilter
     category = "qna"
+    #custom permission 예시들 
+    #지우지 말아주세요!!!
+    # permission_classes=[AllowAny]
+  
+    # def get_permissions(self):
+    #     print(self.action)
+    #     if self.action in ['retrieve']:
+    #         return [IsAuthorOrReadonly(), ]        
+    #     return [permission() for permission in self.permission_classes]
 
 
 class CareerViewSet(BaseBoardViewSet):
