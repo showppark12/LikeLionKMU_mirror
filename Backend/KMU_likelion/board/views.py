@@ -62,13 +62,13 @@ class SessionViewSet(BaseBoardViewSet):
     queryset = models.Session.objects.all()
     serializer_class = serializers.LectureSerializer
     action_serializer_classes = {
-        "assignments": serializers.AssignmentSerializer, "add_assignment": serializers.AssignmentSerializer}
+        "assignment": serializers.AssignmentSerializer, "add_assignment": serializers.AssignmentSerializer}
     filter_class = filters.SessionFilter
     category = "session"
 
-    def get_queryset(self):
+    def get_queryset(self, session_type=models.Session.LECTURE):
         query = super().get_queryset()
-        query = query.filter(session_type='L')
+        query = query.filter(session_type=session_type)
         return query
 
     def get_object(self):
@@ -85,11 +85,11 @@ class SessionViewSet(BaseBoardViewSet):
         self.check_object_permissions(self.request, obj)
         return obj
 
-    @action(detail=True, methods=['GET'])
-    def assignments(self, request, *args, **kwargs):
-        session = self.get_object()
-        queryset = session.assignments.all()
-        serializer = self.get_serializer(data=queryset, many=True)
+    @action(detail=False, methods=['GET'], url_path='assignment/(?P<assignment_id>[^/.]+)')
+    def assignment(self, request, assignment_id, *args, **kwargs):
+        queryset = self.get_queryset(models.Session.ASSIGNMENT)
+        queryset = get_object_or_404(queryset, pk=assignment_id) 
+        serializer = self.get_serializer(data=[queryset], many=True)
         serializer.is_valid()
         return Response(serializer.data)
 
