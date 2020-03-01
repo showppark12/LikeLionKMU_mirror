@@ -79,8 +79,10 @@ class Score(models.Model):
     score_type = models.CharField(max_length=10)
     score = models.PositiveIntegerField(default=0)
 
-    def set_score(request, score_num):
-        score = score_num
+    def set_score(self, score_num):
+        self.score = score_num
+        print(self.score)
+        self.save()
 
 
 class Submission(AbstractBaseBoard):
@@ -102,11 +104,11 @@ class Submission(AbstractBaseBoard):
         return False
 
     def set_scores_by_types(self, score_dict_list):
+        print(score_dict_list)
         scores = self.scores.all()
         for score_dict in score_dict_list:
-            score_type, score = score
-            scores.get(score_type=score_type)
-            scores.set_score(int(score))
+            score_obj = scores.get(score_type=score_dict.get("score_type"))
+            score_obj.set_score(int(score_dict.get("score")))
 
 
     @property

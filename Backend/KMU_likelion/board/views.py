@@ -97,7 +97,6 @@ class SessionViewSet(BaseBoardViewSet):
     def add_assignment(self, request, *args, **kwargs):
         session = self.get_object()
         assignment = session.add_assignment(**request.data)
-        print(request.data)
 
         serializer = self.get_serializer(data=assignment)
         if session.session_type == session.ASSIGNMENT:
@@ -118,18 +117,17 @@ class SubmissionViewSet(BaseBoardViewSet):
     filter_class = filters.SubmissionFilter
     category = "submission"
 
-    @action(detail=True, methods=['GET', 'POST', 'PUT'])
+    @action(detail=True, methods=['GET', 'POST'])
     def scores(self, request, *args, **kwargs):
         submission = self.get_object()
         if request.method == 'POST':
-            """
-            TODO
-            점수를 dictionary로 받아서 넣어주는거
-            """
-            serializer = self.get_serializer(many=True)
+            score_dict_list = request.data.get("score_dict_list")
+            submission.set_scores_by_types(score_dict_list) 
+            serializer = self.get_serializer(
+                data=submission.scores.all(), many=True)
             serializer.is_valid()
             headers = self.get_success_headers(serializer.data)
-            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+            return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
         else:
             serializer = self.get_serializer(
                 data=submission.scores.all(), many=True)
