@@ -57,6 +57,9 @@ class Session(AbstractBaseBoard):
     like = models.ManyToManyField(
         User, blank=True, related_name="session_like")
 
+    def __str__(self):
+        return  f'[{self.get_session_type_display()}] {self.title}'
+
     def get_lectures(self):
         return self.objects.filter(session_type=self.LECTURE)
 
@@ -64,6 +67,9 @@ class Session(AbstractBaseBoard):
         return self.objects.filter(session_type=self.ASSIGNMENT)
 
     def add_assignment(self, **kwargs):
+        for key, value in kwargs.items():
+            if type(value) is type(list()):
+                kwargs[key] = value[0]
         kwargs['lecture'] = self.id
         kwargs['session_type'] = self.ASSIGNMENT
         return kwargs
@@ -84,11 +90,6 @@ class Submission(AbstractBaseBoard):
     like = models.ManyToManyField(User, blank=True, related_name="submission_like")
     url=models.URLField(max_length = 200,null=True) 
     
-    def add_assignment(self, **kwargs):
-        kwargs['lecture'] = self.id
-        kwargs['session_type'] = self.ASSIGNMENT
-        return kwargs
-    
     def add_scores_by_types(self):
         if self.lecture.score_types:
             score_type_list = re.split('\W+', self.lecture.score_types)
@@ -100,11 +101,13 @@ class Submission(AbstractBaseBoard):
             return True
         return False
 
-    def set_scores_by_types(self, type_score_dict):
-        """
-        TODO : 딕셔너리에 맞게 type: score 를 지정해주도록 
-        """
-        pass
+    def set_scores_by_types(self, score_dict_list):
+        scores = self.scores.all()
+        for score_dict in score_dict_list:
+            score_type, score = score
+            scores.get(score_type=score_type)
+            scores.set_score(int(score))
+
 
     @property
     def total_score(self):
@@ -194,8 +197,9 @@ class QnABoardComment(AbstractBaseComment):
     is_child = models.BooleanField(default=False)
 
     def re_comment(self, **kwargs):
-        # for key, value in kwargs.items():
-        #     kwargs[key] = value[0]
+        for key, value in kwargs.items():
+            if type(value) is type(list()):
+                kwargs[key] = value[0]
         kwargs['parent_id'] = self.id
         kwargs['is_child'] = True
         return kwargs
