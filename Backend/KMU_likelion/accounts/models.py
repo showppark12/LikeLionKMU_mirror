@@ -5,9 +5,9 @@ from django.db import models
 class User(AbstractUser):
     major = models.CharField(max_length=200, null=True)
     student_id = models.CharField(max_length=200, null=True)
-    user_type = models.IntegerField(null=True)
+    user_type = models.IntegerField(null=True) #1: 회장, 2:운영진, 3:일반부원
     start_number = models.CharField(max_length=200, null=True)
-    sns_id = models.CharField(max_length=200, null=True)
+    sns_id = models.CharField(max_length=200, null=True, blank=True)
     img = models.ImageField(upload_to='images/', default='../static/images/default_profile_img.png')
 
     def full_name(self):
