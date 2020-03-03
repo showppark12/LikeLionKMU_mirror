@@ -5,7 +5,7 @@ from . import models, serializer_fields
 
 class ImageSerializer(serializers.ModelSerializer):
     image = serializer_fields.Base64ImageField()
-    
+
     class Meta:
         model = models.Image
         fields = ['image']
@@ -31,7 +31,7 @@ class LectureSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Session
         fields = ['id', 'author_name', 'full_name', 'title', 'body', 'user_id',
-                  'pub_date', 'update_date', 'session_type', 'assignments','start_number']
+                  'pub_date', 'update_date', 'session_type', 'assignments', 'start_number']
 
 
 class ScoreSerializer(serializers.ModelSerializer):
@@ -41,16 +41,21 @@ class ScoreSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-# 과제 제출 Serializer
 class SubmissionSerializer(serializers.ModelSerializer):
+    """ 과제 제출 """
     author_name = serializers.ReadOnlyField(source='user_id.username')
     scores = ScoreSerializer(many=True, read_only=True)
     total_score = serializers.SerializerMethodField()
 
+    evaluator_name = serializers.ReadOnlyField(source='evaluator.username')
+
     class Meta:
         model = models.Submission
         fields = ['id', 'author_name', 'full_name', 'title', 'user_id', 'body', 'pub_date',
-                  'update_date', 'lecture', 'scores', 'total_score', 'url']
+                  'update_date', 'lecture', 'scores', 'total_score', 'url',
+                  'evaluator', 'evaluator_name', 'evaluation', 'evaluation_pub_date', 'evaluation_update_date']
+        read_only_fields = ('evaluator', 'evaluation',
+                            'evaluation_pub_date', 'evaluation_update_date',)
 
     def create(self, validated_data):
         submission = super(SubmissionSerializer, self).create(validated_data)
@@ -62,6 +67,14 @@ class SubmissionSerializer(serializers.ModelSerializer):
     def total_score(self):
         submission = self.get_object()
         return submission.total_score()
+
+
+class SubmissionEvaluateSerializer(serializers.ModelSerializer):
+    """ 과제 평가 """
+
+    class Meta:
+        model = models.Submission
+        fields = ['id', 'evaluator', 'evaluation', ]
 
 
 # 스터디 게시판 Serializer
@@ -120,7 +133,7 @@ class SubmissionCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.SubmissionComment
         fields = ['id', 'author_name', 'full_name', 'body', 'user_id',
-                  'board', 'pub_date', 'update_date', 'user_img','is_grader']
+                  'board', 'pub_date', 'update_date', 'user_img', 'is_grader']
 
 
 # 스터디 댓글 Serializer
