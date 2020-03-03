@@ -5,12 +5,33 @@ import Typography from "@material-ui/core/Typography";
 import MenuList from "@material-ui/core/MenuList";
 import MenuItem from "@material-ui/core/MenuItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-
+import EditIcon from '@material-ui/icons/Edit';
 import DraftsIcon from "@material-ui/icons/Drafts";
 import SendIcon from "@material-ui/icons/Send";
 import PriorityHighIcon from "@material-ui/icons/PriorityHigh";
-
+import {updateUser} from "../../../api/AuthAPI";
 export default class LeftProfileView extends Component {
+  state={
+    img:null,
+  }
+  handleFileInput(e){
+    this.setState({
+      img : e.target.files[0],
+    })
+  }
+  updateUserImage = async (id)  => {
+    await updateUser(id,{
+      img:this.state.img
+    })
+      .then(res => {
+        console.log("이미지업데이트됬는지?", res.data[0]);
+        const userImg = res.data[0];
+        this.setState({
+          img: userImg.img,
+        });
+      })
+      .catch(err => console.log(err));
+  };
   render() {
     const { username, sns_id, user_img } = this.props;
 
@@ -22,6 +43,28 @@ export default class LeftProfileView extends Component {
             alt="Myprofile"
             style={{ width: "70%", padding: "5px" }}
           />
+          <br />
+          <EditIcon type="button" data-toggle="modal" data-target="#exampleModal">
+          </EditIcon>
+          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">이미지 업데이트</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <input type="file" name="file" onChange={e=> this.handleFileInput(e)}/>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" onClick={this.updateUserImage}>Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
           <br />
           <br />
           <h1>{username}</h1>
