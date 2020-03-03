@@ -2,7 +2,6 @@ from django.contrib.auth import authenticate, get_user_model
 from rest_framework import serializers
 
 from board import serializers as board_serializers
-from board.serializer_fields import Base64ImageField
 from .models import GroupUser, Mentoring, Portfolio, StudyGroup
 
 User = get_user_model()
@@ -29,7 +28,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
 
 # 접속 유지중인지 확인
 class UserSerializer(serializers.ModelSerializer):
-    img = serializers.ImageField(use_url = True , max_length = None)
+
     class Meta:
         model = User
         fields =  ["username", "first_name", "img", "id","email","major","student_id","user_type","start_number","sns_id" ]
