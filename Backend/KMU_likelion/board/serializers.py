@@ -120,7 +120,7 @@ class SubmissionCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.SubmissionComment
         fields = ['id', 'author_name', 'full_name', 'body', 'user_id',
-                  'board', 'pub_date', 'update_date', 'user_img']
+                  'board', 'pub_date', 'update_date', 'user_img','is_grader']
 
 
 # 스터디 댓글 Serializer

@@ -15,3 +15,14 @@ class IsAuthorOrReadonly(permissions.BasePermission):
             #     return True
             # PUT, DELETE 요청에 한해, 작성자에게만 허용
             return obj.user_id == request.user
+
+# class IsStudyMemberOrReadonly(permissions.BasePermission):
+
+#     def has_permission(self,request,view):
+#         user_group = request.user.groupuser_set.all()
+#         group_id = request.b
+
+
+
+#         return True
+
