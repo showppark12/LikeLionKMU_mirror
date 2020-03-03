@@ -6,7 +6,7 @@ from knox.models import AuthToken
 from rest_framework import generics, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-
+from .permission import IsStudyCaptainOrReadonly
 from . import serializers
 from .filters import (GroupUserFilter, MentoringFilter, PortfolioFilter,
                       StudyGroupFilter, UserFilter)
@@ -182,6 +182,7 @@ class GroupUserViewSet(viewsets.ModelViewSet):
     queryset = GroupUser.objects.all()
     serializer_class = serializers.GroupUserCreateSerializer
     filter_class = GroupUserFilter
+    permission_classes = (IsStudyCaptainOrReadonly,)
 
 
 class MentoringViewSet(viewsets.ModelViewSet):
