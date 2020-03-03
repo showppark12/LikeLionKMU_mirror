@@ -11,17 +11,16 @@ User = get_user_model()
 class CreateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields =  ["username","password", "first_name","last_name","email","major","is_staff","is_active","student_id","user_type","start_number","sns_id","img",
+        fields =  ["username","password", "first_name","last_name","email","major","is_staff","is_active","student_id","user_type","start_number","sns_id",
         "is_superuser" ]
         extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data):
         user = User.objects.create_user(
-            username=validated_data["username"],password= validated_data["password"],first_name=validated_data["first_name"],
+            username=validated_data["username"],password= validated_data["password"], first_name=validated_data["first_name"],
             last_name=validated_data["last_name"], email=validated_data["email"], is_staff=validated_data["is_staff"], is_active=validated_data["is_active"],
             is_superuser=validated_data["is_superuser"],major=validated_data["major"],student_id=validated_data["student_id"],
-            user_type=validated_data["user_type"], start_number=validated_data["start_number"], sns_id=validated_data["sns_id"],
-            img=validated_data["img"]
+            user_type=validated_data["user_type"], start_number=validated_data["start_number"], sns_id=validated_data["sns_id"]
            )
         return user
 
@@ -31,6 +30,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
+
         fields =  ["username", "first_name", "img", "id","email","major","student_id","user_type","start_number","sns_id", "password" ]
 
 
