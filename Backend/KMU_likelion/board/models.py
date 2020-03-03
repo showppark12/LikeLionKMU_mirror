@@ -178,6 +178,7 @@ class SessionComment(AbstractBaseComment):
 class SubmissionComment(AbstractBaseComment):
     board = models.ForeignKey(
         Submission, on_delete=models.CASCADE, related_name="session_comments")
+    is_grader = models.BooleanField(default = False)
 
 
 class StudyBoardComment(AbstractBaseComment):
