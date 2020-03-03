@@ -3,10 +3,11 @@ from django.shortcuts import get_object_or_404
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .permission import IsAuthorOrReadonly
+from .permission import IsAuthorOrReadonly, IsStudyMemberOrReadonly
 from . import filters, models, serializers
 from rest_framework.permissions import AllowAny
 from .pagination import BoardPageNumberPagination
+
 
 
 class ImageViewSet(viewsets.ModelViewSet):
@@ -145,6 +146,7 @@ class StudyViewSet(BaseBoardViewSet):
     filter_class = filters.StudyBoardFilter
     category = "study"
     pagination_class = BoardPageNumberPagination
+    # permission_classes =(IsStudyMemberOrReadonly,)
 
 
 # 공지 게시판 viewset
