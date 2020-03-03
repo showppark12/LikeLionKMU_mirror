@@ -150,16 +150,6 @@ class UserViewSet(viewsets.ModelViewSet):
 
         except:
             return Response({'status': 'NONE'})
-        
-        def post(self,request, *args, **kwargs):
-            serializer = serializers.UserSerializer(data = request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status = HTTP_201_CREATED)
-            else:
-                return Response(serializer.error, status = HTTP_400_BAD_REQUEST)
-
-
 class StudyGroupViewSet(viewsets.ModelViewSet):
     queryset = StudyGroup.objects.all().order_by('pub_date')
     serializer_class = serializers.StudyGroupSerializer
