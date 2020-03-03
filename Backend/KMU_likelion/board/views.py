@@ -9,7 +9,6 @@ from rest_framework.permissions import AllowAny
 from .pagination import BoardPageNumberPagination
 
 
-
 class ImageViewSet(viewsets.ModelViewSet):
     """ Board의 이미지 업로드 """
     queryset = models.Image.objects.all()
@@ -70,7 +69,6 @@ class SessionViewSet(BaseBoardViewSet):
     pagination_class = BoardPageNumberPagination
     category = "session"
     # permission_classes =( IsStaffOrReadonly,)
-    
 
     def get_queryset(self, session_type=models.Session.LECTURE):
         query = super().get_queryset()
@@ -94,7 +92,7 @@ class SessionViewSet(BaseBoardViewSet):
     @action(detail=False, methods=['GET'], url_path='assignment/(?P<assignment_id>[^/.]+)')
     def assignment(self, request, assignment_id, *args, **kwargs):
         queryset = self.get_queryset(models.Session.ASSIGNMENT)
-        queryset = get_object_or_404(queryset, pk=assignment_id) 
+        queryset = get_object_or_404(queryset, pk=assignment_id)
         serializer = self.get_serializer(data=[queryset], many=True)
         serializer.is_valid()
         return Response(serializer.data)
@@ -119,27 +117,38 @@ class SessionViewSet(BaseBoardViewSet):
 class SubmissionViewSet(BaseBoardViewSet):
     queryset = models.Submission.objects.all()
     serializer_class = serializers.SubmissionSerializer
-    action_serializer_classes = {"scores": serializers.ScoreSerializer}
+    action_serializer_classes = {
+        "evaluation": serializers.SubmissionEvaluateSerializer}
     filter_class = filters.SubmissionFilter
     category = "submission"
-    
-    @action(detail=True, methods=['GET', 'POST'])
-    def scores(self, request, *args, **kwargs):
+
+    @action(detail=True, methods=['POST'])
+    def evaluation(self, request, *args, **kwargs):
+        '''
+        제출된 과제에 대해 점수를 메기고 코멘트를 남기는 API
+
+        ---
+        ## `/board/submission/<int:pk>/evaluation/`
+        ## 내용
+            - score_info: {
+                "평가요소": 점수
+                ...
+            }
+            - evaluation_info: {
+                "evaluator": user_pk
+                "evaluation": "과제에 대한 코멘트"
+            }
+        '''
+        score_dict_list = request.data.get("score_info")
+        evaluation_info = request.data.get("evaluation_info")
+
         submission = self.get_object()
-        if request.method == 'POST':
-            score_dict_list = request.data.get("score_dict_list")
-            submission.set_scores_by_types(score_dict_list) 
-            serializer = self.get_serializer(
-                data=submission.scores.all(), many=True)
-            serializer.is_valid()
-            headers = self.get_success_headers(serializer.data)
-            return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
-        else:
-            serializer = self.get_serializer(
-                data=submission.scores.all(), many=True)
-            serializer.is_valid()
-            headers = self.get_success_headers(serializer.data)
-            return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
+        submission.evaluate(score_dict_list, evaluation_info)
+        serializer = self.get_serializer(data=[submission], many=True)
+        serializer.is_valid()
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
 
 
 class StudyViewSet(BaseBoardViewSet):
@@ -160,7 +169,6 @@ class NoticeViewSet(BaseBoardViewSet):
     pagination_class = BoardPageNumberPagination
 
     # permission_classes =( IsStaffOrReadonly,)
-    
 
 
 # QnA 게시판 viewset
@@ -169,15 +177,15 @@ class QnAViewSet(BaseBoardViewSet):
     serializer_class = serializers.QnABoardSerializer
     filter_class = filters.QnABoardFilter
     category = "qna"
-    pagination_class = BoardPageNumberPagination 
-    #custom permission 예시들 
-    #지우지 말아주세요!!!
+    pagination_class = BoardPageNumberPagination
+    # custom permission 예시들
+    # 지우지 말아주세요!!!
     # permission_classes=[AllowAny]
-  
+
     # def get_permissions(self):
     #     print(self.action)
     #     if self.action in ['retrieve']:
-    #         return [IsAuthorOrReadonly(), ]        
+    #         return [IsAuthorOrReadonly(), ]
     #     return [permission() for permission in self.permission_classes]
 
 

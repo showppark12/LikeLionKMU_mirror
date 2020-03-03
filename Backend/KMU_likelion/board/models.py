@@ -5,6 +5,7 @@ import uuid
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import Sum
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
 from accounts.models import StudyGroup
@@ -15,7 +16,7 @@ User = get_user_model()
 
 class Image(models.Model):
     image = models.ImageField(upload_to=get_file_path)
-    
+
     def __str__(self):
         return self.image.url
 
@@ -26,7 +27,7 @@ class AbstractBaseBoard(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)  # 게시물 등록 시간 생성
     update_date = models.DateTimeField(auto_now=True)  # 업데이트 될 때만 정보 바뀔때 마다
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
-    
+
     class Meta:
         abstract = True
         ordering = ['-pub_date', ]
@@ -58,7 +59,7 @@ class Session(AbstractBaseBoard):
         User, blank=True, related_name="session_like")
 
     def __str__(self):
-        return  f'[{self.get_session_type_display()}] {self.title}'
+        return f'[{self.get_session_type_display()}] {self.title}'
 
     def get_lectures(self):
         return self.objects.filter(session_type=self.LECTURE)
@@ -81,7 +82,7 @@ class Score(models.Model):
 
     def set_score(self, score_num):
         self.score = score_num
-        print(self.score)
+        # print(self.score)
         self.save()
 
 
@@ -89,27 +90,47 @@ class Submission(AbstractBaseBoard):
     lecture = models.ForeignKey(Session, on_delete=models.CASCADE)
     scores = models.ManyToManyField(
         Score, blank=True, related_name="+", symmetrical=False)
-    like = models.ManyToManyField(User, blank=True, related_name="submission_like")
-    url=models.URLField(max_length = 200,null=True) 
-    
+    like = models.ManyToManyField(
+        User, blank=True, related_name="submission_like")
+    url = models.URLField(max_length=200, null=True)
+
+    # 평가, 평가자
+    evaluator = models.ForeignKey(User, on_delete=models.CASCADE, default=None,
+                                  related_name="evaluation_history", null=True, blank=True)
+    evaluation = models.TextField(null=True, blank=True)
+    evaluation_pub_date = models.DateTimeField(
+        null=True, blank=True)  # 게시물 등록 시간 생성
+    evaluation_update_date = models.DateTimeField(
+        null=True, blank=True)  # 업데이트 될 때만 정보 바뀔때 마다
+
     def add_scores_by_types(self):
         if self.lecture.score_types:
             score_type_list = re.split('\W+', self.lecture.score_types)
             score_obj_list = [Score.objects.create(
                 score_type=t) for t in score_type_list]
-            print(score_obj_list)
             self.scores.set(score_obj_list, clear=True)
-            print(self.scores.all())
+            # print(self.scores.all())
             return True
         return False
 
-    def set_scores_by_types(self, score_dict_list):
-        print(score_dict_list)
-        scores = self.scores.all()
-        for score_dict in score_dict_list:
-            score_obj = scores.get(score_type=score_dict.get("score_type"))
-            score_obj.set_score(int(score_dict.get("score")))
+    def evaluate(self, score_info, evaluation_info):
+        # 점수 매기기
+        if score_info:
+            scores = self.scores.all()
+            for score_type, score in score_info.items():
+                score_obj = scores.get(score_type=score_type)
+                score_obj.set_score(int(score))
 
+        # 과제에 대한 코멘트
+        if evaluation_info:
+            print(evaluation_info)
+            if not (self.evaluator and self.evaluation and self.evaluation_pub_date and self.evaluation_update_date):
+                self.evaluation_pub_date = timezone.now()
+            self.evaluation_update_date = timezone.now()
+            self.evaluation = evaluation_info.get('evaluation')
+            self.evaluator = get_object_or_404(
+                User, pk=evaluation_info.get('evaluator'))
+            self.save()
 
     @property
     def total_score(self):
@@ -178,7 +199,7 @@ class SessionComment(AbstractBaseComment):
 class SubmissionComment(AbstractBaseComment):
     board = models.ForeignKey(
         Submission, on_delete=models.CASCADE, related_name="session_comments")
-    is_grader = models.BooleanField(default = False)
+    is_grader = models.BooleanField(default=False)
 
 
 class StudyBoardComment(AbstractBaseComment):
