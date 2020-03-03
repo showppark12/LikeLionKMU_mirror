@@ -16,6 +16,19 @@ class IsAuthorOrReadonly(permissions.BasePermission):
             # PUT, DELETE 요청에 한해, 작성자에게만 허용
             return obj.user_id == request.user
 
+class IsStaffOrReadonly(permissions.BasePermission):
+
+    def has_permission(self,request,view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        else:
+            print("유저 타입이 어떻게 되니?",request.user.user_type)
+            if request.user.user_type == 1 or request.user.user_type == 2:
+                return True
+            else:
+                return False
+
+
 class IsStudyMemberOrReadonly(permissions.BasePermission):
 
     def has_permission(self,request,view):
