@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-
+import json
 
 class IsAuthorOrReadonly(permissions.BasePermission):
     
@@ -16,13 +16,23 @@ class IsAuthorOrReadonly(permissions.BasePermission):
             # PUT, DELETE 요청에 한해, 작성자에게만 허용
             return obj.user_id == request.user
 
-# class IsStudyMemberOrReadonly(permissions.BasePermission):
+class IsStudyMemberOrReadonly(permissions.BasePermission):
 
-#     def has_permission(self,request,view):
-#         user_group = request.user.groupuser_set.all()
-#         group_id = request.b
-
-
-
-#         return True
+    def has_permission(self,request,view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        else:
+            try:
+               user_group = request.user.groupuser_set.all()
+               print("포함된 유저 그룹",user_group)
+               json_request = request.body
+               request_object =  json.loads(json_request)
+               group_id =  request_object["group_id"]
+               print("리퀘스트으으으으응", group_id)
+               if user_group.filter(group_id =  group_id).exists():
+                  return True
+               else:
+                   return False
+            except:
+               return False
 
