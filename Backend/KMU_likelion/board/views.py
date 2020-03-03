@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from .permission import IsAuthorOrReadonly
 from . import filters, models, serializers
 from rest_framework.permissions import AllowAny
+from .pagination import BoardPageNumberPagination
 
 
 class ImageViewSet(viewsets.ModelViewSet):
@@ -65,6 +66,7 @@ class SessionViewSet(BaseBoardViewSet):
     action_serializer_classes = {
         "assignment": serializers.AssignmentSerializer, "add_assignment": serializers.AssignmentSerializer}
     filter_class = filters.SessionFilter
+    pagination_class = BoardPageNumberPagination
     category = "session"
 
     def get_queryset(self, session_type=models.Session.LECTURE):
@@ -117,7 +119,7 @@ class SubmissionViewSet(BaseBoardViewSet):
     action_serializer_classes = {"scores": serializers.ScoreSerializer}
     filter_class = filters.SubmissionFilter
     category = "submission"
-
+    
     @action(detail=True, methods=['GET', 'POST'])
     def scores(self, request, *args, **kwargs):
         submission = self.get_object()
@@ -142,6 +144,7 @@ class StudyViewSet(BaseBoardViewSet):
     serializer_class = serializers.StudyBoardSerializer
     filter_class = filters.StudyBoardFilter
     category = "study"
+    pagination_class = BoardPageNumberPagination
 
 
 # 공지 게시판 viewset
@@ -150,6 +153,7 @@ class NoticeViewSet(BaseBoardViewSet):
     serializer_class = serializers.NoticeBoardSerializer
     filter_class = filters.NoticeBoardFilter
     category = "notice"
+    pagination_class = BoardPageNumberPagination
     
 
 
@@ -159,6 +163,7 @@ class QnAViewSet(BaseBoardViewSet):
     serializer_class = serializers.QnABoardSerializer
     filter_class = filters.QnABoardFilter
     category = "qna"
+    pagination_class = BoardPageNumberPagination 
     #custom permission 예시들 
     #지우지 말아주세요!!!
     # permission_classes=[AllowAny]
@@ -175,6 +180,7 @@ class CareerViewSet(BaseBoardViewSet):
     serializer_class = serializers.CareerBoardSerializer
     filter_class = filters.CareerBoardFilter
     category = "career"
+    pagination_class = BoardPageNumberPagination
 
 
 class SessionCommentViewSet(viewsets.ModelViewSet):
