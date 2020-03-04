@@ -183,7 +183,7 @@ class GroupUserViewSet(viewsets.ModelViewSet):
     queryset = GroupUser.objects.all()
     serializer_class = serializers.GroupUserCreateSerializer
     filter_class = GroupUserFilter
-    permission_classes = (IsStudyCaptainOrReadonly,)
+    # permission_classes = (IsStudyCaptainOrReadonly,)
 
 
 class MentoringViewSet(viewsets.ModelViewSet):
