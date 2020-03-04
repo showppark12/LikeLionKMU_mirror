@@ -104,13 +104,15 @@ class GroupUserSerializer(serializers.ModelSerializer):
 
 
 class MentoringSerializer(serializers.ModelSerializer):
-    mentor_name = serializers.ReadOnlyField(source='mentor.username')
-    mentee_name = serializers.ReadOnlyField(source='mentee.username')
+    mentor_username = serializers.ReadOnlyField(source='mentor.username')
+    mentee_username = serializers.ReadOnlyField(source='mentee.username')
+    mentor_name = serializers.ReadOnlyField(source='mentor.first_name')
+    mentee_name = serializers.ReadOnlyField(source='mentee.first_name')
 
     class Meta:
         model = Mentoring
         fields = ['id', 'pub_date', 'mentor',
-                  'mentee', 'mentor_name', 'mentee_name']
+                  'mentee', 'mentor_name', 'mentee_name','mentor_username', 'mentee_username']
 
 
 class MentorSerializer(serializers.ModelSerializer):
