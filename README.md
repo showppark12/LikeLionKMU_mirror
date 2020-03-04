@@ -93,12 +93,12 @@ KMU - LIKELION WEB SERVICE
   - Nav-bar
     - KMU-LIKELION logo
     - Menu
-      - 스터디 게시판
       - 공지사항
+      - 세션
+      - 스터디그룹
       - QnA
-      - 멤버(동아리 구성원 리스트)
-      - What We Made
-    - Mypage Icon
+      - 커리어(동아리 활동내역)
+    - 지원메뉴
       - 로그인 시 - 마이페이지
       - 로그아웃 시 - 로그인 / 입부신청(입부기간 시만)
   - Body
