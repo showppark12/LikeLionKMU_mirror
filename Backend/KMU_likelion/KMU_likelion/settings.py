@@ -12,7 +12,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
             # mysql.py의 경로
-            'read_default_file': os.path.join(BASE_DIR, "conf/mysql_dev.cnf")
+            'read_default_file': os.path.join(BASE_DIR, "conf/mysql.cnf")
         }
     }
 }

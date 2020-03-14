@@ -16,10 +16,11 @@ SESSION_COOKIE_SECURE = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'OPTIONS': {
-            # mysql.py의 경로
-            'read_default_file': os.path.join(BASE_DIR, "conf/mysql.cnf")
-        }
+        'NAME': 'kmu_likelion',
+        'USER': os.environ.get("DATABASE_USER"),
+        'PASSWORD': os.environ.get("DATABASE_PASSWORD"),
+        'HOST': os.environ.get("DATABASE_HOST"),
+        'PORT': os.environ.get("DATABASE_PORT"),
     }
 }
 
