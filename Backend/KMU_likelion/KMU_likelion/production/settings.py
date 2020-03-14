@@ -1,22 +1,30 @@
-from .base import *
+from KMU_likelion.base import *
 
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
-SECRET_KEY = '@gc%$&53_n#2cyl5=ivq0fg(*9y@_)c7w9f3%az01%o3o6lbw^'
-
-DEBUG = True  # 배포 시 false
+DEBUG = os.environ.get("DEBUG")  # 배포 시 false
 
 ALLOWED_HOSTS = ['*']
+
+CSRF_COOKIE_SECURE = True
+
+SESSION_COOKIE_SECURE = True
+
+# SECURE_SSL_REDIRECT = True
+
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
             # mysql.py의 경로
-            'read_default_file': os.path.join(BASE_DIR, "conf/mysql_dev.cnf")
+            'read_default_file': os.path.join(BASE_DIR, "conf/mysql.cnf")
         }
     }
 }
 
+# FRONTEND_BASE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(BASE_DIR))), 'Frontend', 'frontend-react')
+# FRONTEND_TEMPLATE_ROOT = os.path.join(FRONTEND_BASE_DIR, 'build', 'index.html')
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -32,3 +40,7 @@ TEMPLATES = [
         },
     },
 ]
+
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'frontend', 'build', 'static')
+# ]

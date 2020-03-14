@@ -1,0 +1,51 @@
+version: "3"
+
+services:
+  db:
+    image: mysql:8.0.19
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    ports:
+      - "13306:3306"
+    environment:
+      MYSQL_DATABASE: "kmu_likelion"
+      MYSQL_USER: "kmu"
+      MYSQL_PASSWORD: "kmu@rnralsajttk!"
+      MYSQL_ROOT_PASSWORD: "kmu@rnralsajttk!"
+    volumes: 
+      - mysql_volume:/var/lib/mysql
+  nginx:
+    restart: unless-stopped
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./global_conf/nginx:/etc/nginx/conf.d
+      - static_volume:/static
+      - media_volume:/media`
+    depends_on:
+      - web
+  web:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # command: python manage.py runserver 0.0.0.0:8000
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --no-input && 
+                      gunicorn KMU_likelion.wsgi:application --bind 0.0.0.0:8000 --env DJANGO_SETTINGS_MODULE='KMU_likelion.production.settings'"
+                      # --certfile=/etc/nginx/conf.d/kmu.cert --keyfile=/etc/nginx/conf.d/kmu.key 
+    volumes:
+      - ./global_conf/nginx:/etc/nginx/conf.d
+      - ./KMU_likelion:/app/backend
+      - static_volume:/app/backend/.static_root
+      - media_volume:/app/backend/.media_root
+    env_file:
+      - ./Backend/KMU_likelion/conf/env.prod
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+
+volumes:
+  static_volume:
+  media_volume:
+  mysql_volume:
