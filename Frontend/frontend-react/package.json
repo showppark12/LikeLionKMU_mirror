@@ -36,7 +36,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "aws s3 sync ./build s3://kmu-likelion-deploy --profile=deploy-s3",
-    "invalidate": "aws cloudfront create-invalidation --profile=sample-deploy-s3 --distribution-id E17X9MK8ZOCOCW --paths / /index.html /error.html /service-worker.js /manifest.json /favicon.ico"
+    "invalidate": "aws cloudfront create-invalidation --profile=deploy-s3 --distribution-id EB34EJ4VSUPPJ --paths / /index.html /error.html /service-worker.js /manifest.json /favicon.ico"
   },
   "eslintConfig": {
     "extends": "react-app"
