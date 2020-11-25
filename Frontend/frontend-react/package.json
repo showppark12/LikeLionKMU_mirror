@@ -15,7 +15,7 @@
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "date-fns": "^2.9.0",
-    "highlight.js": "^9.18.1",
+    "highlight.js": "^10.1.2",
     "markdown-it": "^10.0.0",
     "material-table": "^1.57.2",
     "material-ui-popup-state": "^1.5.3",
